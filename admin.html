@@ -24,8 +24,9 @@
         :root {
             --sidebar-width: 280px;
             --sidebar-z: 1000;
-            --modal-z: 2000;
+            --modal-z: 3000;
             --toggle-z: 1500;
+            --bottom-nav-z: 2000;
             --transition-speed: 0.4s;
             --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
             --radius-xl: 32px;
@@ -63,51 +64,81 @@
 
         .hidden { display: none !important; }
         
+        /* Reset & Base Styles Fix */
+        body { margin: 0; padding: 0; min-height: 100vh; }
+
         /* Bulatan Konsisten */
         .rounded-3xl { border-radius: var(--radius-xl) !important; }
         .rounded-2xl { border-radius: var(--radius-lg) !important; }
         .rounded-xl { border-radius: var(--radius-md) !important; }
 
-        /* Sidebar & Layout Fix */
-        .sidebar { background: var(--sidebar-bg); z-index: var(--sidebar-z); border-right: 1px solid var(--glass-border); }
-        .main-content {
-            margin-left: calc(var(--sidebar-width) + 40px);
-            padding: 40px 40px 140px 0;
-            transition: all var(--transition-speed) ease;
-            min-height: 100vh;
+        /* Sidebar Fix Layout Overlap */
+        .sidebar { 
+            background: var(--sidebar-bg); 
+            z-index: var(--sidebar-z); 
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
         }
 
-        /* Login Card & Password Box Fix */
-        #loginArea { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            transition: all var(--transition-speed) ease;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Login Area - Centering Fix */
+        #loginArea { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 80vh; 
+            width: 100%;
+        }
+
         .login-card {
-            max-width: 420px; width: 100%;
+            max-width: 420px; 
+            width: 90%;
             background: var(--card-bg);
             backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-premium);
             padding: 50px 35px;
             text-align: center;
-            border-radius: 35px;
+            border-radius: var(--radius-xl);
+            margin: auto;
         }
         
+        /* Password Box Fix (Tumpul Konsisten) */
         .pass-input-wrapper { position: relative; margin-bottom: 25px; }
         .pass-input-wrapper input {
-            text-align: center; font-weight: 800; font-size: 1.2rem;
-            letter-spacing: 6px; padding: 18px !important;
+            text-align: center; 
+            font-weight: 800; 
+            font-size: 1.2rem;
+            letter-spacing: 6px; 
+            padding: 18px !important;
             border: 2px solid var(--glass-border) !important;
-            transition: 0.3s !important;
+            border-radius: var(--radius-lg) !important; 
             background: var(--input-bg) !important;
-            border-radius: var(--radius-lg) !important; /* Konsistensi Sudut */
+            color: var(--text-main) !important;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
         }
         .pass-input-wrapper input:focus {
             border-color: var(--accent) !important;
             box-shadow: 0 0 20px rgba(249, 115, 22, 0.2) !important;
         }
 
-        /* GRID KARTU PEGAWAI PRO - Responsif Fix */
+        /* GRID KARTU PEGAWAI PRO */
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
             margin-top: 10px;
         }
@@ -125,93 +156,132 @@
             position: relative;
             overflow: hidden;
         }
-        .admin-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .admin-card:hover { transform: translateY(-8px); border-color: var(--accent); }
 
         .card-img-wrapper {
             position: relative; flex-shrink: 0;
-            width: 80px; height: 110px;
-            border-radius: 18px;
+            width: 85px; height: 115px;
+            border-radius: 20px;
             overflow: hidden;
             border: 2px solid var(--glass-border);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
             background: #000;
         }
         .card-img { width: 100%; height: 100%; object-fit: cover; }
 
         .card-info { flex: 1; min-width: 0; }
-        .card-name { font-weight: 800; font-size: 1.05rem; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-id { font-size: 0.7rem; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; opacity: 0.7; }
+        .card-name { font-weight: 800; font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-id { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; opacity: 0.7; }
         .card-role { 
-            font-size: 0.75rem; font-weight: 800; color: var(--accent); 
-            display: inline-block; padding: 4px 10px; background: rgba(249, 115, 22, 0.1);
-            border-radius: 10px; margin-bottom: 8px;
+            font-size: 0.8rem; font-weight: 800; color: var(--accent); 
+            display: inline-block; padding: 4px 12px; background: rgba(249, 115, 22, 0.1);
+            border-radius: 12px; margin-bottom: 10px;
         }
-        .card-region { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-region { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Actions styling */
-        .card-actions { display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--glass-border); padding-top: 12px; }
+        /* Card Actions */
+        .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
         .btn-action-small {
-            flex: 1; padding: 10px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            font-size: 0.65rem; font-weight: 800; cursor: pointer; transition: 0.2s;
+            flex: 1; padding: 12px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.2s;
             border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-main);
+            outline: none;
         }
-        .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; }
+        .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; transform: translateY(-2px); }
 
-        /* Status Badge */
+        /* Status Pill */
         .status-pill {
             position: absolute; top: 15px; right: 15px;
-            padding: 4px 10px; border-radius: 8px;
-            font-size: 0.55rem; font-weight: 900;
+            padding: 5px 12px; border-radius: 10px;
+            font-size: 0.6rem; font-weight: 900;
         }
         .status-aktif { background: #10b981; color: white; }
         .status-non { background: #ef4444; color: white; }
 
         /* Tab Navigation */
-        .tab-nav { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .tab-nav { display: flex; gap: 12px; margin-bottom: 35px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
         .tab-trigger {
             background: var(--tab-inactive); border: 1px solid var(--glass-border);
-            padding: 12px 24px; border-radius: 18px;
-            font-weight: 800; font-size: 0.75rem; color: var(--text-dim);
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+            padding: 15px 28px; border-radius: 22px;
+            font-weight: 800; font-size: 0.85rem; color: var(--text-dim);
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; white-space: nowrap;
         }
         .tab-trigger.active {
             background: var(--accent-gradient); color: white !important; border-color: transparent;
             box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2); transform: translateY(-2px);
         }
 
-        /* Modal Layout */
+        /* Modal Stacking Fix */
+        .modal-admin {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: var(--modal-z);
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-admin.show { display: flex; }
         .modal-card {
             background: var(--bg-panel);
             width: 100%; max-width: 550px;
-            border-radius: 35px;
+            border-radius: 40px;
             border: 1px solid var(--glass-border);
-            padding: 35px;
+            padding: 40px;
             max-height: 90vh; overflow-y: auto;
             box-shadow: var(--shadow-premium);
         }
 
+        /* Responsive Mobile Fix */
         @media (max-width: 1024px) {
-            .main-content { margin-left: 0; padding: 20px 15px 140px; }
+            .main-content { margin-left: 0; padding: 30px 20px 140px; }
             .sidebar { transform: translateX(-110%); }
+            .sidebar.active { transform: translateX(0); }
             .data-grid { grid-template-columns: 1fr; }
+            .login-card { padding: 40px 25px; }
         }
 
-        /* Bottom Nav Mobile */
+        /* Bottom Nav Fix */
         .bottom-nav {
-            display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; height: 75px;
-            background: var(--sidebar-bg); backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-radius: 25px;
-            padding: 0 20px; justify-content: space-between; align-items: center;
-            z-index: 1000; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            display: none; 
+            position: fixed; 
+            bottom: 20px; left: 20px; right: 20px; 
+            height: 75px;
+            background: var(--sidebar-bg); 
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); 
+            border-radius: 25px;
+            padding: 0 20px; 
+            justify-content: space-between; 
+            align-items: center;
+            z-index: var(--bottom-nav-z); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         @media (max-width: 1024px) { .bottom-nav { display: flex; } }
-        .b-nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 4px; }
-        .b-nav-item.active { color: var(--accent); }
-        .presensi-fab { background: var(--accent-gradient); padding: 12px; border-radius: 18px; margin-top: -40px; border: 4px solid var(--bg-panel); color: white; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3); }
         
-        /* Input & Select global rounded fix */
-        input, select { border-radius: var(--radius-md) !important; }
+        .b-nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.65rem; font-weight: 800; gap: 5px; }
+        .b-nav-item.active { color: var(--accent); }
+        .presensi-fab { background: var(--accent-gradient); padding: 14px; border-radius: 20px; margin-top: -45px; border: 5px solid var(--bg-panel); color: white; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); }
+        
+        /* Input Tumpul Konsisten */
+        input, select, textarea { 
+            border-radius: var(--radius-md) !important; 
+            background: var(--input-bg) !important;
+            border: 1px solid var(--glass-border) !important;
+            color: var(--text-main) !important;
+            font-weight: 600;
+        }
+
+        .btn-premium {
+            border-radius: var(--radius-lg) !important;
+            font-weight: 800;
+            padding: 16px 28px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
     </style>
 </head>
 <body class="dark-theme">
@@ -219,7 +289,7 @@
     <div class="fixed-bg"></div>
 
     <!-- TOGGLE THEME MOBILE -->
-    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; z-index: var(--toggle-z); background: var(--sidebar-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-premium); cursor: pointer;">
+    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; z-index: var(--toggle-z); background: var(--sidebar-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-premium); cursor: pointer;">
         <i data-lucide="sun-moon"></i>
     </div>
 
@@ -242,7 +312,7 @@
         </nav>
 
         <div class="sidebar-footer" style="padding: 20px; margin: 20px; border: 1px solid var(--glass-border); border-radius: 24px;">
-            <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; color: var(--accent); text-align: center;">00:00:00</div>
+            <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; color: var(--accent); text-align: center;">00:00:00</div>
             <button class="btn-premium" onclick="toggleTheme()" style="width: 100%; background: var(--accent-gradient); color: white; font-size: 0.75rem; border-radius: 14px !important;">
                 <i data-lucide="refresh-cw" size="14"></i> TEMA
             </button>
@@ -255,41 +325,41 @@
         <!-- AREA LOGIN -->
         <div id="loginArea" class="fade-in">
             <div class="login-card">
-                <div style="width: 70px; height: 70px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 22px; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
-                    <i data-lucide="lock" size="36"></i>
+                <div style="width: 80px; height: 80px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+                    <i data-lucide="lock" size="40"></i>
                 </div>
-                <h2 style="margin-bottom: 10px; font-weight: 800; font-size: 1.6rem; color: var(--text-main);">Panel Akses</h2>
-                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 35px;">Masukkan kata sandi master.</p>
+                <h2 style="margin-bottom: 12px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Akses Master</h2>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px; line-height: 1.6;">Gunakan kata sandi administrator untuk mengelola basis data Cloud SIM UPT PUSDA.</p>
                 
                 <div class="pass-input-wrapper">
                     <input type="password" id="pass" placeholder="••••••••">
                 </div>
                 
-                <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; border-radius: 18px !important;">
-                    MASUK PANEL <i data-lucide="arrow-right" size="18"></i>
+                <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; border-radius: 20px !important;">
+                    BUKA PANEL <i data-lucide="arrow-right" size="20"></i>
                 </button>
             </div>
         </div>
 
         <!-- AREA DATA ADMIN -->
         <div id="adminContent" class="hidden">
-            <div style="display: flex; flex-direction: column; gap: 25px; margin-bottom: 35px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 5px; height: 30px; background: var(--accent); border-radius: 3px;"></div>
-                        <h2 style="font-weight: 800; font-size: 1.5rem; color: var(--text-main);">Database Cloud</h2>
+            <div style="display: flex; flex-direction: column; gap: 30px; margin-bottom: 40px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 6px; height: 35px; background: var(--accent); border-radius: 3px;"></div>
+                        <h2 style="font-weight: 800; font-size: 1.6rem; color: var(--text-main); letter-spacing: -0.8px;">Database Cloud</h2>
                     </div>
-                    <button class="btn-premium" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.8rem; border-radius: 16px !important; padding: 12px 20px;">
-                        <i data-lucide="user-plus" size="18"></i> TAMBAH
+                    <button class="btn-premium" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem; padding: 14px 24px; border-radius: 18px !important;">
+                        <i data-lucide="user-plus" size="20"></i> TAMBAH DATA
                     </button>
                 </div>
 
                 <div class="tab-nav">
                     <div id="tabPeg" class="tab-trigger active" onclick="switchAdminTab('PEG')">
-                        <i data-lucide="users" size="16"></i> DATA PEGAWAI
+                        <i data-lucide="users" size="18"></i> DATA PEGAWAI
                     </div>
                     <div id="tabWil" class="tab-trigger" onclick="switchAdminTab('WIL')">
-                        <i data-lucide="map-pin" size="16"></i> DATA KORLAP
+                        <i data-lucide="map-pin" size="18"></i> DATA KORLAP
                     </div>
                 </div>
             </div>
@@ -299,8 +369,8 @@
                 <!-- Konten dirender oleh JavaScript (renderAdminTable) -->
             </div>
 
-            <p style="text-align: center; color: var(--text-dim); font-size: 0.65rem; margin-top: 50px; opacity: 0.5;">
-                SIM UPT PUSDA v3.1 • Profesional Database System
+            <p style="text-align: center; color: var(--text-dim); font-size: 0.7rem; margin-top: 60px; opacity: 0.5;">
+                SIM UPT PUSDA v3.2 • Sistem Basis Data Profesional
             </p>
         </div>
     </main>
@@ -308,31 +378,32 @@
     <!-- MODAL EDITOR DATA -->
     <div id="modalEditor" class="modal-admin">
         <div class="modal-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <h3 id="modalTitle" style="font-weight: 800; font-size: 1.3rem; color: var(--text-main);">Editor Data</h3>
-                <div onclick="closeModalAdmin()" style="cursor: pointer; opacity: 0.5; padding: 5px;"><i data-lucide="x-circle" size="28"></i></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h3 id="modalTitle" style="font-weight: 800; font-size: 1.5rem; color: var(--text-main);">Editor Informasi</h3>
+                <div onclick="closeModalAdmin()" style="cursor: pointer; opacity: 0.5; padding: 5px;"><i data-lucide="x-circle" size="32"></i></div>
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
-                <div style="display: flex; gap: 20px; margin-bottom: 25px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border);">
-                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 80px; height: 110px; border-radius: 12px; object-fit: cover; border: 2px solid white;">
+                <!-- Foto Profile Section -->
+                <div style="display: flex; gap: 20px; margin-bottom: 30px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border);">
+                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 90px; height: 125px; border-radius: 18px; object-fit: cover; border: 2px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
                     <div style="flex: 1;">
-                        <label style="font-size: 0.6rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 8px;">FOTO PROFIL (PNG)</label>
+                        <label style="font-size: 0.65rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px; letter-spacing: 0.5px;">FOTO PROFIL (PNG)</label>
                         <input type="file" id="fileFoto" accept="image/*" style="display: none;" onchange="handleAdminPhoto(this)">
-                        <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.75rem; padding: 10px; border-radius: 12px !important;">
-                            <i data-lucide="upload" size="16"></i> UPLOAD
+                        <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px; border-radius: 14px !important;">
+                            <i data-lucide="upload" size="18"></i> GANTI FOTO
                         </button>
-                        <input type="text" id="formLinkFoto" placeholder="Atau tempel link foto..." style="margin-top: 10px; font-size: 0.7rem !important;">
+                        <input type="text" id="formLinkFoto" placeholder="Atau tautan foto langsung..." style="margin-top: 15px; font-size: 0.75rem !important;">
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">ID Sistem</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">ID SISTEM</label>
                         <input type="text" id="formID" required>
                     </div>
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">Status</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">STATUS</label>
                         <select id="formStatus">
                             <option value="Aktif">Aktif</option>
                             <option value="Non-Aktif">Non-Aktif</option>
@@ -340,18 +411,18 @@
                     </div>
                 </div>
 
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">Nama Lengkap</label>
-                    <input type="text" id="formNama" placeholder="Nama Tanpa Gelar" required>
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">NAMA LENGKAP</label>
+                    <input type="text" id="formNama" placeholder="Nama tanpa gelar" required>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">Jabatan</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">JABATAN</label>
                         <input type="text" id="formJabatan" required>
                     </div>
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">Wilayah</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">WILAYAH</label>
                         <select id="formWilayah">
                             <option value="Bangorejo">Bangorejo</option>
                             <option value="Cluring">Cluring</option>
@@ -364,19 +435,19 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">WhatsApp</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">WHATSAPP</label>
                         <input type="text" id="formHP" placeholder="628...">
                     </div>
                     <div class="input-group">
-                        <label style="font-size: 0.65rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 5px;">Koordinat</label>
+                        <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">KOORDINAT</label>
                         <input type="text" id="formLokasi" placeholder="Lokasi GPS">
                     </div>
                 </div>
 
-                <div style="margin-top: 35px; display: flex; gap: 10px;">
-                    <button type="button" class="btn-premium" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 16px !important;">BATAL</button>
-                    <button type="submit" class="btn-premium" style="flex: 2; background: var(--accent-gradient); color: white; border-radius: 16px !important;">
-                        SIMPAN <i data-lucide="save" size="18"></i>
+                <div style="margin-top: 40px; display: flex; gap: 15px;">
+                    <button type="button" class="btn-premium" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 18px !important;">BATAL</button>
+                    <button type="submit" class="btn-premium" style="flex: 2; background: var(--accent-gradient); color: white; border-radius: 18px !important;">
+                        SIMPAN PERUBAHAN <i data-lucide="save" size="20"></i>
                     </button>
                 </div>
             </form>
@@ -407,14 +478,14 @@
         }
 
         /**
-         * Render Kartu Data (Sinkron dengan main.js)
+         * Render Kartu Data - Sinkron dengan main.js
          */
         function renderAdminTable() {
             const container = document.getElementById('dataContainer');
             if (!container) return;
             
             if (!window.appData || !window.appData.isLoaded) {
-                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:100px; opacity:0.5;"><i data-lucide="loader-2" class="spin"></i><br>Mengkoneksikan...</div>`;
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:120px 20px; opacity:0.5;"><i data-lucide="loader-2" class="spin" size="40"></i><br><br>Menghubungkan ke Database Cloud...</div>`;
                 lucide.createIcons();
                 return;
             }
@@ -422,7 +493,8 @@
             const data = currentAdminTab === 'PEG' ? window.appData.pegawai : window.appData.korlap;
             
             if (!data || data.length === 0) {
-                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:100px; color:var(--text-dim);">Data kosong.</div>`;
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:120px 20px; color:var(--text-dim);"><i data-lucide="database" size="40" style="margin-bottom:15px; opacity:0.3;"></i><br>Tidak ada data di tabel ${currentAdminTab}.</div>`;
+                lucide.createIcons();
                 return;
             }
 
@@ -442,14 +514,14 @@
                         <div class="card-role">${p.Jabatan}</div>
                         <div class="card-region">
                             <i data-lucide="map-pin" size="10"></i>
-                            WIL. ${p.Wilayah?.toUpperCase()}
+                            WIL. ${p.Wilayah?.toUpperCase() || '-'}
                         </div>
                         <div class="card-actions">
-                            <button class="btn-action-small" onclick="resetTodayPresence('${p.ID}')">
-                                <i data-lucide="rotate-ccw" size="12"></i> RESET
+                            <button type="button" class="btn-action-small" onclick="resetTodayPresence('${p.ID}')" title="Reset Presensi">
+                                <i data-lucide="rotate-ccw" size="14"></i> RESET
                             </button>
-                            <button class="btn-action-small" onclick="editData('${p.ID}')">
-                                <i data-lucide="edit-3" size="12"></i> UBAH
+                            <button type="button" class="btn-action-small" onclick="editData('${p.ID}')" title="Ubah Data">
+                                <i data-lucide="edit-3" size="14"></i> UBAH
                             </button>
                         </div>
                     </div>
@@ -458,10 +530,11 @@
             lucide.createIcons();
         }
 
-        const checkData = setInterval(() => {
+        // Jalankan render awal & sinkronisasi
+        const checkDataSync = setInterval(() => {
             if(window.appData && window.appData.isLoaded) {
                 renderAdminTable();
-                clearInterval(checkData);
+                clearInterval(checkDataSync);
             }
         }, 800);
 
@@ -474,14 +547,13 @@
         }
 
         /**
-         * Fungsi Edit Data - Perbaikan Tipe Data ID
+         * Fungsi Edit Data - Tahan Error Tipe Data
          */
         function editData(id) {
             const list = currentAdminTab === 'PEG' ? window.appData.pegawai : window.appData.korlap;
-            // Gunakan .toString() untuk memastikan ID cocok meski bertipe data beda
             const p = list.find(x => x.ID.toString() === id.toString());
             if (p) {
-                document.getElementById('modalTitle').innerText = "Edit " + (currentAdminTab === 'PEG' ? "Pegawai" : "Korlap");
+                document.getElementById('modalTitle').innerText = "Edit Info " + (currentAdminTab === 'PEG' ? "Pegawai" : "Korlap");
                 document.getElementById('formID').value = p.ID || '';
                 document.getElementById('formNama').value = p.Nama || '';
                 document.getElementById('formJabatan').value = p.Jabatan || '';
