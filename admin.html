@@ -33,51 +33,44 @@
             --radius-md: 16px;
         }
 
-        /* PERBAIKAN MODE TERANG - Lebih Berkesan & Pro */
+        /* PERBAIKAN MODE TERANG - Kontras Indigo & Slate */
         body.light-theme {
             --bg-panel: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.9);
             --table-head: #eff6ff;
             --table-border: rgba(30, 41, 59, 0.08);
             --text-main: #0f172a;
             --text-dim: #475569;
-            --glass-border: rgba(30, 41, 59, 0.1);
-            --sidebar-bg: rgba(255, 255, 255, 0.95);
-            --shadow-premium: 0 20px 50px rgba(0, 50, 150, 0.1);
+            --glass-border: rgba(30, 41, 59, 0.12);
+            --sidebar-bg: rgba(255, 255, 255, 0.98);
+            --shadow-premium: 0 20px 50px rgba(0, 50, 150, 0.08);
             --input-bg: #ffffff;
+            --tab-inactive: #f1f5f9;
         }
 
         /* MODE GELAP (Default) */
         body:not(.light-theme) {
             --bg-panel: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.55);
-            --table-head: rgba(0, 0, 0, 0.25);
-            --table-border: rgba(255, 255, 255, 0.05);
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --table-head: rgba(0, 0, 0, 0.3);
+            --table-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-dim: rgba(248, 250, 252, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --sidebar-bg: rgba(15, 23, 42, 0.9);
+            --sidebar-bg: rgba(15, 23, 42, 0.95);
             --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.5);
-            --input-bg: rgba(0, 0, 0, 0.2);
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --tab-inactive: rgba(255, 255, 255, 0.05);
         }
 
         .hidden { display: none !important; }
         
-        /* Utility Border Radius - Memastikan tidak ada yang lancip */
+        /* Bulatan Konsisten - Tidak Lancip */
         .rounded-3xl { border-radius: var(--radius-xl) !important; }
         .rounded-2xl { border-radius: var(--radius-lg) !important; }
         .rounded-xl { border-radius: var(--radius-md) !important; }
 
-        /* Sidebar Styling */
-        .sidebar { 
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(25px);
-            z-index: var(--sidebar-z);
-            transition: transform var(--transition-speed) ease;
-            border-right: 1px solid var(--glass-border);
-        }
-
-        /* Konten Utama - Layout Fix */
+        /* Konten Utama */
         .main-content {
             margin-left: calc(var(--sidebar-width) + 40px);
             padding: 40px 40px 120px 0;
@@ -86,16 +79,9 @@
         }
 
         /* Login Card */
-        #loginArea {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-        }
-
+        #loginArea { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
         .login-card {
-            max-width: 440px;
-            width: 100%;
+            max-width: 440px; width: 100%;
             background: var(--card-bg);
             backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
@@ -105,7 +91,7 @@
             border-radius: var(--radius-xl);
         }
 
-        /* Table Styling Profesional & Swipeable */
+        /* PERBAIKAN TABEL - Bisa Digeser & Pro */
         .admin-table-container {
             background: var(--card-bg);
             backdrop-filter: blur(25px);
@@ -114,15 +100,18 @@
             overflow: hidden;
             box-shadow: var(--shadow-premium);
             margin-top: 25px;
+            display: flex;
+            flex-direction: column;
         }
 
         .table-responsive { 
             width: 100%; 
             overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+            -webkit-overflow-scrolling: touch; 
+            position: relative;
         }
 
-        table { width: 100%; border-collapse: collapse; min-width: 950px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; } /* Min-width ditingkatkan untuk memicu scroll di HP */
         
         th { 
             background: var(--table-head);
@@ -134,97 +123,65 @@
             font-weight: 800;
             text-align: left;
             border-bottom: 2px solid var(--table-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        td { 
-            padding: 18px 20px; 
-            border-bottom: 1px solid var(--table-border);
-            vertical-align: middle;
-            color: var(--text-main);
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(100, 150, 255, 0.03); }
-
-        /* Status Badge */
-        .status-badge {
-            padding: 8px 16px;
-            border-radius: 14px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .status-aktif { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        .status-non { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        td { padding: 18px 20px; border-bottom: 1px solid var(--table-border); vertical-align: middle; color: var(--text-main); }
+        tr:hover td { background: rgba(100, 150, 255, 0.04); }
 
         /* Action Buttons */
         .btn-action {
-            width: 42px; height: 42px; border-radius: 14px;
+            width: 42px; height: 42px; border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             border: 1px solid var(--glass-border);
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-main);
             cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
         .btn-action:hover {
-            transform: translateY(-4px) scale(1.05);
+            transform: translateY(-4px);
             background: var(--accent-gradient);
             color: white;
-            border-color: transparent;
             box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
         }
 
-        /* Modal Structure */
-        .modal-admin {
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            z-index: var(--modal-z);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-admin.show { display: flex; animation: modalIn 0.4s ease; }
-        
-        .modal-card {
-            background: var(--bg-panel);
-            width: 100%;
-            max-width: 600px;
-            border-radius: 40px;
+        /* PERBAIKAN SUB-JUDUL TABS */
+        .tab-nav { display: flex; gap: 15px; margin-bottom: 35px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .tab-nav::-webkit-scrollbar { display: none; }
+
+        .tab-trigger {
+            background: var(--tab-inactive);
             border: 1px solid var(--glass-border);
-            padding: 40px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: var(--shadow-premium);
+            padding: 14px 28px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
         }
-
-        /* Form Controls - Pro Look */
-        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .input-group label { font-size: 0.75rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; padding-left: 5px; }
-        
-        input, select {
-            background: var(--input-bg) !important;
-            border: 1px solid var(--glass-border) !important;
-            color: var(--text-main) !important;
-            padding: 16px 20px !important;
-            border-radius: 18px !important;
-            font-size: 0.95rem !important;
-            width: 100%;
-            outline: none;
-            transition: 0.3s;
+        .tab-trigger.active {
+            background: var(--accent-gradient);
+            color: white !important;
+            border-color: transparent;
+            box-shadow: 0 12px 24px rgba(234, 88, 12, 0.25);
+            transform: translateY(-2px);
         }
-        input:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
+        .tab-trigger i { opacity: 0.7; }
+        .tab-trigger.active i { opacity: 1; }
 
-        /* Fix Tombol Sudut Bulat */
+        /* Tombol Premium Rounded */
         .btn-premium {
-            border-radius: var(--radius-lg) !important;
+            border-radius: 20px !important;
             border: none;
-            padding: 16px 28px;
+            padding: 14px 28px;
             font-weight: 800;
             cursor: pointer;
             transition: 0.3s;
@@ -232,15 +189,62 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Modal Styles */
+        .modal-card {
+            background: var(--bg-panel);
+            width: 100%; max-width: 600px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-premium);
         }
 
         @media (max-width: 1024px) {
-            .main-content { margin-left: 0; padding: 20px 20px 120px; }
+            .main-content { margin-left: 0; padding: 20px 20px 140px; }
             .sidebar { transform: translateX(-110%); }
             .sidebar.active { transform: translateX(0); }
         }
 
-        @keyframes modalIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        /* Navigasi Bawah khusus Mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 20px; left: 20px; right: 20px;
+            height: 75px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 0 20px;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 15px 40px var(--card-shadow);
+        }
+
+        @media (max-width: 1024px) {
+            .bottom-nav { display: flex; }
+        }
+
+        .b-nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.65rem; font-weight: 800; gap: 5px;
+        }
+        .b-nav-item.active { color: var(--accent); }
+        .presensi-fab {
+            background: var(--accent-gradient);
+            padding: 14px; border-radius: 20px;
+            margin-top: -45px;
+            box-shadow: 0 12px 25px rgba(249, 115, 22, 0.4);
+            border: 5px solid var(--bg-panel);
+            color: white;
+        }
     </style>
 </head>
 <body class="dark-theme">
@@ -248,7 +252,7 @@
     <div class="fixed-bg"></div>
 
     <!-- TOGGLE THEME MOBILE -->
-    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; z-index: var(--toggle-z); background: var(--sidebar-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-premium);">
+    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; z-index: var(--toggle-z); background: var(--sidebar-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-premium); cursor: pointer;">
         <i data-lucide="sun-moon"></i>
     </div>
 
@@ -257,8 +261,8 @@
         <div class="brand">
             <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="sidebarLogo" alt="Logo" onerror="this.src='https://placehold.co/100x100?text=PUSDA'">
             <div>
-                <h1 style="color: var(--text-main);">E-PUSDA</h1>
-                <p style="color: var(--text-dim); font-size: 0.75rem;">Bondoyudo Baru</p>
+                <h1 style="color: var(--text-main); font-size: 1.2rem; font-weight: 800;">E-PUSDA</h1>
+                <p style="color: var(--text-dim); font-size: 0.7rem; font-weight: 600;">UPT Bondoyudo Baru</p>
             </div>
         </div>
 
@@ -272,7 +276,7 @@
 
         <div class="sidebar-footer rounded-3xl" style="padding: 25px; text-align: center; border: 1px solid var(--glass-border); margin: 20px;">
             <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; color: var(--accent);">00:00:00</div>
-            <button class="btn-premium rounded-2xl" onclick="toggleTheme()" style="width: 100%; padding: 12px; font-size: 0.8rem; background: var(--accent-gradient); color: white;">
+            <button class="btn-premium" onclick="toggleTheme()" style="width: 100%; background: var(--accent-gradient); color: white;">
                 <i data-lucide="refresh-cw" size="16"></i> GANTI TEMA
             </button>
         </div>
@@ -284,7 +288,7 @@
         <!-- AREA LOGIN -->
         <div id="loginArea" class="fade-in">
             <div class="login-card">
-                <div style="width: 80px; height: 80px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+                <div style="width: 80px; height: 80px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
                     <i data-lucide="lock" size="40"></i>
                 </div>
                 <h2 style="margin-bottom: 12px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Panel Akses</h2>
@@ -292,7 +296,7 @@
                 
                 <input type="password" id="pass" placeholder="PASSWORD" style="text-align: center; font-weight: 800; margin-bottom: 30px;">
                 
-                <button class="btn-premium rounded-2xl" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; font-size: 1rem;">
+                <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; font-size: 1rem;">
                     MASUK SEKARANG <i data-lucide="arrow-right" size="20"></i>
                 </button>
             </div>
@@ -304,36 +308,36 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <div style="width: 6px; height: 35px; background: var(--accent); border-radius: 3px;"></div>
-                        <h2 style="font-weight: 800; font-size: 1.8rem; color: var(--text-main); letter-spacing: -0.5px;">Basis Data Pegawai</h2>
+                        <h2 style="font-weight: 800; font-size: 1.8rem; color: var(--text-main); letter-spacing: -0.5px;">Manajemen Database</h2>
                     </div>
-                    <button class="btn-premium rounded-2xl" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem;">
+                    <button class="btn-premium" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem;">
                         <i data-lucide="user-plus" size="20"></i> TAMBAH DATA
                     </button>
                 </div>
 
-                <!-- Tab Menu - Sub Judul Diperbaiki -->
-                <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 5px;">
+                <!-- Tab Menu - Sub Judul Lebih Pro -->
+                <div class="tab-nav">
                     <div id="tabPeg" class="tab-trigger active" onclick="switchAdminTab('PEG')">
-                        <i data-lucide="users" size="16"></i> DATA PEGAWAI
+                        <i data-lucide="users" size="18"></i> DATA PEGAWAI
                     </div>
                     <div id="tabWil" class="tab-trigger" onclick="switchAdminTab('WIL')">
-                        <i data-lucide="map-pin" size="16"></i> DATA KORLAP
+                        <i data-lucide="map-pin" size="18"></i> DATA KORLAP
                     </div>
                 </div>
             </div>
 
-            <!-- Tabel Data Grid - Swipeable Fix -->
+            <!-- Tabel Data Grid - Perbaikan Scroll Touch -->
             <div class="admin-table-container">
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th style="padding-left: 30px;">NIP / ID</th>
-                                <th>PROFIL</th>
-                                <th>NAMA PEGAWAI</th>
-                                <th>UNIT KERJA</th>
-                                <th>STATUS</th>
-                                <th style="text-align: right; padding-right: 30px;">KONTROL</th>
+                                <th style="padding-left: 30px; width: 100px;">NIP / ID</th>
+                                <th style="width: 80px;">PROFIL</th>
+                                <th>INFORMASI PEGAWAI</th>
+                                <th>JABATAN & WILAYAH</th>
+                                <th style="width: 150px;">STATUS</th>
+                                <th style="text-align: right; padding-right: 30px; width: 180px;">TINDAKAN</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
@@ -343,9 +347,9 @@
                 </div>
             </div>
 
-            <p style="text-align: center; color: var(--text-dim); font-size: 0.75rem; margin-top: 30px; opacity: 0.6;">
-                <i data-lucide="info" size="14" style="vertical-align: middle; margin-right: 5px;"></i> 
-                Geser tabel ke samping untuk melihat detail lebih lanjut pada layar ponsel.
+            <p style="text-align: center; color: var(--text-dim); font-size: 0.75rem; margin-top: 30px; opacity: 0.6; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i data-lucide="smartphone" size="16"></i> 
+                Geser tabel ke kanan atau kiri untuk melihat detail pada layar ponsel.
             </p>
         </div>
     </main>
@@ -359,13 +363,12 @@
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
-                <!-- Avatar Preview -->
                 <div style="display: flex; gap: 25px; margin-bottom: 35px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border);">
                     <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 100px; height: 135px; border-radius: 20px; object-fit: cover; border: 3px solid white; box-shadow: var(--shadow-premium);">
                     <div style="flex: 1;">
                         <label style="font-size: 0.7rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px;">FOTO PROFIL (PNG)</label>
                         <input type="file" id="fileFoto" accept="image/*" style="display: none;" onchange="handleAdminPhoto(this)">
-                        <button type="button" class="btn-premium rounded-2xl" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px;">
+                        <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px;">
                             <i data-lucide="upload" size="18"></i> UPLOAD FOTO
                         </button>
                         <input type="text" id="formLinkFoto" placeholder="Atau tempel Link Foto..." style="margin-top: 15px; font-size: 0.75rem !important;">
@@ -420,8 +423,8 @@
                 </div>
 
                 <div style="margin-top: 40px; display: flex; gap: 15px;">
-                    <button type="button" class="btn-premium rounded-2xl" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border);">BATAL</button>
-                    <button type="submit" class="btn-premium rounded-2xl" style="flex: 2; background: var(--accent-gradient); color: white;">
+                    <button type="button" class="btn-premium" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border);">BATAL</button>
+                    <button type="submit" class="btn-premium" style="flex: 2; background: var(--accent-gradient); color: white;">
                         SIMPAN DATA <i data-lucide="save" size="20"></i>
                     </button>
                 </div>
@@ -463,13 +466,14 @@
             currentAdminTab = type;
             document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
             const targetId = type === 'PEG' ? 'tabPeg' : 'tabWil';
-            document.getElementById(targetId).classList.add('active');
+            const targetEl = document.getElementById(targetId);
+            if(targetEl) targetEl.classList.add('active');
             renderAdminTable();
         }
 
         function renderAdminTable() {
             const container = document.getElementById('tableBody');
-            if (!window.appData.isLoaded) {
+            if (!window.appData || !window.appData.isLoaded) {
                 container.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:100px; opacity:0.5;"><i data-lucide="loader-2" class="spin"></i><br>Mengkoneksikan Database...</td></tr>`;
                 lucide.createIcons();
                 return;
@@ -487,28 +491,29 @@
                     <td style="font-weight:800; color:var(--text-dim); padding-left:30px;">#${p.ID}</td>
                     <td>
                         <img src="${p.Link_Foto_Profile || 'https://placehold.co/60x80?text=?'}" 
-                             style="width:50px; height:68px; border-radius:14px; object-fit:cover; border:2px solid var(--glass-border); box-shadow:var(--shadow-premium);"
+                             style="width:50px; height:68px; border-radius:16px; object-fit:cover; border:2px solid var(--glass-border); box-shadow:var(--shadow-premium);"
                              onerror="this.src='https://placehold.co/60x80?text=Error'">
                     </td>
                     <td>
                         <div style="font-weight:800; font-size:1.05rem;">${p.Nama}</div>
-                        <div style="font-size:0.75rem; color:var(--text-dim); margin-top:4px;">ID: ${p.ID} • ${p.NoHP || '-'}</div>
+                        <div style="font-size:0.75rem; color:var(--text-dim); margin-top:4px; font-weight:600;">ID: ${p.ID} • ${p.NoHP || '-'}</div>
                     </td>
                     <td>
-                        <div style="font-size:0.9rem; font-weight:700; color:var(--accent);">${p.Jabatan}</div>
-                        <div style="font-size:0.75rem; opacity:0.7;">WIL. ${p.Wilayah?.toUpperCase()}</div>
+                        <div style="font-size:0.9rem; font-weight:800; color:var(--accent);">${p.Jabatan}</div>
+                        <div style="font-size:0.75rem; opacity:0.7; font-weight:600;">WIL. ${p.Wilayah?.toUpperCase()}</div>
                     </td>
                     <td>
                         <span class="status-badge ${p.Status === 'Aktif' ? 'status-aktif' : 'status-non'}">
+                            <div style="width:6px; height:6px; border-radius:50%; background:currentColor;"></div>
                             ${p.Status || 'Aktif'}
                         </span>
                     </td>
                     <td style="padding-right:30px;">
-                        <div class="action-group">
-                            <button class="btn-action" title="Reset Absen" onclick="resetTodayPresence('${p.ID}')">
+                        <div class="action-group" style="display:flex; gap:10px; justify-content:flex-end;">
+                            <button class="btn-action" title="Reset Absen" onclick="resetTodayPresence('${p.ID}')" style="color: #f59e0b;">
                                 <i data-lucide="rotate-ccw" size="18"></i>
                             </button>
-                            <button class="btn-action" title="Ubah Info" onclick="editData('${p.ID}')">
+                            <button class="btn-action" title="Ubah Info" onclick="editData('${p.ID}')" style="color: #3b82f6;">
                                 <i data-lucide="edit-2" size="18"></i>
                             </button>
                         </div>
