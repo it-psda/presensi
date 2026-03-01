@@ -33,17 +33,17 @@
             --radius-md: 16px;
         }
 
-        /* PERBAIKAN MODE TERANG - Kontras Indigo & Slate */
+        /* MODE TERANG PREMIUM */
         body.light-theme {
             --bg-panel: #f8fafc;
             --card-bg: #ffffff;
             --card-border: rgba(30, 41, 59, 0.08);
             --text-main: #0f172a;
             --text-dim: #475569;
-            --glass-border: rgba(30, 41, 59, 0.12);
+            --glass-border: rgba(30, 41, 59, 0.1);
             --sidebar-bg: #ffffff;
-            --shadow-premium: 0 15px 35px rgba(0, 50, 150, 0.06);
-            --input-bg: #f8fafc;
+            --shadow-premium: 0 10px 30px rgba(0, 40, 120, 0.05);
+            --input-bg: #f1f5f9;
             --tab-inactive: #f1f5f9;
         }
 
@@ -51,30 +51,25 @@
         body:not(.light-theme) {
             --bg-panel: #0f172a;
             --card-bg: rgba(30, 41, 59, 0.6);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.05);
             --text-main: #f8fafc;
             --text-dim: rgba(248, 250, 252, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
             --sidebar-bg: rgba(15, 23, 42, 0.95);
-            --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.5);
-            --input-bg: rgba(0, 0, 0, 0.3);
+            --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.4);
+            --input-bg: rgba(0, 0, 0, 0.2);
             --tab-inactive: rgba(255, 255, 255, 0.05);
         }
 
         .hidden { display: none !important; }
         
-        /* Bulatan Konsisten - Tidak Lancip */
+        /* Bulatan Konsisten */
         .rounded-3xl { border-radius: var(--radius-xl) !important; }
         .rounded-2xl { border-radius: var(--radius-lg) !important; }
         .rounded-xl { border-radius: var(--radius-md) !important; }
 
-        /* Sidebar & Layout Fix Overlap */
-        .sidebar { 
-            background: var(--sidebar-bg); 
-            z-index: var(--sidebar-z);
-            border-right: 1px solid var(--glass-border);
-        }
-
+        /* Sidebar & Layout Fix */
+        .sidebar { background: var(--sidebar-bg); z-index: var(--sidebar-z); border-right: 1px solid var(--glass-border); }
         .main-content {
             margin-left: calc(var(--sidebar-width) + 40px);
             padding: 40px 40px 140px 0;
@@ -82,23 +77,37 @@
             min-height: 100vh;
         }
 
-        /* Login Card */
+        /* Login Card & Password Box */
         #loginArea { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
         .login-card {
-            max-width: 440px; width: 100%;
+            max-width: 420px; width: 100%;
             background: var(--card-bg);
             backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-premium);
-            padding: 50px 40px;
+            padding: 50px 35px;
             text-align: center;
-            border-radius: var(--radius-xl);
+            border-radius: 35px;
+        }
+        
+        .pass-input-wrapper { position: relative; margin-bottom: 25px; }
+        .pass-input-wrapper input {
+            text-align: center; font-weight: 800; font-size: 1.2rem;
+            letter-spacing: 6px; padding: 18px !important;
+            border: 2px solid var(--glass-border) !important;
+            transition: 0.3s !important;
+            background: var(--input-bg) !important;
+        }
+        .pass-input-wrapper input:focus {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2) !important;
+            transform: translateY(-2px);
         }
 
-        /* GRID SISTEM KARTU (Pengganti Tabel) */
+        /* GRID KARTU PEGAWAI PRO */
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 20px;
             margin-top: 10px;
         }
@@ -106,103 +115,75 @@
         .admin-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            padding: 20px;
+            border-radius: 28px;
+            padding: 22px;
             display: flex;
-            gap: 18px;
+            gap: 20px;
             align-items: center;
             transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: var(--shadow-premium);
             position: relative;
+            overflow: hidden;
         }
-        .admin-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .admin-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--accent); }
 
-        .card-img {
-            width: 70px; height: 95px;
-            border-radius: 14px;
-            object-fit: cover;
+        .card-img-wrapper {
+            position: relative; flex-shrink: 0;
+            width: 80px; height: 110px;
+            border-radius: 18px;
+            overflow: hidden;
             border: 2px solid var(--glass-border);
-            flex-shrink: 0;
-            background: #000;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
         }
+        .card-img { width: 100%; height: 100%; object-fit: cover; }
 
-        .card-info { flex: 1; overflow: hidden; }
-        .card-name { font-weight: 800; font-size: 1rem; color: var(--text-main); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-id { font-size: 0.7rem; color: var(--text-dim); font-weight: 600; margin-bottom: 8px; }
-        .card-meta { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
-        .card-area { font-size: 0.65rem; font-weight: 800; opacity: 0.6; text-transform: uppercase; }
-
-        /* Action Buttons */
-        .card-actions { display: flex; flex-direction: column; gap: 8px; }
-        .btn-action {
-            width: 38px; height: 38px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            cursor: pointer;
-            transition: 0.3s;
+        .card-info { flex: 1; min-width: 0; }
+        .card-name { font-weight: 800; font-size: 1.05rem; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-id { font-size: 0.7rem; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; opacity: 0.6; }
+        .card-role { 
+            font-size: 0.8rem; font-weight: 800; color: var(--accent); 
+            display: inline-block; padding: 4px 10px; background: rgba(249, 115, 22, 0.1);
+            border-radius: 10px; margin-bottom: 8px;
         }
-        .btn-action:hover { transform: scale(1.1); background: var(--accent-gradient); color: white; border-color: transparent; }
+        .card-region { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Status Pill */
+        /* Actions Horizontal */
+        .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .btn-action-small {
+            flex: 1; padding: 10px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s;
+            border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-main);
+        }
+        .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; }
+
+        /* Status Badge */
         .status-pill {
             position: absolute; top: 15px; right: 15px;
-            padding: 4px 10px; border-radius: 8px;
-            font-size: 0.6rem; font-weight: 900; text-transform: uppercase;
+            padding: 5px 12px; border-radius: 10px;
+            font-size: 0.6rem; font-weight: 900;
         }
-        .status-aktif { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        .status-non { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .status-aktif { background: #10b981; color: white; }
+        .status-non { background: #ef4444; color: white; }
 
         /* Tab Navigation */
         .tab-nav { display: flex; gap: 12px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .tab-nav::-webkit-scrollbar { display: none; }
         .tab-trigger {
-            background: var(--tab-inactive);
-            border: 1px solid var(--glass-border);
-            padding: 14px 25px;
-            border-radius: 20px;
-            font-weight: 800; font-size: 0.8rem;
-            color: var(--text-dim);
-            cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 10px; white-space: nowrap;
+            background: var(--tab-inactive); border: 1px solid var(--glass-border);
+            padding: 14px 28px; border-radius: 20px;
+            font-weight: 800; font-size: 0.8rem; color: var(--text-dim);
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; white-space: nowrap;
         }
         .tab-trigger.active {
-            background: var(--accent-gradient);
-            color: white !important;
-            border-color: transparent;
-            box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2);
-            transform: translateY(-2px);
+            background: var(--accent-gradient); color: white !important; border-color: transparent;
+            box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2); transform: translateY(-2px);
         }
 
-        /* Button Rounded Fix */
+        /* Button Premium */
         .btn-premium {
-            border-radius: 20px !important;
-            border: none;
-            padding: 14px 28px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-
-        /* Modal Layout */
-        .modal-admin {
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            z-index: var(--modal-z);
-            display: none; align-items: center; justify-content: center; padding: 20px;
-        }
-        .modal-admin.show { display: flex; }
-        .modal-card {
-            background: var(--bg-panel);
-            width: 100%; max-width: 550px;
-            border-radius: 40px;
-            border: 1px solid var(--glass-border);
-            padding: 35px;
-            max-height: 90vh; overflow-y: auto;
-            box-shadow: var(--shadow-premium);
+            border-radius: 20px !important; border: none;
+            padding: 16px 28px; font-weight: 800; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
         @media (max-width: 1024px) {
@@ -213,12 +194,9 @@
 
         /* Bottom Nav Mobile */
         .bottom-nav {
-            display: none; position: fixed;
-            bottom: 20px; left: 20px; right: 20px; height: 75px;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
+            display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; height: 75px;
+            background: var(--sidebar-bg); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 25px;
             padding: 0 20px; justify-content: space-between; align-items: center;
             z-index: 1000; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
@@ -269,12 +247,16 @@
         <!-- AREA LOGIN -->
         <div id="loginArea" class="fade-in">
             <div class="login-card">
-                <div style="width: 80px; height: 80px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+                <div style="width: 80px; height: 80px; background: rgba(249, 115, 22, 0.15); color: var(--accent); border-radius: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
                     <i data-lucide="lock" size="40"></i>
                 </div>
-                <h2 style="margin-bottom: 12px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Panel Akses</h2>
-                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px;">Gunakan sandi administrator untuk mengelola database Cloud.</p>
-                <input type="password" id="pass" placeholder="KATA SANDI" style="text-align: center; font-weight: 800; margin-bottom: 30px;">
+                <h2 style="margin-bottom: 10px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Panel Admin</h2>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px;">Gunakan sandi master untuk modifikasi data.</p>
+                
+                <div class="pass-input-wrapper">
+                    <input type="password" id="pass" placeholder="••••••••">
+                </div>
+                
                 <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white;">
                     MASUK SEKARANG <i data-lucide="arrow-right" size="20"></i>
                 </button>
@@ -294,7 +276,6 @@
                     </button>
                 </div>
 
-                <!-- Tab Menu Premium -->
                 <div class="tab-nav">
                     <div id="tabPeg" class="tab-trigger active" onclick="switchAdminTab('PEG')">
                         <i data-lucide="users" size="18"></i> DATA PEGAWAI
@@ -307,11 +288,11 @@
 
             <!-- Kontainer Kartu Pegawai -->
             <div id="dataContainer" class="data-grid">
-                <!-- Konten dirender oleh JavaScript -->
+                <!-- Konten dirender oleh JavaScript (renderAdminTable) -->
             </div>
 
             <p style="text-align: center; color: var(--text-dim); font-size: 0.7rem; margin-top: 50px; opacity: 0.6;">
-                SIM UPT PUSDA v3.0 • Database Cloud Synchronized
+                SIM UPT PUSDA v3.0 • Profesional Database System
             </p>
         </div>
     </main>
@@ -325,7 +306,6 @@
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
-                <!-- Foto Profile Section -->
                 <div style="display: flex; gap: 20px; margin-bottom: 30px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 20px; border-radius: 24px; border: 1px solid var(--glass-border);">
                     <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 80px; height: 110px; border-radius: 14px; object-fit: cover; border: 2px solid white;">
                     <div style="flex: 1;">
@@ -334,7 +314,7 @@
                         <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.75rem; padding: 10px;">
                             <i data-lucide="upload" size="16"></i> UPLOAD FOTO
                         </button>
-                        <input type="text" id="formLinkFoto" placeholder="Atau tempel Link Foto..." style="margin-top: 10px; font-size: 0.7rem !important;">
+                        <input type="text" id="formLinkFoto" placeholder="Atau tempel link foto..." style="margin-top: 10px; font-size: 0.7rem !important;">
                     </div>
                 </div>
 
@@ -414,14 +394,16 @@
             document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
             const targetId = type === 'PEG' ? 'tabPeg' : 'tabWil';
             document.getElementById(targetId).classList.add('active');
-            renderAdminCards();
+            renderAdminTable(); // Memanggil fungsi yang disinkronkan dengan main.js
         }
 
         /**
-         * Render Kartu Data (Pengganti Tabel)
+         * Render Kartu Data (Sinkron dengan main.js)
          */
-        function renderAdminCards() {
+        function renderAdminTable() {
             const container = document.getElementById('dataContainer');
+            if (!container) return;
+            
             if (!window.appData || !window.appData.isLoaded) {
                 container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:100px; opacity:0.5;"><i data-lucide="loader-2" class="spin"></i><br>Mengkoneksikan Database...</div>`;
                 lucide.createIcons();
@@ -431,7 +413,7 @@
             const data = currentAdminTab === 'PEG' ? window.appData.pegawai : window.appData.korlap;
             
             if (!data || data.length === 0) {
-                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:100px; color:var(--text-dim);">Data masih kosong.</div>`;
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:100px; color:var(--text-dim);">Tabel ${currentAdminTab} kosong.</div>`;
                 return;
             }
 
@@ -440,35 +422,40 @@
                     <span class="status-pill ${p.Status === 'Aktif' ? 'status-aktif' : 'status-non'}">
                         ${p.Status || 'Aktif'}
                     </span>
-                    <img src="${p.Link_Foto_Profile || 'https://placehold.co/80x110?text=?'}" 
-                         class="card-img" 
-                         onerror="this.src='https://placehold.co/80x110?text=Error'">
+                    <div class="card-img-wrapper">
+                        <img src="${p.Link_Foto_Profile || 'https://placehold.co/80x110?text=?'}" 
+                             class="card-img" 
+                             onerror="this.src='https://placehold.co/80x110?text=Error'">
+                    </div>
                     <div class="card-info">
                         <div class="card-name">${p.Nama}</div>
-                        <div class="card-id">#${p.ID} • WA: ${p.NoHP || '-'}</div>
-                        <div class="card-meta">${p.Jabatan}</div>
-                        <div class="card-area">WIL. ${p.Wilayah?.toUpperCase()}</div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-action" title="Reset Absen" onclick="resetTodayPresence('${p.ID}')" style="color: #f59e0b;">
-                            <i data-lucide="rotate-ccw" size="18"></i>
-                        </button>
-                        <button class="btn-action" title="Ubah Info" onclick="editData('${p.ID}')" style="color: #3b82f6;">
-                            <i data-lucide="edit-3" size="18"></i>
-                        </button>
+                        <div class="card-id">ID: #${p.ID}</div>
+                        <div class="card-role">${p.Jabatan}</div>
+                        <div class="card-region">
+                            <i data-lucide="map-pin" size="12"></i>
+                            WIL. ${p.Wilayah?.toUpperCase()}
+                        </div>
+                        <div class="card-actions">
+                            <div class="btn-action-small" onclick="resetTodayPresence('${p.ID}')" title="Reset Presensi">
+                                <i data-lucide="rotate-ccw" size="14"></i> RESET
+                            </div>
+                            <div class="btn-action-small" onclick="editData('${p.ID}')" title="Ubah Data">
+                                <i data-lucide="edit-3" size="14"></i> UBAH
+                            </div>
+                        </div>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        // Jalankan render ulang saat data termuat
+        // Jalankan render ulang saat data termuat (Polling singkat)
         const checkData = setInterval(() => {
             if(window.appData && window.appData.isLoaded) {
-                renderAdminCards();
+                renderAdminTable();
                 clearInterval(checkData);
             }
-        }, 1000);
+        }, 800);
 
         function openAddModal() {
             document.getElementById('modalTitle').innerText = "Tambah " + (currentAdminTab === 'PEG' ? "Pegawai" : "Korlap");
