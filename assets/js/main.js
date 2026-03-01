@@ -5,7 +5,7 @@
  * Fitur: Minimalist GET (No-Preflight), Text-Plain POST, GAS Redirect Support
  */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOL0goC2pdIIx6hHzgrzdHm8tlO3FBKICPGl5AJsKuJfRT_0qsMQE7gqStHAzsLTW0/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
 
 // Global State Aplikasi
 window.appData = {
@@ -401,3 +401,4 @@ window.onerror = (msg, url, line) => {
     console.error(`🔴 Runtime Error: ${msg} at line ${line}`); 
     return false; 
 };
+
