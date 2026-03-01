@@ -105,7 +105,7 @@
             border-radius: var(--radius-xl);
         }
 
-        /* Table Styling */
+        /* Table Styling Profesional & Swipeable */
         .admin-table-container {
             background: var(--card-bg);
             backdrop-filter: blur(25px);
@@ -116,7 +116,11 @@
             margin-top: 25px;
         }
 
-        .table-responsive { width: 100%; overflow-x: auto; }
+        .table-responsive { 
+            width: 100%; 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+        }
 
         table { width: 100%; border-collapse: collapse; min-width: 950px; }
         
@@ -300,21 +304,25 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <div style="width: 6px; height: 35px; background: var(--accent); border-radius: 3px;"></div>
-                        <h2 style="font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Database Pegawai</h2>
+                        <h2 style="font-weight: 800; font-size: 1.8rem; color: var(--text-main); letter-spacing: -0.5px;">Basis Data Pegawai</h2>
                     </div>
                     <button class="btn-premium rounded-2xl" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem;">
                         <i data-lucide="user-plus" size="20"></i> TAMBAH DATA
                     </button>
                 </div>
 
-                <!-- Tab Menu -->
+                <!-- Tab Menu - Sub Judul Diperbaiki -->
                 <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 5px;">
-                    <div id="tabPeg" class="tab-trigger active" onclick="switchAdminTab('PEG')">DATA PEGAWAI</div>
-                    <div id="tabWil" class="tab-trigger" onclick="switchAdminTab('WIL')">DATA KORLAP</div>
+                    <div id="tabPeg" class="tab-trigger active" onclick="switchAdminTab('PEG')">
+                        <i data-lucide="users" size="16"></i> DATA PEGAWAI
+                    </div>
+                    <div id="tabWil" class="tab-trigger" onclick="switchAdminTab('WIL')">
+                        <i data-lucide="map-pin" size="16"></i> DATA KORLAP
+                    </div>
                 </div>
             </div>
 
-            <!-- Tabel Data -->
+            <!-- Tabel Data Grid - Swipeable Fix -->
             <div class="admin-table-container">
                 <div class="table-responsive">
                     <table>
@@ -334,6 +342,11 @@
                     </table>
                 </div>
             </div>
+
+            <p style="text-align: center; color: var(--text-dim); font-size: 0.75rem; margin-top: 30px; opacity: 0.6;">
+                <i data-lucide="info" size="14" style="vertical-align: middle; margin-right: 5px;"></i> 
+                Geser tabel ke samping untuk melihat detail lebih lanjut pada layar ponsel.
+            </p>
         </div>
     </main>
 
@@ -346,6 +359,7 @@
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
+                <!-- Avatar Preview -->
                 <div style="display: flex; gap: 25px; margin-bottom: 35px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border);">
                     <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 100px; height: 135px; border-radius: 20px; object-fit: cover; border: 3px solid white; box-shadow: var(--shadow-premium);">
                     <div style="flex: 1;">
@@ -361,7 +375,7 @@
                 <div class="form-row">
                     <div class="input-group">
                         <label>ID Sistem</label>
-                        <input type="text" id="formID" required>
+                        <input type="text" id="formID" placeholder="NIP/ID" required>
                     </div>
                     <div class="input-group">
                         <label>Status Kerja</label>
@@ -374,13 +388,13 @@
 
                 <div class="input-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" id="formNama" required>
+                    <input type="text" id="formNama" placeholder="Nama tanpa gelar" required>
                 </div>
 
                 <div class="form-row">
                     <div class="input-group">
                         <label>Jabatan</label>
-                        <input type="text" id="formJabatan" required>
+                        <input type="text" id="formJabatan" placeholder="E.g. Korlap" required>
                     </div>
                     <div class="input-group">
                         <label>Wilayah</label>
@@ -389,7 +403,7 @@
                             <option value="Cluring">Cluring</option>
                             <option value="Pesanggaran">Pesanggaran</option>
                             <option value="Porolinggo">Porolinggo</option>
-                            <option value="Umum">Umum</option>
+                            <option value="Umum">Umum / Kantor</option>
                         </select>
                     </div>
                 </div>
@@ -415,6 +429,31 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION (Fixed for Mobile) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="b-nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="raport.html" class="b-nav-item">
+            <i data-lucide="file-text"></i>
+            <span>Raport</span>
+        </a>
+        <a href="presensi.html" class="b-nav-item">
+            <div class="presensi-fab">
+                <i data-lucide="scan-face" color="white"></i>
+            </div>
+        </a>
+        <a href="wilayah.html" class="b-nav-item">
+            <i data-lucide="map"></i>
+            <span>Wilayah</span>
+        </a>
+        <a href="admin.html" class="b-nav-item active">
+            <i data-lucide="user-cog"></i>
+            <span>Admin</span>
+        </a>
+    </nav>
+
     <!-- SCRIPTS -->
     <script src="assets/js/main.js"></script>
     <script>
@@ -423,7 +462,8 @@
         function switchAdminTab(type) {
             currentAdminTab = type;
             document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
-            document.getElementById(type === 'PEG' ? 'tabPeg' : 'tabWil').classList.add('active');
+            const targetId = type === 'PEG' ? 'tabPeg' : 'tabWil';
+            document.getElementById(targetId).classList.add('active');
             renderAdminTable();
         }
 
