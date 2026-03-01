@@ -1,0 +1,383 @@
+/**
+ * SIM UPT PUSDA - Global Stylesheet
+ * Mendukung Multi-Theme (Dark & Light)
+ * Fitur: PNG Pop-out, Drop Shadow, & Mobile Responsive Fix
+ */
+
+:root {
+    /* --- DARK THEME (Default) --- */
+    --primary: #1e3a8a;
+    --primary-light: #3b82f6;
+    --accent: #f97316;
+    --success: #10b981;
+    --danger: #ef4444;
+
+    /* Variabel Latar Belakang & Teks */
+    --bg-body: #0f172a;
+    --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
+    --text-main: #f8fafc;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    
+    /* Komponen Glassmorphism */
+    --glass: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --sidebar-bg: rgba(15, 23, 42, 0.85);
+    --card-shadow: rgba(0, 0, 0, 0.4);
+    
+    /* Input & Form */
+    --input-bg: rgba(0, 0, 0, 0.3);
+    
+    /* Konfigurasi Layout */
+    --sidebar-width: 280px;
+}
+
+/* --- LIGHT THEME OVERRIDES --- */
+body.light-theme {
+    --bg-body: #f1f5f9;
+    --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f1f5f9 70%);
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    
+    --glass: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --sidebar-bg: rgba(255, 255, 255, 0.9);
+    --card-shadow: rgba(0, 0, 0, 0.08);
+    
+    --input-bg: #ffffff;
+}
+
+/* --- RESET & BASE STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.fixed-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg-gradient);
+}
+
+/* --- SIDEBAR FLOATING --- */
+.sidebar {
+    width: var(--sidebar-width);
+    height: calc(100vh - 40px);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    box-shadow: 0 20px 50px var(--card-shadow);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.brand img {
+    height: 45px;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.1));
+}
+
+.brand div h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Navigasi Link */
+.nav-items {
+    flex: 1;
+    display: flex;
+    flex-direction: column; gap: 8px;
+}
+
+.nav-link {
+    padding: 14px 18px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+    transform: translateX(5px);
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.4);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 15px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 15px;
+}
+
+/* --- MAIN CONTENT AREA --- */
+.main-content {
+    flex: 1;
+    margin-left: calc(var(--sidebar-width) + 40px);
+    padding: 40px 40px 120px 0;
+    min-height: 100vh;
+    transition: 0.3s;
+}
+
+/* --- THEME TOGGLE MOBILE --- */
+.theme-toggle-mobile {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 25px var(--card-shadow);
+    color: var(--text-main);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-mobile:active {
+    transform: scale(0.9);
+}
+
+.theme-toggle-mobile i {
+    width: 20px;
+    height: 20px;
+}
+
+/* --- HERO SECTION (FIXED POP-OUT) --- */
+.hero-section {
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 40px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    overflow: visible; /* Penting agar PNG bisa pop-out keluar bingkai */
+    z-index: 1;
+    box-shadow: 0 10px 30px var(--card-shadow);
+}
+
+.hero-text h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: var(--text-main);
+}
+
+/* Container untuk Foto PNG */
+.hero-image-container {
+    flex: 0 0 280px;
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 350px;
+}
+
+/* Lingkaran latar belakang untuk menyatukan foto dengan desain */
+.hero-image-container::before {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+    opacity: 0.2;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.hero-img {
+    width: 135%; /* Efek meluap keluar container */
+    height: auto;
+    object-fit: contain;
+    /* Drop shadow mengikuti siluet PNG transparan */
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+    transform: scale(1.15) translateY(15px);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- COMPONENTS: CARDS --- */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 20px;
+}
+
+.tool-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    box-shadow: 0 4px 15px var(--card-shadow);
+}
+
+.tool-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-light);
+}
+
+.tool-icon {
+    width: 55px; height: 55px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 24px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* --- BOTTOM NAVIGATION (FIXED MOBILE) --- */
+.bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 20px; left: 20px; right: 20px;
+    height: 70px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 15px 40px var(--card-shadow);
+}
+
+.b-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    color: var(--text-muted); text-decoration: none;
+    font-size: 0.65rem; font-weight: 700;
+}
+
+.b-nav-item.active { color: var(--primary-light); }
+body:not(.light-theme) .b-nav-item.active { color: white; }
+
+.presensi-fab {
+    background: var(--accent);
+    padding: 12px; border-radius: 50%;
+    margin-top: -35px;
+    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4);
+    border: 5px solid var(--bg-body);
+}
+
+/* --- RESPONSIVENESS FIX --- */
+@media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; padding: 20px 20px 100px 20px; }
+    .bottom-nav { display: flex; }
+    .theme-toggle-mobile { display: flex; } /* Tampilkan toggle di HP */
+
+    .hero-section {
+        flex-direction: column-reverse; /* Foto di atas, Teks di bawah */
+        padding: 55px 20px 30px; /* Padding atas ditambah agar tidak tertutup tombol toggle */
+        text-align: center;
+        gap: 0;
+        margin-top: 40px;
+        background: var(--glass);
+    }
+
+    .hero-image-container {
+        flex: none;
+        width: 100%;
+        min-height: 180px; /* Diperpendek sedikit */
+        margin-top: -110px; /* Menarik gambar ke atas secara proposional */
+        margin-bottom: 0px;
+    }
+
+    .hero-image-container::before {
+        width: 160px;
+        height: 160px;
+        bottom: -20px;
+        opacity: 0.2;
+    }
+
+    .hero-img {
+        width: 180px; /* Ukuran pas di HP agar ramping */
+        transform: scale(1.1) translateY(45px); /* Diturunkan lebih banyak sesuai permintaan agar menyatu dengan kartu */
+        filter: drop-shadow(0 12px 25px rgba(0,0,0,0.5));
+    }
+
+    .hero-text {
+        width: 100%;
+        padding: 35px 10px 10px; /* Padding atas ditambah untuk memberi ruang gambar */
+    }
+
+    .hero-text h2 { 
+        font-size: 1.6rem; 
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+    
+    .hero-text p {
+        font-size: 0.85rem;
+        max-width: 100%;
+        line-height: 1.5;
+        opacity: 0.8;
+    }
+}
+
+/* --- UTILS --- */
+.fade-in { animation: fadeIn 0.5s ease-in forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- PRINT STYLES --- */
+@media print {
+    .sidebar, .bottom-nav, .filter-box, .btn, .fixed-bg, .theme-toggle-mobile { display: none !important; }
+    .main-content { margin: 0 !important; padding: 0 !important; }
+}

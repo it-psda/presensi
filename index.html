@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dashboard - SIM UPT PUSDA</title>
+    
+    <!-- Meta untuk Mobile Web App (PWA Look) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Library Ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Link ke File CSS Eksternal -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <!-- Latar Belakang Gradient Statis -->
+    <div class="fixed-bg"></div>
+
+    <!-- TOGGLE THEME MOBILE (Melayang di pojok kanan atas) -->
+    <div class="theme-toggle-mobile" onclick="toggleTheme()">
+        <i data-lucide="sun-moon"></i>
+    </div>
+
+    <!-- SIDEBAR (Floating Desktop) -->
+    <aside class="sidebar">
+        <div class="brand">
+            <!-- Logo Instansi (Diupdate otomatis oleh main.js dari CONF.csv) -->
+            <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="sidebarLogo" alt="Logo">
+            <div>
+                <h1>E-PUSDA</h1>
+                <p>Bondoyudo Baru</p>
+            </div>
+        </div>
+
+        <nav class="nav-items">
+            <a href="index.html" class="nav-link active">
+                <i data-lucide="layout-grid"></i> Dashboard
+            </a>
+            <a href="raport.html" class="nav-link">
+                <i data-lucide="file-bar-chart"></i> E-Raport
+            </a>
+            <a href="presensi.html" class="nav-link">
+                <i data-lucide="scan-face"></i> E-Presensi
+            </a>
+            <a href="wilayah.html" class="nav-link">
+                <i data-lucide="map"></i> Wilayah
+            </a>
+            <a href="admin.html" class="nav-link">
+                <i data-lucide="shield-check"></i> Admin Panel
+            </a>
+        </nav>
+
+        <!-- Sidebar Footer: Jam & Pengatur Tema Desktop -->
+        <div class="sidebar-footer">
+            <div style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 5px;">Jam Server</div>
+            <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px;">00:00:00</div>
+            
+            <button class="btn btn-primary" onclick="toggleTheme()" style="width: 100%; padding: 10px; font-size: 0.8rem; border-radius: 12px;">
+                <i data-lucide="sun-moon"></i> Ganti Tema
+            </button>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <!-- Hero Section: Sambutan & Slide Foto Korlap -->
+        <div class="hero-section fade-in">
+            <div class="hero-text">
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <span style="background: rgba(249, 115, 22, 0.2); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;">OFFICIAL SYSTEM</span>
+                </div>
+                <h2 id="greetTitle">Selamat Datang,<br>Rekan PUSDA.</h2>
+                <p id="greetSub">Kelola data presensi, pantau raport kinerja harian, dan koordinasi wilayah kerja dalam satu platform terpusat UPT PSDA WS Bondoyudo Baru.</p>
+            </div>
+            
+            <!-- Container Foto PNG Pop-out -->
+            <div class="hero-image-container">
+                <!-- Foto diupdate otomatis oleh main.js dari MS_WIL.csv -->
+                <img id="heroImage" src="https://placehold.co/400x600/1e3a8a/ffffff?text=MEMUAT+DATA..." class="hero-img" alt="Hero Image">
+                
+                <!-- Label Nama Korlap Melayang di atas foto -->
+                <div id="heroLabel" style="position: absolute; bottom: 0px; left: 0; right: 0; text-align: center; z-index: 10;">
+                    <!-- Diisi dinamis oleh JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Judul Bagian Layanan -->
+        <div style="margin-bottom: 25px; font-weight: 800; display: flex; align-items: center; gap: 12px; padding-left: 5px;">
+            <div style="width: 5px; height: 22px; background: var(--accent); border-radius: 3px;"></div>
+            <span style="font-size: 1.1rem; letter-spacing: 0.5px;">Layanan Digital</span>
+        </div>
+        
+        <!-- Grid Layanan: Diisi secara dinamis oleh assets/js/main.js dari TOOLS.csv -->
+        <div class="tools-grid" id="toolsContainer">
+            <!-- Elemen tool-card akan di-render melalui JavaScript -->
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION (Floating Mobile) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="b-nav-item active">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="raport.html" class="b-nav-item">
+            <i data-lucide="file-text"></i>
+            <span>Raport</span>
+        </a>
+        <a href="presensi.html" class="b-nav-item">
+            <!-- Tombol Aksi Utama (FAB) -->
+            <div class="presensi-fab">
+                <i data-lucide="scan-face" color="white"></i>
+            </div>
+        </a>
+        <a href="wilayah.html" class="b-nav-item">
+            <i data-lucide="map"></i>
+            <span>Wilayah</span>
+        </a>
+        <a href="admin.html" class="b-nav-item">
+            <i data-lucide="user-cog"></i>
+            <span>Admin</span>
+        </a>
+    </nav>
+
+    <!-- Link ke File JS Eksternal -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

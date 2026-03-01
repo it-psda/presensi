@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>E-Raport - SIM UPT PUSDA</title>
+    
+    <!-- Meta untuk Mobile Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Library Ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Link ke File CSS Eksternal -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <style>
+        /* Gaya Spesifik E-Raport - Penyesuaian Sudut Tumpul (Rounded) */
+        .raport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-top: 20px; }
+        
+        .raport-card {
+            background: white; color: #1e293b; border-radius: 32px; /* Sudut lebih tumpul senada index */
+            overflow: visible; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex; flex-direction: column; position: relative;
+            margin-top: 25px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        body.light-theme .raport-card { background: #fff; border: 1px solid rgba(0,0,0,0.05); }
+        
+        .raport-card:hover { transform: translateY(-8px); }
+
+        .raport-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 22px; color: white; display: flex; gap: 20px; align-items: center;
+            border-radius: 32px 32px 0 0; position: relative;
+        }
+
+        .raport-avatar {
+            width: 80px; aspect-ratio: 3/4; border-radius: 18px;
+            object-fit: cover; background: #eee; border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transform: scale(1.15) translateY(10px); z-index: 2;
+        }
+
+        .raport-info { z-index: 1; flex: 1; margin-left: 5px; }
+        .raport-info h3 { font-size: 1.1rem; font-weight: 800; line-height: 1.2; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .raport-info p { font-size: 0.75rem; opacity: 0.9; font-weight: 600; }
+
+        .raport-body { padding: 30px 22px 22px; flex: 1; border-radius: 0 0 32px 32px; background: white; }
+
+        .score-display { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; padding-bottom: 15px; border-bottom: 1px dashed #e2e8f0; }
+        .big-score { font-size: 3rem; font-weight: 900; color: var(--primary); line-height: 1; letter-spacing: -1px; }
+        .grade-badge { background: #1e293b; color: white; padding: 8px 18px; border-radius: 16px; font-weight: 800; font-size: 1.4rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+        .stat-item { text-align: center; background: #f8fafc; padding: 12px 5px; border-radius: 18px; border: 1px solid #f1f5f9; transition: 0.2s; }
+        .stat-item:hover { background: #f1f5f9; transform: scale(1.05); }
+        .stat-val { font-weight: 800; font-size: 1.1rem; color: #0f172a; display: block; }
+        .stat-lbl { font-size: 0.6rem; color: #64748b; text-transform: uppercase; font-weight: 800; margin-top: 3px; letter-spacing: 0.5px; }
+
+        .heatmap-container { margin-top: 15px; background: #f8fafc; padding: 15px; border-radius: 20px; border: 1px solid #f1f5f9; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .heat-day { aspect-ratio: 1; border-radius: 6px; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; cursor: help; transition: 0.2s; border: 1px solid rgba(0,0,0,0.05); }
+        .heat-day:hover { transform: scale(1.2); z-index: 2; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* Filter Box Custom - Senada dengan index */
+        .filter-section { background: var(--glass); padding: 30px; border-radius: 32px; border: 1px solid var(--glass-border); margin-bottom: 35px; display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; backdrop-filter: blur(20px); box-shadow: 0 20px 40px var(--card-shadow); }
+        .filter-group { flex: 1; min-width: 180px; }
+        .filter-group label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; opacity: 0.8; padding-left: 8px; letter-spacing: 0.5px; }
+        
+        .rounded-xl { border-radius: 16px !important; }
+
+        @media (max-width: 768px) {
+            .raport-grid { grid-template-columns: 1fr; gap: 25px; }
+            .filter-section { padding: 25px; border-radius: 28px; }
+            .filter-group { min-width: 100%; }
+        }
+
+        /* PRINT STYLE: Optimized for F4/Folio Professional */
+        @media print {
+            @page { size: 215mm 330mm; margin: 15mm 15mm; }
+            body { background: white !important; color: black !important; padding: 0 !important; }
+            .sidebar, .bottom-nav, .theme-toggle-mobile, .filter-section, .fixed-bg, .sidebar-footer { display: none !important; }
+            .main-content { margin: 0 !important; padding: 0 !important; width: 100%; }
+            
+            .print-header { display: flex !important; align-items: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 25px; gap: 25px; }
+            .print-logo { height: 85px; width: auto; filter: none !important; }
+            .print-title { flex: 1; text-align: center; }
+            .print-title h2 { margin: 0; font-size: 18pt; font-weight: 800; color: #000; }
+            .print-title .sub-instansi { font-weight: 800; font-size: 14pt; }
+            .print-title .address { font-size: 9pt; font-weight: 400; margin-top: 5px; font-style: italic; }
+            
+            .raport-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; margin-top: 10px !important; }
+            .raport-card { break-inside: avoid; border: 1.5px solid #000 !important; box-shadow: none !important; margin-top: 10px; border-radius: 12px !important; background: #fff !important; color: #000 !important; }
+            .raport-header { background: #f0f0f0 !important; color: black !important; border-bottom: 1.5px solid #000; padding: 12px !important; border-radius: 12px 12px 0 0 !important; }
+            .raport-avatar { width: 40px !important; height: 55px !important; transform: none !important; border: 1px solid #000 !important; border-radius: 6px !important; box-shadow: none !important; }
+            .raport-info h3 { font-size: 10pt !important; color: #000 !important; }
+            .raport-body { padding: 15px !important; background: #fff !important; }
+            .big-score { color: black !important; font-size: 2.2rem !important; }
+            .grade-badge { border: 2px solid #000; background: none !important; color: black !important; font-size: 1.2rem !important; padding: 4px 12px !important; }
+            .stat-item { border: 1px solid #000; background: none !important; border-radius: 8px !important; }
+            .stat-val { color: black !important; }
+            .heat-day { border: 0.5px solid #000; color: black !important; background: none !important; height: 14px; width: 14px; }
+            .print-footer { display: flex !important; justify-content: flex-end; margin-top: 40px; page-break-inside: avoid; }
+            .sig-box { width: 280px; text-align: center; color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Latar Belakang Gradient -->
+    <div class="fixed-bg"></div>
+
+    <!-- TOGGLE THEME MOBILE -->
+    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="display: flex; align-items: center; justify-content: center;">
+        <i data-lucide="sun-moon"></i>
+    </div>
+
+    <!-- HEADER KHUSUS CETAK (KOP SURAT RESMI) -->
+    <div class="print-header" style="display: none;">
+        <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="printLogo" class="print-logo">
+        <div class="print-title">
+            <h2>PEMERINTAH PROVINSI JAWA TIMUR</h2>
+            <div class="sub-instansi">DINAS PEKERJAAN UMUM SUMBER DAYA AIR</div>
+            <div style="font-weight: 700; font-size: 12pt;">UPT PSDA WS BONDOYUDO BARU DI LUMAJANG</div>
+            <div class="address">Jl. Jend. Basuki Rahmat No. 123, Lumajang - Jawa Timur</div>
+            <div style="font-size: 10pt; margin-top: 10px; font-weight: 800; text-decoration: underline;">LAPORAN REKAPITULASI KINERJA PEGAWAI</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="sidebarLogo" alt="Logo">
+            <div>
+                <h1>E-PUSDA</h1>
+                <p>Bondoyudo Baru</p>
+            </div>
+        </div>
+
+        <nav class="nav-items">
+            <a href="index.html" class="nav-link">
+                <i data-lucide="layout-grid"></i> Dashboard
+            </a>
+            <a href="raport.html" class="nav-link active">
+                <i data-lucide="file-bar-chart"></i> E-Raport
+            </a>
+            <a href="presensi.html" class="nav-link">
+                <i data-lucide="scan-face"></i> E-Presensi
+            </a>
+            <a href="wilayah.html" class="nav-link">
+                <i data-lucide="map"></i> Wilayah
+            </a>
+            <a href="admin.html" class="nav-link">
+                <i data-lucide="shield-check"></i> Admin Panel
+            </a>
+        </nav>
+
+        <div class="sidebar-footer rounded-3xl">
+            <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px;">00:00:00</div>
+            <button class="btn btn-primary rounded-2xl" onclick="toggleTheme()" style="width: 100%; padding: 10px; font-size: 0.8rem;">
+                <i data-lucide="sun-moon" size="18"></i> Ganti Tema
+            </button>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="section-title" style="margin-bottom: 25px; font-weight: 800; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 6px; height: 26px; background: var(--accent); border-radius: 3px;"></div>
+            <span style="font-size: 1.5rem; letter-spacing: -0.5px;">E-Raport Kinerja Tahunan</span>
+        </div>
+
+        <!-- Filter Area -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>Mulai Tanggal</label>
+                <input type="date" id="reportStart" class="rounded-xl">
+            </div>
+            <div class="filter-group">
+                <label>Hingga Tanggal</label>
+                <input type="date" id="reportEnd" class="rounded-xl">
+            </div>
+            <div class="filter-group">
+                <label>Pilih Wilayah</label>
+                <select id="reportRegion" class="rounded-xl">
+                    <option value="ALL">Semua Wilayah</option>
+                    <option value="Bangorejo">Bangorejo</option>
+                    <option value="Cluring">Cluring</option>
+                    <option value="Pesanggaran">Pesanggaran</option>
+                    <option value="Porolinggo">Porolinggo</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-primary rounded-xl" onclick="generateReport()" style="padding: 14px 28px; font-weight: 800; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);">
+                    <i data-lucide="play" size="18"></i> PROSES DATA
+                </button>
+                <button class="btn rounded-xl" onclick="preparePrint()" title="Cetak ke PDF (F4)" style="background: var(--success); color: white; padding: 14px 20px; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);">
+                    <i data-lucide="printer" size="20"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Grid Raport Card -->
+        <div id="raportContainer" class="raport-grid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px; opacity: 0.5; background: var(--glass); border-radius: 32px; border: 1px solid var(--glass-border);">
+                <i data-lucide="database-zap" size="64" style="margin-bottom: 20px; color: var(--accent);"></i>
+                <h3 style="font-weight: 800;">Siap Menganalisa Database</h3>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Silakan tentukan periode tanggal dan wilayah, kemudian klik "Proses Data".</p>
+            </div>
+        </div>
+
+        <!-- FOOTER TANDA TANGAN (Hanya Cetak) -->
+        <div class="print-footer" style="display: none;">
+            <div class="sig-box">
+                <div id="sigPlaceDate">Banyuwangi, ....................</div>
+                <div style="font-weight: 700; margin-top: 5px;">Kepala UPT PSDA WS Bondoyudo Baru</div>
+                <br><br><br><br>
+                <div style="font-weight: 800; text-decoration: underline;">( ......................................... )</div>
+                <div style="font-size: 10pt;">NIP. .....................................</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="b-nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="raport.html" class="b-nav-item active">
+            <i data-lucide="file-text"></i>
+            <span>Raport</span>
+        </a>
+        <a href="presensi.html" class="b-nav-item">
+            <div class="presensi-fab">
+                <i data-lucide="scan-face" color="white"></i>
+            </div>
+        </a>
+        <a href="wilayah.html" class="b-nav-item">
+            <i data-lucide="map"></i>
+            <span>Wilayah</span>
+        </a>
+        <a href="admin.html" class="b-nav-item">
+            <i data-lucide="user-cog"></i>
+            <span>Admin</span>
+        </a>
+    </nav>
+
+    <!-- Link ke File JS Eksternal -->
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        // Inisialisasi appData secara global untuk mencegah ReferenceError
+        window.appData = window.appData || { pegawai: [], config: {}, korlap: [], tools: [], presensi: [] };
+
+        // Logika khusus Halaman Raport
+        window.addEventListener('load', () => {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+            const startInput = document.getElementById('reportStart');
+            const endInput = document.getElementById('reportEnd');
+            
+            if (startInput) startInput.value = firstDay;
+            if (endInput) endInput.value = today.toISOString().split('T')[0];
+            
+            // Sinkronisasi logo secara dinamis dari window.appData
+            const checkDataInterval = setInterval(() => {
+                if (window.appData && window.appData.config && window.appData.config.Logo) {
+                    const printLogo = document.getElementById('printLogo');
+                    const sidebarLogo = document.getElementById('sidebarLogo');
+                    if (printLogo) printLogo.src = window.appData.config.Logo;
+                    if (sidebarLogo) sidebarLogo.src = window.appData.config.Logo;
+                    clearInterval(checkDataInterval);
+                }
+            }, 800);
+
+            setTimeout(() => clearInterval(checkDataInterval), 15000);
+        });
+
+        /**
+         * Fungsi Generate Report: Sinkronisasi dengan E_Pres (appData.presensi)
+         */
+        function generateReport() {
+            const container = document.getElementById('raportContainer');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                    <i data-lucide="loader-2" class="spin" size="48"></i>
+                    <p style="margin-top:20px; font-weight:800;">MENSINKRONKAN DATA E_PRES...</p>
+                </div>`;
+            lucide.createIcons();
+
+            // Ambil data dari appData (dikelola oleh main.js)
+            const presensiData = window.appData.presensi || [];
+            const pegawaiData = window.appData.pegawai || [];
+
+            setTimeout(() => {
+                renderRaportCards(pegawaiData, presensiData);
+            }, 1000);
+        }
+
+        function renderRaportCards(pegawai, presensi) {
+            const container = document.getElementById('raportContainer');
+            const startStr = document.getElementById('reportStart').value;
+            const endStr = document.getElementById('reportEnd').value;
+            const regionFilter = document.getElementById('reportRegion').value;
+
+            if (!pegawai || pegawai.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.5; padding: 40px;">Data Master Pegawai gagal dimuat.</p>`;
+                return;
+            }
+
+            // Filter Pegawai Berdasarkan Wilayah
+            const filteredPegawai = pegawai.filter(p => {
+                return regionFilter === 'ALL' || p.Wilayah.toLowerCase() === regionFilter.toLowerCase();
+            });
+
+            if (filteredPegawai.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.5; padding: 40px;">Tidak ada pegawai di wilayah ${regionFilter}.</p>`;
+                return;
+            }
+
+            // Hitung Statistik per Pegawai berdasarkan presensi
+            container.innerHTML = filteredPegawai.map(p => {
+                // Filter presensi milik pegawai ini dalam rentang tanggal
+                const logs = presensi.filter(l => {
+                    const logDate = l.Timestamp ? l.Timestamp.split(' ')[0] : '';
+                    return l.ID_Pegawai == p.ID && logDate >= startStr && logDate <= endStr;
+                });
+
+                const hadirCount = logs.filter(l => l.Status === 'Hadir' || l.Status === 'Terlambat').length;
+                const telatCount = logs.filter(l => l.Status === 'Terlambat').length;
+                const izinCount = logs.filter(l => l.Status === 'Izin' || l.Status === 'Sakit').length;
+                
+                // Kalkulasi Skor (Simulasi: Presentase kehadiran ideal 22 hari kerja)
+                const idealDays = 22; 
+                let score = Math.round((hadirCount / idealDays) * 100);
+                if (score > 100) score = 100;
+                if (score < 0) score = 0;
+
+                let grade = 'D';
+                let color = '#ef4444';
+                if(score >= 90) { grade = 'A'; color = '#10b981'; }
+                else if(score >= 75) { grade = 'B'; color = '#3b82f6'; }
+                else if(score >= 60) { grade = 'C'; color = '#f59e0b'; }
+
+                return `
+                <div class="raport-card">
+                    <div class="raport-header">
+                        <img src="${p.Link_Foto_Profile || 'https://placehold.co/100x130?text=User'}" class="raport-avatar" onerror="this.src='https://placehold.co/100x130?text=Error'">
+                        <div class="raport-info">
+                            <h3>${p.Nama}</h3>
+                            <p>${p.Jabatan} - WIL. ${p.Wilayah.toUpperCase()}</p>
+                        </div>
+                    </div>
+                    <div class="raport-body">
+                        <div class="score-display">
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; margin-bottom: 5px;">SKOR KINERJA</div>
+                                <div class="big-score" style="color: ${color}">${score}</div>
+                            </div>
+                            <div class="grade-badge" style="background: ${color}">${grade}</div>
+                        </div>
+                        <div class="mini-stats">
+                            <div class="stat-item"><span class="stat-val">${hadirCount}</span><span class="stat-lbl">Hadir</span></div>
+                            <div class="stat-item"><span class="stat-val" style="color:${telatCount > 0 ? 'var(--danger)' : ''}">${telatCount}</span><span class="stat-lbl">Telat</span></div>
+                            <div class="stat-item"><span class="stat-val">${izinCount}</span><span class="stat-lbl">Izin</span></div>
+                            <div class="stat-item"><span class="stat-val" style="color:var(--danger)">${Math.max(0, idealDays - hadirCount - izinCount)}</span><span class="stat-lbl">Alpha</span></div>
+                        </div>
+                        <div class="heatmap-container">
+                            <div style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Aktivitas Kehadiran</div>
+                            <div class="heatmap-grid">
+                                ${Array(28).fill(0).map((_, i) => {
+                                    const hasLog = logs.some(l => {
+                                        const d = new Date(l.Timestamp).getDate();
+                                        return d === (i + 1);
+                                    });
+                                    return `<div class="heat-day" style="background: ${hasLog ? color : '#f1f5f9'}; ${hasLog ? '' : 'color: #cbd5e1'}">${i+1}</div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function preparePrint() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const sigDateEl = document.getElementById('sigPlaceDate');
+            if (sigDateEl) sigDateEl.innerText = "Banyuwangi, " + today.toLocaleDateString('id-ID', options);
+            
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Menyiapkan...';
+            lucide.createIcons();
+
+            setTimeout(() => {
+                window.print();
+                btn.innerHTML = originalText;
+                lucide.createIcons();
+            }, 500);
+        }
+    </script>
+</body>
+</html>

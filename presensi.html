@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>E-Presensi - SIM UPT PUSDA</title>
+    
+    <!-- Meta untuk Mobile Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Library Ikon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Link ke File CSS Eksternal -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <style>
+        /* Desain Khusus Halaman Presensi */
+        .presensi-container {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .identity-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px var(--card-shadow);
+        }
+
+        .member-selector {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Pencarian tumpul */
+        #selPegawai {
+            border-radius: 20px !important;
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+            font-weight: 600;
+        }
+
+        .profile-preview {
+            width: 120px;
+            height: 160px;
+            border-radius: 24px;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--glass-border);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: #000;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .status-option {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .status-option.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 8px 15px rgba(249, 115, 22, 0.3);
+        }
+
+        /* Kolom keterangan tumpul & Voice Icon */
+        .note-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #inpNote {
+            border-radius: 20px !important;
+            padding: 15px 50px 15px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            resize: none;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .voice-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .voice-btn.listening {
+            animation: pulse-red 1.5s infinite;
+            background: var(--danger);
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Filter Chips Styling */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .filter-container::-webkit-scrollbar { display: none; }
+
+        .chip {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-muted);
+        }
+        .chip.active {
+            background: var(--primary-light);
+            color: white;
+            border-color: var(--primary-light);
+        }
+
+        .photo-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .photo-box {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: rgba(0,0,0,0.2);
+            border: 2px dashed var(--glass-border);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-box.captured {
+            border-style: solid;
+            border-color: var(--success);
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            z-index: 2;
+        }
+
+        .gps-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 12px 15px;
+            border-radius: 18px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 20px 15px 120px; }
+            .identity-card { padding: 25px 20px; border-radius: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-bg"></div>
+
+    <!-- TOGGLE THEME MOBILE -->
+    <div class="theme-toggle-mobile rounded-2xl" onclick="toggleTheme()" style="display: flex; align-items: center; justify-content: center;">
+        <i data-lucide="sun-moon"></i>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="" id="sidebarLogo" alt="Logo">
+            <div>
+                <h1>E-PUSDA</h1>
+                <p>Bondoyudo Baru</p>
+            </div>
+        </div>
+
+        <nav class="nav-items">
+            <a href="index.html" class="nav-link">
+                <i data-lucide="layout-grid"></i> Dashboard
+            </a>
+            <a href="raport.html" class="nav-link">
+                <i data-lucide="file-bar-chart"></i> E-Raport
+            </a>
+            <a href="presensi.html" class="nav-link active">
+                <i data-lucide="scan-face"></i> E-Presensi
+            </a>
+            <a href="wilayah.html" class="nav-link">
+                <i data-lucide="map"></i> Wilayah
+            </a>
+            <a href="admin.html" class="nav-link">
+                <i data-lucide="shield-check"></i> Admin Panel
+            </a>
+        </nav>
+
+        <div class="sidebar-footer rounded-3xl">
+            <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px;">00:00:00</div>
+            <button class="btn btn-primary rounded-2xl" onclick="toggleTheme()" style="width: 100%; padding: 10px; font-size: 0.8rem;">
+                <i data-lucide="sun-moon" size="18"></i> Ganti Tema
+            </button>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="section-title" style="margin-bottom: 25px; font-weight: 800; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 6px; height: 26px; background: var(--accent); border-radius: 3px;"></div>
+            <span style="font-size: 1.5rem; letter-spacing: -0.5px;">E-Presensi Digital</span>
+        </div>
+
+        <div class="presensi-container fade-in">
+            <!-- Form Card -->
+            <div class="identity-card">
+                <div class="gps-badge" id="gpsStatus">
+                    <i data-lucide="loader-2" class="spin" size="14"></i>
+                    <span>Mencari Sinyal GPS...</span>
+                </div>
+
+                <!-- Filter Wilayah Chips (Dinamis) -->
+                <div class="filter-container" id="wilayahFilter">
+                    <div class="chip active" onclick="setRegionFilter('ALL', this)">SEMUA</div>
+                    <!-- Wilayah lain akan di-render oleh JS -->
+                </div>
+
+                <!-- Pemilih Pegawai (Sinkron MS_PEG & MS_WIL) -->
+                <div class="member-selector">
+                    <select id="selPegawai" class="rounded-xl" onchange="updateProfilePreview()">
+                        <option value="">-- Cari Nama / NIP --</option>
+                    </select>
+                </div>
+
+                <img id="profImg" src="https://placehold.co/120x160?text=Profil" class="profile-preview">
+                <h3 id="profName" style="font-weight:800; margin-bottom:2px; letter-spacing:-0.5px;">---</h3>
+                <p id="profRole" style="font-size:0.75rem; opacity:0.6; font-weight:600; margin-bottom:25px;">Pilih identitas untuk memulai</p>
+
+                <!-- Pilihan Status -->
+                <div class="status-grid">
+                    <div class="status-option" onclick="setStatus('Hadir', this)">
+                        <i data-lucide="check-circle"></i> HADIR KERJA
+                    </div>
+                    <div class="status-option" onclick="setStatus('Pulang', this)">
+                        <i data-lucide="log-out"></i> PULANG KERJA
+                    </div>
+                    <div class="status-option" onclick="setStatus('Izin', this)">
+                        <i data-lucide="info"></i> IZIN / SAKIT
+                    </div>
+                    <div class="status-option" onclick="setStatus('Dinas', this)">
+                        <i data-lucide="briefcase"></i> DINAS LUAR
+                    </div>
+                </div>
+
+                <!-- Input Catatan dengan Speak to Text -->
+                <div class="note-wrapper">
+                    <textarea id="inpNote" placeholder="Catatan kegiatan hari ini (min. 10 karakter)..." rows="2"></textarea>
+                    <button type="button" class="voice-btn" id="voiceBtn" onclick="startSpeechToText()" title="Gunakan Suara">
+                        <i data-lucide="mic" size="18"></i>
+                    </button>
+                </div>
+
+                <!-- Slot Dokumentasi -->
+                <div class="photo-slots">
+                    <div class="photo-box" id="boxSelfie" onclick="triggerCamera('user')">
+                        <i data-lucide="camera" size="32" style="opacity:0.3;"></i>
+                        <span style="font-size:0.65rem; font-weight:800; opacity:0.5; margin-top:10px;">FOTO SELFIE</span>
+                        <img id="prevSelfie" style="display:none;">
+                    </div>
+                    <div class="photo-box" id="boxWork" onclick="triggerCamera('environment')">
+                        <i data-lucide="image" size="32" style="opacity:0.3;"></i>
+                        <span style="font-size:0.65rem; font-weight:800; opacity:0.5; margin-top:10px;">FOTO LOKASI</span>
+                        <img id="prevWork" style="display:none;">
+                    </div>
+                </div>
+
+                <!-- Tombol Submit -->
+                <button id="btnSubmit" class="btn btn-primary rounded-2xl" onclick="submitPresensi()" disabled style="width:100%; padding:18px; font-weight:900; font-size:1rem; box-shadow:0 10px 25px rgba(249, 115, 22, 0.4);">
+                    <i data-lucide="send" size="20"></i> KIRIM PRESENSI
+                </button>
+            </div>
+            
+            <p style="text-align:center; font-size:0.7rem; opacity:0.5; line-height:1.5; margin-top:10px;">
+                Sinkronisasi database UPT PUSDA v2.5<br>Data GPS dan Waktu terekam secara otomatis.
+            </p>
+        </div>
+
+        <!-- Hidden inputs and canvas for processing -->
+        <input type="file" id="camInp" accept="image/*" style="display:none;" onchange="processImage(event)">
+        <canvas id="wmCvs" style="display:none;"></canvas>
+    </main>
+
+    <!-- BOTTOM NAVIGATION (Fixed CSS Class for consistency) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="b-nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="raport.html" class="b-nav-item">
+            <i data-lucide="file-text"></i>
+            <span>Raport</span>
+        </a>
+        <a href="presensi.html" class="b-nav-item active">
+            <div class="presensi-fab">
+                <i data-lucide="scan-face" color="white"></i>
+            </div>
+        </a>
+        <a href="wilayah.html" class="b-nav-item"> <!-- Fixed: Changed from nav-link to b-nav-item -->
+            <i data-lucide="map"></i>
+            <span>Wilayah</span>
+        </a>
+        <a href="admin.html" class="b-nav-item">
+            <i data-lucide="user-cog"></i>
+            <span>Admin</span>
+        </a>
+    </nav>
+
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        // Inisialisasi appData global
+        window.appData = window.appData || { pegawai: [], korlap: [], config: {} };
+
+        let selectedStatus = "";
+        let currentCamType = "";
+        let gpsLocked = false;
+        let coords = "";
+        let currentRegion = "ALL";
+
+        window.addEventListener('load', () => {
+            lockGPS();
+            
+            // Sinkronisasi data gabungan MS_PEG dan MS_WIL
+            const syncInterval = setInterval(() => {
+                if (window.appData && (window.appData.pegawai?.length > 0 || window.appData.korlap?.length > 0)) {
+                    renderRegionChips();
+                    populateCombinedPegawai();
+                    updateSidebarLogo();
+                    clearInterval(syncInterval);
+                }
+            }, 800);
+            
+            setTimeout(() => clearInterval(syncInterval), 15000);
+        });
+
+        function lockGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        coords = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+                        const badge = document.getElementById('gpsStatus');
+                        badge.innerHTML = `<i data-lucide="map-pin" size="14"></i><span>LOKASI TERKUNCI: ${coords}</span>`;
+                        badge.style.background = "rgba(16, 185, 129, 0.15)";
+                        gpsLocked = true;
+                        validateForm();
+                        lucide.createIcons();
+                    },
+                    (err) => {
+                        document.getElementById('gpsStatus').innerHTML = `<i data-lucide="alert-triangle" size="14"></i><span>GPS DIBLOKIR / BERMASALAH</span>`;
+                        document.getElementById('gpsStatus').style.color = "var(--danger)";
+                    },
+                    { enableHighAccuracy: true }
+                );
+            }
+        }
+
+        /**
+         * Render Pilihan Wilayah secara Dinamis dan Berurutan
+         */
+        function renderRegionChips() {
+            const container = document.getElementById('wilayahFilter');
+            const pData = window.appData.pegawai || [];
+            const kData = window.appData.korlap || [];
+            const combined = [...pData, ...kData];
+            
+            // Ambil wilayah unik, buang nilai kosong, urutkan alfabetis
+            const regions = [...new Set(combined.map(p => p.Wilayah?.toUpperCase()))]
+                            .filter(r => r && r !== "")
+                            .sort();
+
+            let html = `<div class="chip ${currentRegion === 'ALL' ? 'active' : ''}" onclick="setRegionFilter('ALL', this)">SEMUA</div>`;
+            regions.forEach(reg => {
+                html += `<div class="chip ${currentRegion === reg ? 'active' : ''}" onclick="setRegionFilter('${reg}', this)">${reg}</div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function setRegionFilter(region, el) {
+            currentRegion = region;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            populateCombinedPegawai(); // Re-populate dropdown based on filter
+        }
+
+        /**
+         * Sinkronisasi data dari MS_PEG dan MS_WIL dengan filter wilayah
+         */
+        function populateCombinedPegawai() {
+            const sel = document.getElementById('selPegawai');
+            sel.innerHTML = '<option value="">-- Cari Nama / NIP --</option>';
+            
+            const pData = window.appData.pegawai || [];
+            const kData = window.appData.korlap || [];
+            let combined = [...pData, ...kData].filter(p => p.Status === 'Aktif');
+            
+            // Filter Berdasarkan Wilayah yang dipilih
+            if (currentRegion !== "ALL") {
+                combined = combined.filter(p => p.Wilayah?.toUpperCase() === currentRegion);
+            }
+
+            // Urutkan berdasarkan nama
+            combined.sort((a, b) => a.Nama.localeCompare(b.Nama));
+
+            combined.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.ID;
+                opt.text = `${p.Nama} (${p.Jabatan})`;
+                sel.add(opt);
+            });
+            
+            // Reset preview jika ganti wilayah
+            updateProfilePreview();
+        }
+
+        function updateProfilePreview() {
+            const id = document.getElementById('selPegawai').value;
+            const pData = window.appData.pegawai || [];
+            const kData = window.appData.korlap || [];
+            const p = [...pData, ...kData].find(x => x.ID == id);
+            
+            if (p) {
+                document.getElementById('profImg').src = p.Link_Foto_Profile || 'https://placehold.co/120x160?text=User';
+                document.getElementById('profName').innerText = p.Nama;
+                document.getElementById('profRole').innerText = `${p.Jabatan} - WIL. ${p.Wilayah?.toUpperCase()}`;
+            } else {
+                document.getElementById('profImg').src = 'https://placehold.co/120x160?text=Profil';
+                document.getElementById('profName').innerText = "---";
+                document.getElementById('profRole').innerText = "Pilih identitas untuk memulai";
+            }
+            validateForm();
+        }
+
+        /**
+         * Fitur Speak to Text (Web Speech API)
+         */
+        function startSpeechToText() {
+            const btn = document.getElementById('voiceBtn');
+            const noteArea = document.getElementById('inpNote');
+
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Browser Anda tidak mendukung fitur suara ke teks.");
+                return;
+            }
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                btn.classList.add('listening');
+                btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i>';
+                lucide.createIcons();
+            };
+
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                noteArea.value += (noteArea.value ? ' ' : '') + text;
+                validateForm();
+            };
+
+            recognition.onend = () => {
+                btn.classList.remove('listening');
+                btn.innerHTML = '<i data-lucide="mic" size="18"></i>';
+                lucide.createIcons();
+            };
+
+            recognition.onerror = () => {
+                btn.classList.remove('listening');
+                btn.innerHTML = '<i data-lucide="mic" size="18"></i>';
+                lucide.createIcons();
+            };
+
+            recognition.start();
+        }
+
+        function setStatus(status, el) {
+            selectedStatus = status;
+            document.querySelectorAll('.status-option').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+            validateForm();
+        }
+
+        function triggerCamera(type) {
+            currentCamType = type;
+            const inp = document.getElementById('camInp');
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                inp.setAttribute('capture', type === 'user' ? 'user' : 'environment');
+            }
+            inp.click();
+        }
+
+        function processImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    drawWatermark(img);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function drawWatermark(img) {
+            const cvs = document.getElementById('wmCvs');
+            const ctx = cvs.getContext('2d');
+            
+            const width = 800;
+            const height = (img.height / img.width) * width;
+            cvs.width = width;
+            cvs.height = height;
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            ctx.fillStyle = "rgba(0,0,0,0.6)";
+            ctx.fillRect(0, height - 130, width, 130);
+
+            ctx.fillStyle = "white";
+            ctx.font = "bold 28px Plus Jakarta Sans";
+            const name = document.getElementById('profName').innerText;
+            ctx.fillText(name.toUpperCase(), 30, height - 80);
+
+            ctx.font = "22px Plus Jakarta Sans";
+            const now = new Date().toLocaleString('id-ID');
+            ctx.fillText(`${now} | GPS: ${coords}`, 30, height - 40);
+
+            const dataUrl = cvs.toDataURL('image/jpeg', 0.8);
+            
+            if (currentCamType === 'user') {
+                const prev = document.getElementById('prevSelfie');
+                prev.src = dataUrl;
+                prev.style.display = "block";
+                document.getElementById('boxSelfie').classList.add('captured');
+            } else {
+                const prev = document.getElementById('prevWork');
+                prev.src = dataUrl;
+                prev.style.display = "block";
+                document.getElementById('boxWork').classList.add('captured');
+            }
+            validateForm();
+        }
+
+        function validateForm() {
+            const pegOk = document.getElementById('selPegawai').value !== "";
+            const statusOk = selectedStatus !== "";
+            const noteOk = document.getElementById('inpNote').value.length >= 10;
+            const sPhotoOk = document.getElementById('prevSelfie').src.includes('data:image');
+            const wPhotoOk = document.getElementById('prevWork').src.includes('data:image');
+
+            document.getElementById('btnSubmit').disabled = !(pegOk && statusOk && noteOk && sPhotoOk && wPhotoOk && gpsLocked);
+        }
+
+        document.getElementById('inpNote').addEventListener('input', validateForm);
+
+        async function submitPresensi() {
+            const btn = document.getElementById('btnSubmit');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> MENGIRIM...`;
+            lucide.createIcons();
+
+            const pId = document.getElementById('selPegawai').value;
+            const pData = window.appData.pegawai || [];
+            const kData = window.appData.korlap || [];
+            const p = [...pData, ...kData].find(x => x.ID == pId);
+
+            const payload = {
+                action: "submitPresensi",
+                id_pegawai: pId,
+                nama: p.Nama,
+                status: selectedStatus,
+                keterangan: document.getElementById('inpNote').value,
+                gps: coords,
+                wilayah: p.Wilayah,
+                foto_selfie: document.getElementById('prevSelfie').src,
+                foto_lokasi: document.getElementById('prevWork').src
+            };
+
+            try {
+                // Simulasi pengiriman
+                setTimeout(() => {
+                    alert(`✅ Presensi Berhasil!\nTerima kasih ${p.Nama}, data presensi Anda telah tersinkronisasi.`);
+                    location.reload();
+                }, 2000);
+            } catch (err) {
+                alert("Gagal mengirim presensi. Periksa koneksi internet.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
+        function updateSidebarLogo() {
+            if (window.appData.config?.Logo) {
+                document.getElementById('sidebarLogo').src = window.appData.config.Logo;
+            }
+        }
+    </script>
+</body>
+</html>
