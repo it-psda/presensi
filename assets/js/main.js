@@ -1,8 +1,8 @@
 /**
  * SIM UPT PUSDA - Global JavaScript Engine
- * Versi: 2.7.2 (CORS & Environment Optimized)
+ * Versi: 2.7.4 (Production Ready - GitHub Pages Optimized)
  * Sinkronisasi: MS_PEG, MS_WIL, TOOLS, CONF, E_PRES
- * Fitur: Modern Toast, CRUD Sync, Auto-Scoring Interface, & lh3 Image Support
+ * Fitur: Modern Toast, CRUD Sync, Auto-Scoring, & GAS Redirect Fix
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOL0goC2pdIIx6hHzgrzdHm8tlO3FBKICPGl5AJsKuJfRT_0qsMQE7gqStHAzsLTW0/exec";
@@ -14,7 +14,8 @@ window.appData = {
     korlap: [],
     presensi: [],
     tools: [],
-    agenda: []
+    agenda: [],
+    isLoaded: false // Flag untuk mengecek apakah data sudah siap
 };
 
 let slideIdx = 0;
@@ -22,12 +23,10 @@ let slideInterval;
 
 // Inisialisasi Utama
 window.addEventListener('load', async () => {
+    console.log("Sistem PUSDA Memulai...");
     if (typeof lucide !== 'undefined') lucide.createIcons();
     initTheme();
     initClock();
-    
-    // Cek Lingkungan Pengguna
-    checkEnvironment();
     
     // Ambil data dari database sebelum menjalankan fitur halaman
     await fetchAppData();
@@ -36,32 +35,29 @@ window.addEventListener('load', async () => {
     if (document.getElementById('toolsContainer')) renderDashboardTools();
     if (document.getElementById('heroImage')) startHeroSlide();
     if (document.getElementById('adminContent')) renderAdminTable();
+    
+    // Inisialisasi khusus halaman presensi jika ada
+    if (typeof populateCombinedPegawai === 'function') populateCombinedPegawai();
 });
 
 /**
- * --- ENVIRONMENT CHECK ---
- */
-function checkEnvironment() {
-    if (window.location.protocol === 'file:') {
-        console.warn("PERINGATAN: Aplikasi dijalankan via file://. CORS mungkin akan memblokir permintaan API.");
-        setTimeout(() => {
-            showToast("Gunakan 'Live Server' atau hosting agar API Google Sheets berjalan lancar.", "warning");
-        }, 2000);
-    }
-}
-
-/**
  * --- DATA SYNC ---
+ * Menggunakan mode cors dan redirect follow untuk Google Apps Script
  */
 async function fetchAppData() {
     try {
-        // Gunakan cache: 'no-cache' untuk memastikan data selalu segar
         const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, {
             method: 'GET',
+            mode: 'cors', 
+            redirect: 'follow',
             cache: 'no-cache',
-            mode: 'cors'
+            headers: {
+                'Accept': 'application/json'
+            }
         });
         
+        if (!response.ok) throw new Error(`Network response was not ok: ${response.status}`);
+
         const result = await response.json();
 
         if (result.status === 'success') {
@@ -71,19 +67,29 @@ async function fetchAppData() {
                 korlap: result.korlap || [],
                 presensi: result.presensi || [],
                 tools: result.tools || [],
-                agenda: result.agenda || []
+                agenda: result.agenda || [],
+                isLoaded: true
             };
 
             updateGlobalUI();
-            console.log("Database PUSDA Terkoneksi.");
+            console.log("✅ Database Terkoneksi & Sinkron.");
             
-            if (document.getElementById('tableBody')) {
-                if (typeof renderAdminTable === 'function') renderAdminTable();
+            // Re-render jika di halaman admin
+            const tableBody = document.getElementById('tableBody');
+            if (tableBody && typeof renderAdminTable === 'function') {
+                renderAdminTable();
             }
+        } else {
+            throw new Error(result.message || "Server mengembalikan status error.");
         }
     } catch (error) {
-        showToast("Gagal sinkronisasi database. Pastikan Apps Script telah di-Deploy sebagai 'Anyone'.", "danger");
-        console.error("Sync Error:", error);
+        window.appData.isLoaded = false;
+        let msg = "Gagal sinkronisasi database.";
+        if (error.message.includes("fetch")) {
+            msg = "Masalah Koneksi/CORS. Pastikan Apps Script 'Anyone' & jalankan di Server/Hosting.";
+        }
+        showToast(msg, "danger");
+        console.error("🔴 Error Detail:", error);
     }
 }
 
@@ -120,9 +126,10 @@ function showToast(message, type = "success") {
             display: flex; align-items: center; gap: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 800; font-size: 0.85rem;
             border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+            max-width: 300px;
         ">
             <i data-lucide="${icons[type] || 'bell'}"></i>
-            <span>${message}</span>
+            <span style="flex:1;">${message}</span>
         </div>
     `;
 
@@ -133,7 +140,7 @@ function showToast(message, type = "success") {
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(-20px)';
         setTimeout(() => toast.remove(), 500);
-    }, 4000);
+    }, 4500);
 }
 
 /**
@@ -143,28 +150,35 @@ async function login() {
     const passInput = document.getElementById('pass');
     if (!passInput) return;
     
+    // Cegah login jika data belum siap
+    if (!window.appData.isLoaded) {
+        showToast("Menunggu sinkronisasi database... Mohon tunggu sebentar.", "warning");
+        await fetchAppData();
+        if (!window.appData.isLoaded) return;
+    }
+
     const passValue = passInput.value;
-    // Password diambil dari CONF. Jika gagal fetch, gunakan fallback.
     const adminPass = window.appData.config.AdminPassword || 'pusda123';
 
     if (passValue === adminPass) {
-        showToast("Login Berhasil! Selamat Datang Admin.");
+        showToast("Akses Diterima. Selamat Datang Admin.");
         const loginArea = document.getElementById('loginArea');
         const adminContent = document.getElementById('adminContent');
         
         if (loginArea) {
             loginArea.classList.add('fade-out');
-            setTimeout(() => loginArea.style.display = 'none', 500);
-        }
-        
-        if (adminContent) {
-            adminContent.style.display = 'block';
-            adminContent.classList.remove('hidden');
-            adminContent.classList.add('fade-in');
-            if (typeof renderAdminTable === 'function') renderAdminTable();
+            setTimeout(() => {
+                loginArea.style.display = 'none';
+                if (adminContent) {
+                    adminContent.style.display = 'block';
+                    adminContent.classList.remove('hidden');
+                    adminContent.classList.add('fade-in');
+                    if (typeof renderAdminTable === 'function') renderAdminTable();
+                }
+            }, 400);
         }
     } else {
-        showToast("Password Administrator Salah!", "danger");
+        showToast("Kata Sandi Salah!", "danger");
         passInput.value = '';
         passInput.focus();
     }
@@ -208,33 +222,28 @@ async function saveAdminData() {
 
     try {
         btn.disabled = true;
-        btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Memproses...';
+        btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Sinkronisasi...';
         lucide.createIcons();
 
-        /**
-         * PENTING: Untuk menghindari preflight OPTIONS yang menyebabkan error CORS pada GAS,
-         * kita mengirim payload sebagai text/plain. Code.gs kita sudah mendukung JSON.parse(e.postData.contents).
-         */
+        // Mengirim sebagai text/plain untuk menghindari Preflight OPTIONS di GitHub Pages
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'cors',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8',
-            },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         });
         
         const result = await response.json();
 
         if (result.status === 'success') {
-            showToast("Data berhasil disinkronkan ke Cloud.");
+            showToast("Data tersimpan dan disinkronkan.");
             if (typeof closeModalAdmin === 'function') closeModalAdmin();
             await fetchAppData(); 
         } else {
-            showToast("Gagal simpan: " + result.message, "danger");
+            showToast("Gagal: " + result.message, "danger");
         }
     } catch (error) {
-        showToast("CORS Error atau Koneksi Terputus. Gunakan server lokal (Live Server).", "danger");
+        showToast("Terjadi kesalahan koneksi/server.", "danger");
         console.error("Save Error:", error);
     } finally {
         btn.disabled = false;
@@ -278,7 +287,7 @@ function startHeroSlide() {
 
     updateSlide();
     if (slideInterval) clearInterval(slideInterval);
-    slideInterval = setInterval(updateSlide, 6000);
+    slideInterval = setInterval(updateSlide, 7000);
 }
 
 function renderDashboardTools() {
@@ -334,7 +343,7 @@ function toggleTheme() {
     showToast(`Mode ${isLight ? 'Terang' : 'Gelap'} Aktif`, "info");
 }
 
-window.onerror = function(msg) {
-    console.error("PUSDA Engine Error:", msg);
+window.onerror = function(msg, url, line) {
+    console.error("PUSDA Engine Error:", msg, "at line:", line);
     return false;
 };
