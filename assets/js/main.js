@@ -5,7 +5,7 @@
  * Fitur: No-Preflight POST (CORS Fix), Reset Logic, Auto-Scoring, lh3 Link Support
  */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOL0goC2pdIIx6hHzgrzdHm8tlO3FBKICPGl5AJsKuJfRT_0qsMQE7gqStHAzsLTW0/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
 
 // State Global Aplikasi
 window.appData = {
@@ -363,3 +363,4 @@ function startSpeechToText() {
 }
 
 window.onerror = (msg) => { console.error("🔴 Runtime Error:", msg); return false; };
+
