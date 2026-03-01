@@ -364,3 +364,4 @@ function startSpeechToText() {
 
 window.onerror = (msg) => { console.error("🔴 Runtime Error:", msg); return false; };
 
+
