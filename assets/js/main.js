@@ -1,8 +1,8 @@
 /**
  * SIM UPT PUSDA - Global JavaScript Engine
- * Versi: 2.8.0 (Integrated & Optimized)
+ * Versi: 2.8.1 (CORS Production Fix - GitHub Pages)
  * Sinkronisasi: MS_PEG, MS_WIL, TOOLS, CONF, E_PRES
- * Fitur: Modern Toast, CRUD Cloud Sync, Auto-Scoring, Speak-to-Text, & GAS Redirect Fix
+ * Fitur: Minimalist GET (No-Preflight), Text-Plain POST, GAS Redirect Support
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOL0goC2pdIIx6hHzgrzdHm8tlO3FBKICPGl5AJsKuJfRT_0qsMQE7gqStHAzsLTW0/exec";
@@ -21,21 +21,19 @@ window.appData = {
 let slideIdx = 0;
 let slideInterval;
 
-// Inisialisasi Utama saat Halaman Dimuat
+// Inisialisasi Utama
 window.addEventListener('load', async () => {
     console.log("🚀 Engine SIM PUSDA Memulai...");
     
-    // Jalankan Ikon Lucide
     if (typeof lucide !== 'undefined') lucide.createIcons();
     
-    // Inisialisasi Tema & Jam
     initTheme();
     initClock();
     
-    // Pemuatan Data Utama dari Cloud
+    // Ambil data database
     await fetchAppData();
 
-    // Jalankan Fitur UI secara Kondisional (Berdasarkan ID elemen di HTML)
+    // Jalankan Fitur UI secara Kondisional
     if (document.getElementById('toolsContainer')) renderDashboardTools();
     if (document.getElementById('heroImage')) startHeroSlide();
     if (document.getElementById('adminContent')) renderAdminTable();
@@ -44,14 +42,14 @@ window.addEventListener('load', async () => {
 
 /**
  * --- 1. DATA SYNC (GET DATA) ---
+ * Perbaikan: Menghapus header kustom untuk menghindari Preflight OPTIONS
  */
 async function fetchAppData() {
     try {
+        // Penting: Jangan menambahkan headers kustom pada GET ke GAS untuk menghindari CORS Preflight
         const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, {
             method: 'GET',
-            mode: 'cors',
-            redirect: 'follow',
-            cache: 'no-cache'
+            redirect: 'follow' // Wajib bagi Google Apps Script
         });
         
         if (!response.ok) throw new Error("Gagal merespon server.");
@@ -71,19 +69,18 @@ async function fetchAppData() {
             updateGlobalUI();
             console.log("✅ Database Sinkron.");
             
-            // Trigger Re-render untuk komponen yang membutuhkan data segar
+            // Trigger Re-render
             if (typeof renderAdminTable === 'function' && document.getElementById('tableBody')) renderAdminTable();
             if (typeof populateCombinedPegawai === 'function' && document.getElementById('selPegawai')) populateCombinedPegawai();
         }
     } catch (error) {
         window.appData.isLoaded = false;
         console.error("🔴 Sync Error:", error);
-        showToast("Gagal menyambung ke database Cloud.", "danger");
+        // showToast("Gagal sinkronisasi. Cek status Deployment GAS Anda.", "danger");
     }
 }
 
 function updateGlobalUI() {
-    // Update Logo Instansi di semua halaman
     const logoUrl = window.appData.config.Logo;
     if (logoUrl) {
         const logos = document.querySelectorAll('#sidebarLogo, #printLogo, #adminLogo');
@@ -141,7 +138,7 @@ async function login() {
     if (!passInput) return;
     
     if (!window.appData.isLoaded) {
-        showToast("Sinkronisasi database... Mohon tunggu.", "warning");
+        showToast("Database sedang memuat. Ulangi dalam 3 detik.", "warning");
         await fetchAppData();
         if (!window.appData.isLoaded) return;
     }
@@ -150,7 +147,7 @@ async function login() {
     const adminPass = window.appData.config.AdminPassword || 'pusda123';
 
     if (passValue === adminPass) {
-        showToast("Login Berhasil! Selamat Datang.");
+        showToast("Login Berhasil!");
         const loginArea = document.getElementById('loginArea');
         const adminContent = document.getElementById('adminContent');
         
@@ -174,6 +171,7 @@ async function login() {
 
 /**
  * --- 4. CRUD PEGAWAI & KORLAP (POST DATA) ---
+ * Menggunakan Content-Type: text/plain untuk bypass CORS Preflight
  */
 async function saveAdminData() {
     const btn = document.querySelector('#formAdmin button[type="submit"]');
@@ -187,7 +185,6 @@ async function saveAdminData() {
         return;
     }
 
-    // Deteksi Tipe Data (Korlap atau Pegawai)
     const modalTitle = document.getElementById('modalTitle').innerText;
     const isKorlap = modalTitle.includes("Korlap");
 
@@ -204,7 +201,6 @@ async function saveAdminData() {
         Link_Foto_Profile: document.getElementById('formLinkFoto').value
     };
 
-    // Sisipkan Foto jika ada perubahan (Base64)
     const previewImg = document.getElementById('formPreview');
     if (previewImg && previewImg.src.startsWith('data:image')) {
         payload.fotoBase64 = previewImg.src;
@@ -215,7 +211,7 @@ async function saveAdminData() {
         btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Memproses...';
         lucide.createIcons();
 
-        // Mengirim sebagai text/plain untuk menghindari CORS Preflight OPTIONS
+        // Mengirim sebagai text/plain agar browser tidak mengirim permintaan OPTIONS
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'cors',
@@ -227,15 +223,14 @@ async function saveAdminData() {
         const result = await response.json();
 
         if (result.status === 'success') {
-            showToast("Data Tersimpan ke Cloud Drive & Sheet.");
+            showToast("Data Berhasil Disimpan.");
             if (typeof closeModalAdmin === 'function') closeModalAdmin();
-            await fetchAppData(); // Refresh UI State
+            await fetchAppData(); 
         } else {
             showToast("Gagal: " + result.message, "danger");
         }
     } catch (error) {
-        showToast("Error Koneksi: Pastikan Deployment 'Anyone'.", "danger");
-        console.error("POST Error:", error);
+        showToast("Error Koneksi. Pastikan Apps Script Aktif.", "danger");
     } finally {
         btn.disabled = false;
         btn.innerHTML = 'Simpan Perubahan';
@@ -254,10 +249,10 @@ async function submitPresensi() {
         action: "presensi",
         idPegawai: document.getElementById('selPegawai').value,
         nama: document.getElementById('profName').innerText,
-        status: selectedStatus, // Variable ini harus ada di presensi.html
+        status: typeof selectedStatus !== 'undefined' ? selectedStatus : '', 
         keterangan: document.getElementById('inpNote').value,
-        gps: coords, // Variable koordinat dari presensi.html
-        wilayah: currentRegion,
+        gps: typeof coords !== 'undefined' ? coords : '',
+        wilayah: typeof currentRegion !== 'undefined' ? currentRegion : '',
         selfieBase64: document.getElementById('prevSelfie').src,
         workBase64: document.getElementById('prevWork').src
     };
@@ -278,26 +273,26 @@ async function submitPresensi() {
         const result = await response.json();
 
         if (result.status === 'success') {
-            showToast(`Presensi Berhasil! Skor: ${result.score} poin.`);
+            showToast(`Berhasil! Skor: ${result.score}`);
             setTimeout(() => location.reload(), 2000);
         } else {
             showToast(result.message, "danger");
             btn.disabled = false;
         }
     } catch (error) {
-        showToast("Gagal kirim presensi. Cek internet.", "danger");
+        showToast("Gagal kirim. Cek internet.", "danger");
     }
 }
 
 /**
- * Fitur Suara ke Teks (Speak to Text)
+ * Suara ke Teks
  */
 function startSpeechToText() {
     const btn = document.getElementById('voiceBtn');
     const noteArea = document.getElementById('inpNote');
 
     if (!('webkitSpeechRecognition' in window)) {
-        showToast("Browser tidak mendukung Voice Input.", "warning");
+        showToast("Voice Input tidak didukung.", "warning");
         return;
     }
 
@@ -344,9 +339,9 @@ function startHeroSlide() {
                 heroImg.style.opacity = '1';
                 if (heroLabel) {
                     heroLabel.innerHTML = `
-                        <div style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: inline-block; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+                        <div style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: inline-block;">
                             <span style="display:block; font-size:0.9rem; font-weight:800; color:#fff;">${p.Nama.toUpperCase()}</span>
-                            <span style="font-weight:700; font-size:0.7rem; color:var(--accent); text-transform:uppercase; letter-spacing:1px;">KORLAP ${p.Wilayah}</span>
+                            <span style="font-weight:700; font-size:0.7rem; color:var(--accent); text-transform:uppercase;">KORLAP ${p.Wilayah}</span>
                         </div>
                     `;
                 }
@@ -376,7 +371,7 @@ function renderDashboardTools() {
 }
 
 function getToolUrl(tool) {
-    const map = { 'E-Presensi': 'presensi.html', 'E-Raport': 'raport.html', 'Wilayah': 'wilayah.html', 'Admin Panel': 'admin.html' };
+    const map = { 'E-Presensi': 'presensi.html', 'E-Raport': 'raport.html', 'Wilayah': 'wilayah.html' };
     return tool.Link_URL && tool.Link_URL !== '#' ? tool.Link_URL : (map[tool.Nama] || '#');
 }
 
