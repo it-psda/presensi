@@ -1,6 +1,6 @@
 /**
- * SIM UPT PUSDA - Global Stylesheet v3.6
- * Full Responsiveness, Mobile Optimization & Consistent Branding
+ * SIM UPT PUSDA - Global Stylesheet v3.8
+ * Full Responsiveness, Mobile Optimization & Standardized Navigation
  */
 
  :root {
@@ -8,6 +8,7 @@
     --primary: #1e3a8a;
     --primary-light: #3b82f6;
     --accent: #f97316;
+    --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
     --success: #10b981;
     --danger: #ef4444;
 
@@ -74,7 +75,7 @@ body {
     background: var(--bg-gradient);
 }
 
-/* --- SIDEBAR FLOATING (Consistency Fix) --- */
+/* --- SIDEBAR FLOATING (Standardized) --- */
 .sidebar {
     width: var(--sidebar-width);
     height: calc(100vh - 40px);
@@ -147,7 +148,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 .main-content {
     flex: 1;
     margin-left: calc(var(--sidebar-width) + 40px);
-    padding: 40px 1.5rem 120px 1.5rem;
+    padding: 40px 1.5rem 120px 0.5rem;
     min-height: 100vh;
     transition: 0.3s ease;
 }
@@ -207,7 +208,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* --- GRID & CARD STANDARDS (Proportional Fix) --- */
+/* --- GRID & CARD STANDARDS (Responsive Fix) --- */
 .data-grid, .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -219,7 +220,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 .admin-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 28px;
+    border-radius: 30px;
     padding: 24px;
     display: flex;
     gap: 24px;
@@ -233,7 +234,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     flex-shrink: 0;
 }
 
@@ -242,34 +243,37 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     border-radius: 20px;
     overflow: hidden;
     border: 2px solid var(--glass-border);
-    background: transparent; /* Fix: Background Transparan */
+    background: transparent; 
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* Status Pill (Positioned below photo) */
+/* Status Pill - Repositioned under photo */
 .status-pill {
     padding: 5px 12px;
-    border-radius: 10px;
-    font-size: 0.6rem;
+    border-radius: 12px;
+    font-size: 0.65rem;
     font-weight: 900;
     text-align: center;
     width: 100%;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .status-aktif { background: #10b981; color: white; }
 .status-non { background: #ef4444; color: white; }
 
-/* --- BOTTOM NAV MOBILE --- */
+/* --- BOTTOM NAVIGATION (Unified & Standardized) --- */
 .bottom-nav {
     display: none;
     position: fixed;
-    bottom: 20px; left: 15px; right: 15px;
+    bottom: 20px; 
+    left: 20px; 
+    right: 20px;
     height: 75px;
     background: var(--sidebar-bg);
     backdrop-filter: blur(25px);
     border: 1px solid var(--glass-border);
     border-radius: 25px;
-    padding: 0 20px;
+    padding: 0 15px;
     justify-content: space-between;
     align-items: center;
     z-index: 2000;
@@ -277,19 +281,41 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 }
 
 .b-nav-item {
-    display: flex; flex-direction: column; align-items: center;
-    color: var(--text-muted); text-decoration: none;
-    font-size: 0.65rem; font-weight: 800; gap: 5px;
+    flex: 1;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    color: var(--text-muted); 
+    text-decoration: none;
+    font-size: 0.65rem; 
+    font-weight: 800; 
+    gap: 6px;
+    transition: 0.3s;
 }
-.b-nav-item.active { color: var(--accent); }
+
+.b-nav-item.active { 
+    color: var(--accent); 
+    transform: translateY(-2px);
+}
+
+body:not(.light-theme) .b-nav-item.active {
+    color: #fff;
+    filter: drop-shadow(0 0 8px var(--accent));
+}
 
 .presensi-fab {
     background: var(--accent-gradient);
-    padding: 14px; border-radius: 20px;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
     margin-top: -45px;
-    box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 12px 25px rgba(249, 115, 22, 0.4);
     border: 5px solid var(--bg-body);
     color: white;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* --- BUTTONS & INPUTS (Consistent Rounded) --- */
@@ -312,7 +338,7 @@ input, select, textarea {
 /* --- RESPONSIVITAS GLOBAL --- */
 @media (max-width: 1024px) {
     .sidebar { display: none; }
-    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } /* Margin 0.5rem */
+    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } 
     .bottom-nav { display: flex; }
     .theme-toggle-mobile { display: flex; }
     
@@ -323,14 +349,20 @@ input, select, textarea {
 
 /* Fix Khusus Layar Sangat Kecil (iPhone SE, < 400px) */
 @media (max-width: 400px) {
-    .main-content { padding: 20px 0.4rem 120px 0.4rem; } /* Margin lebih ramping */
-    .admin-card { padding: 16px; gap: 15px; }
+    .main-content { padding: 20px 0.4rem 120px 0.4rem; } 
+    .admin-card { padding: 18px; gap: 15px; }
     .card-img-wrapper { width: 75px; height: 105px; }
     .card-name { font-size: 1rem; }
     .btn-action-small { padding: 10px 5px; font-size: 0.6rem; }
-    .bottom-nav { height: 65px; bottom: 15px; left: 10px; right: 10px; }
-    .presensi-fab { padding: 10px; margin-top: -35px; }
+    .bottom-nav { height: 70px; bottom: 15px; left: 10px; right: 10px; }
+    .presensi-fab { width: 50px; height: 50px; margin-top: -40px; border-width: 4px; }
 }
 
 .fade-in { animation: fadeIn 0.5s ease-in forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- PRINT STYLES --- */
+@media print {
+    .sidebar, .bottom-nav, .filter-box, .btn, .fixed-bg, .theme-toggle-mobile { display: none !important; }
+    .main-content { margin: 0 !important; padding: 0 !important; }
+}
