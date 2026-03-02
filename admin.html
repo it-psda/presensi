@@ -89,20 +89,20 @@
             transition: 0.3s;
         }
 
+        /* MAIN CONTENT - MARGIN 0.5rem sesuai permintaan */
         .main-content {
             margin-left: calc(var(--sidebar-width) + 40px);
-            padding: 40px 1.5rem 120px 0.5rem;
+            padding: 40px 0.5rem 120px 0.5rem;
             transition: all var(--transition-speed) ease;
             min-height: 100vh;
         }
 
-        /* Sidebar Footer (Jam & Tema) - Menyamakan dengan Index */
+        /* Sidebar Footer (Jam & Tema) - Menyamakan dengan Index secara Presisi */
         .sidebar-footer {
             margin-top: auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 15px;
             text-align: center;
         }
         body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
@@ -120,7 +120,7 @@
             border-radius: var(--radius-xl);
         }
         
-        /* Kotak Password - Fix Tumpul Konsisten */
+        /* Kotak Password - Fix Tumpul Konsisten 20px */
         .pass-input-wrapper { position: relative; margin-bottom: 25px; }
         .pass-input-wrapper input {
             text-align: center; font-weight: 800; font-size: 1.2rem;
@@ -131,10 +131,9 @@
             color: var(--text-main) !important;
             width: 100%;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* GRID KARTU PEGAWAI - Responsif */
+        /* GRID KARTU PEGAWAI */
         .data-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -156,7 +155,7 @@
         }
         .admin-card:hover { transform: translateY(-8px); border-color: var(--accent); }
 
-        /* Profile Card - Perbaikan Background & Status */
+        /* Profile Col - Perbaikan Background & Status */
         .profile-col {
             display: flex;
             flex-direction: column;
@@ -218,7 +217,7 @@
             box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2); transform: translateY(-2px);
         }
 
-        /* Modal Stacking */
+        /* Modal Structure */
         .modal-admin {
             position: fixed; inset: 0;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
@@ -262,7 +261,7 @@
         <i data-lucide="sun-moon"></i>
     </div>
 
-    <!-- SIDEBAR (Senada Index) -->
+    <!-- SIDEBAR (Senada Index secara Eksklusif) -->
     <aside class="sidebar" id="sidebarMenu">
         <div class="brand">
             <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="sidebarLogo" alt="Logo" onerror="this.src='https://placehold.co/100x100?text=PUSDA'">
@@ -299,7 +298,7 @@
                     <i data-lucide="lock" size="40"></i>
                 </div>
                 <h2 style="margin-bottom: 12px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Akses Master</h2>
-                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px;">Gunakan sandi administrator untuk modifikasi data.</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px; line-height: 1.6;">Gunakan kata sandi administrator untuk mengelola basis data Cloud SIM UPT PUSDA.</p>
                 
                 <div class="pass-input-wrapper">
                     <input type="password" id="pass" placeholder="••••••••">
@@ -350,10 +349,11 @@
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
+                <!-- Foto Profile Section -->
                 <div style="display: flex; gap: 20px; margin-bottom: 30px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border);">
-                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 90px; height: 125px; border-radius: 18px; object-fit: cover; border: 2px solid white;">
+                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 90px; height: 125px; border-radius: 18px; object-fit: cover; border: 2px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
                     <div style="flex: 1;">
-                        <label style="font-size: 0.65rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px;">FOTO PROFIL (PNG)</label>
+                        <label style="font-size: 0.65rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px; letter-spacing: 0.5px;">FOTO PROFIL (PNG)</label>
                         <input type="file" id="fileFoto" accept="image/*" style="display: none;" onchange="handleAdminPhoto(this)">
                         <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px; border-radius: 14px !important; border:none; cursor:pointer;">
                             <i data-lucide="upload" size="18"></i> GANTI FOTO
