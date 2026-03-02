@@ -34,45 +34,43 @@
             --radius-md: 16px;
         }
 
-        /* MODE TERANG PREMIUM */
+        /* MODE TERANG PREMIUM - Kontras diperbaiki agar berkesan */
         body.light-theme {
-            --bg-panel: #f8fafc;
-            --card-bg: #ffffff;
-            --card-border: rgba(30, 41, 59, 0.08);
+            --bg-panel: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(30, 41, 59, 0.1);
             --text-main: #0f172a;
             --text-dim: #475569;
-            --glass-border: rgba(30, 41, 59, 0.1);
-            --sidebar-bg: rgba(255, 255, 255, 0.9);
-            --shadow-premium: 0 10px 30px rgba(0, 40, 120, 0.05);
-            --input-bg: #f1f5f9;
-            --tab-inactive: #f1f5f9;
+            --glass-border: rgba(30, 41, 59, 0.15);
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --shadow-premium: 0 10px 30px rgba(0, 50, 150, 0.08);
+            --input-bg: #ffffff;
+            --tab-inactive: #e2e8f0;
         }
 
         /* MODE GELAP (Default) */
         body:not(.light-theme) {
             --bg-panel: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.6);
-            --card-border: rgba(255, 255, 255, 0.05);
+            --card-bg: rgba(30, 41, 59, 0.65);
+            --card-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-dim: rgba(248, 250, 252, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --sidebar-bg: rgba(15, 23, 42, 0.85);
+            --sidebar-bg: rgba(15, 23, 42, 0.9);
             --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.4);
-            --input-bg: rgba(0, 0, 0, 0.2);
+            --input-bg: rgba(0, 0, 0, 0.25);
             --tab-inactive: rgba(255, 255, 255, 0.05);
         }
 
         .hidden { display: none !important; }
-        
-        /* Reset & Base Styles Fix */
         body { margin: 0; padding: 0; min-height: 100vh; }
 
-        /* Bulatan Konsisten */
+        /* Bulatan Konsisten - Anti Lancip */
         .rounded-3xl { border-radius: var(--radius-xl) !important; }
         .rounded-2xl { border-radius: var(--radius-lg) !important; }
         .rounded-xl { border-radius: var(--radius-md) !important; }
 
-        /* SIDEBAR FLOATING (Senada Index) */
+        /* SIDEBAR FLOATING (Menyamakan dengan Index/Dashboard) */
         .sidebar {
             width: var(--sidebar-width);
             height: calc(100vh - 40px);
@@ -88,37 +86,31 @@
             flex-direction: column;
             z-index: var(--sidebar-z);
             box-shadow: 0 20px 50px var(--card-shadow);
+            transition: 0.3s;
         }
 
         .main-content {
             margin-left: calc(var(--sidebar-width) + 40px);
-            padding: 40px 40px 120px 0;
+            padding: 40px 1.5rem 120px 0.5rem;
             transition: all var(--transition-speed) ease;
             min-height: 100vh;
-            position: relative;
-            z-index: 1;
         }
 
+        /* Sidebar Footer (Jam & Tema) - Menyamakan dengan Index */
         .sidebar-footer {
             margin-top: auto;
-            padding: 15px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             text-align: center;
         }
+        body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 
-        /* Login Area - Centering Fix */
-        #loginArea { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 80vh; 
-            width: 100%;
-        }
-
+        /* Login Area */
+        #loginArea { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
         .login-card {
-            max-width: 420px; 
-            width: 90%;
+            max-width: 420px; width: 90%;
             background: var(--card-bg);
             backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
@@ -126,32 +118,23 @@
             padding: 50px 35px;
             text-align: center;
             border-radius: var(--radius-xl);
-            margin: auto;
         }
         
-        /* Password Box Fix (Tumpul Konsisten) */
+        /* Kotak Password - Fix Tumpul Konsisten */
         .pass-input-wrapper { position: relative; margin-bottom: 25px; }
         .pass-input-wrapper input {
-            text-align: center; 
-            font-weight: 800; 
-            font-size: 1.2rem;
-            letter-spacing: 6px; 
-            padding: 18px !important;
+            text-align: center; font-weight: 800; font-size: 1.2rem;
+            letter-spacing: 6px; padding: 18px !important;
             border: 2px solid var(--glass-border) !important;
-            border-radius: var(--radius-lg) !important; 
+            border-radius: 20px !important; 
             background: var(--input-bg) !important;
             color: var(--text-main) !important;
             width: 100%;
-            box-sizing: border-box;
             outline: none;
-            transition: 0.3s;
-        }
-        .pass-input-wrapper input:focus {
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* GRID KARTU PEGAWAI PRO */
+        /* GRID KARTU PEGAWAI - Responsif */
         .data-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -170,16 +153,15 @@
             transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: var(--shadow-premium);
             position: relative;
-            overflow: hidden;
         }
         .admin-card:hover { transform: translateY(-8px); border-color: var(--accent); }
 
-        /* Profile Photo & Status Col */
+        /* Profile Card - Perbaikan Background & Status */
         .profile-col {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-shrink: 0;
         }
 
@@ -189,39 +171,39 @@
             border-radius: 20px;
             overflow: hidden;
             border: 2px solid var(--glass-border);
-            background: transparent; /* Fix: Background transparan */
+            background: transparent; /* Fix: Background Transparan menyatu */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         .card-img { width: 100%; height: 100%; object-fit: cover; }
 
         .card-info { flex: 1; min-width: 0; padding-top: 5px; }
-        .card-name { font-weight: 800; font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-id { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; opacity: 0.7; }
+        .card-name { font-weight: 800; font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; }
+        .card-id { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; opacity: 0.7; }
         .card-role { 
             font-size: 0.8rem; font-weight: 800; color: var(--accent); 
             display: inline-block; padding: 4px 12px; background: rgba(249, 115, 22, 0.1);
             border-radius: 12px; margin-bottom: 10px;
         }
-        .card-region { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Card Actions */
         .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
         .btn-action-small {
-            flex: 1; padding: 10px; border-radius: 14px;
+            flex: 1; padding: 12px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.2s;
             border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-main);
-            outline: none;
         }
-        .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; transform: translateY(-2px); }
+        .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; }
 
-        /* Status Pill Fix (Dibawah foto) */
+        /* Status Pill - Di bawah foto */
         .status-pill {
-            padding: 4px 12px; border-radius: 10px;
+            padding: 5px 12px; border-radius: 10px;
             font-size: 0.6rem; font-weight: 900;
             text-align: center; width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .status-aktif { background: #10b981; color: white; }
-        .status-non { background: #ef4444; color: white; }
+        .status-aktif { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        .status-non { background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
 
         /* Tab Navigation */
         .tab-nav { display: flex; gap: 12px; margin-bottom: 35px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
@@ -236,76 +218,39 @@
             box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2); transform: translateY(-2px);
         }
 
-        /* Modal Stacking Fix */
+        /* Modal Stacking */
         .modal-admin {
             position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            z-index: var(--modal-z);
-            display: none; align-items: center; justify-content: center; padding: 20px;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
+            z-index: var(--modal-z); display: none; align-items: center; justify-content: center; padding: 20px;
         }
         .modal-admin.show { display: flex; }
         .modal-card {
-            background: var(--bg-panel);
-            width: 100%; max-width: 550px;
-            border-radius: 40px;
-            border: 1px solid var(--glass-border);
-            padding: 40px;
-            max-height: 90vh; overflow-y: auto;
+            background: var(--bg-panel); width: 100%; max-width: 550px;
+            border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 40px; max-height: 90vh; overflow-y: auto;
             box-shadow: var(--shadow-premium);
         }
 
-        /* Responsive Mobile Fix */
         @media (max-width: 1024px) {
             .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 30px 20px 140px; }
+            .main-content { margin-left: 0; padding: 30px 0.5rem 140px 0.5rem; }
             .data-grid { grid-template-columns: 1fr; }
-            .login-card { padding: 40px 25px; }
         }
 
-        /* Bottom Nav Fix */
+        /* Bottom Nav Mobile */
         .bottom-nav {
-            display: none; 
-            position: fixed; 
-            bottom: 20px; left: 20px; right: 20px; 
-            height: 75px;
-            background: var(--sidebar-bg); 
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); 
-            border-radius: 25px;
-            padding: 0 20px; 
-            justify-content: space-between; 
-            align-items: center;
-            z-index: var(--bottom-nav-z); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; height: 75px;
+            background: var(--sidebar-bg); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 25px;
+            padding: 0 20px; justify-content: space-between; align-items: center;
+            z-index: var(--bottom-nav-z); box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         @media (max-width: 1024px) { .bottom-nav { display: flex; } }
         
         .b-nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.65rem; font-weight: 800; gap: 5px; }
         .b-nav-item.active { color: var(--accent); }
         .presensi-fab { background: var(--accent-gradient); padding: 14px; border-radius: 20px; margin-top: -45px; border: 5px solid var(--bg-panel); color: white; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); }
-        
-        /* Input Tumpul Konsisten */
-        input, select, textarea { 
-            border-radius: var(--radius-md) !important; 
-            background: var(--input-bg) !important;
-            border: 1px solid var(--glass-border) !important;
-            color: var(--text-main) !important;
-            font-weight: 600;
-        }
-
-        .btn-premium {
-            border-radius: var(--radius-lg) !important;
-            font-weight: 800;
-            padding: 16px 28px;
-            cursor: pointer;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
     </style>
 </head>
 <body class="dark-theme">
@@ -338,7 +283,7 @@
         <div class="sidebar-footer">
             <div style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 5px;">Jam Server</div>
             <div id="clockSidebar" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; color: var(--accent); text-align: center;">00:00:00</div>
-            <button class="btn btn-primary" onclick="toggleTheme()" style="width: 100%; padding: 10px; font-size: 0.8rem; border-radius: 12px; background: var(--accent-gradient); border:none; color:white;">
+            <button class="btn btn-primary" onclick="toggleTheme()" style="width: 100%; padding: 10px; font-size: 0.8rem; border-radius: 12px; background: var(--accent-gradient); border:none; color:white; cursor:pointer;">
                 <i data-lucide="sun-moon"></i> Ganti Tema
             </button>
         </div>
@@ -354,13 +299,13 @@
                     <i data-lucide="lock" size="40"></i>
                 </div>
                 <h2 style="margin-bottom: 12px; font-weight: 800; font-size: 1.8rem; color: var(--text-main);">Akses Master</h2>
-                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px; line-height: 1.6;">Gunakan kata sandi administrator untuk mengelola basis data Cloud SIM UPT PUSDA.</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 40px;">Gunakan sandi administrator untuk modifikasi data.</p>
                 
                 <div class="pass-input-wrapper">
                     <input type="password" id="pass" placeholder="••••••••">
                 </div>
                 
-                <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; border-radius: 20px !important;">
+                <button class="btn-premium" onclick="login()" style="width: 100%; background: var(--accent-gradient); color: white; border-radius: 20px !important; cursor:pointer; font-weight:800; border:none; padding:18px;">
                     BUKA PANEL <i data-lucide="arrow-right" size="20"></i>
                 </button>
             </div>
@@ -374,7 +319,7 @@
                         <div style="width: 6px; height: 35px; background: var(--accent); border-radius: 3px;"></div>
                         <h2 style="font-weight: 800; font-size: 1.6rem; color: var(--text-main); letter-spacing: -0.8px;">Database Cloud</h2>
                     </div>
-                    <button class="btn-premium" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem; padding: 14px 24px; border-radius: 18px !important;">
+                    <button class="btn-premium" onclick="openAddModal()" style="background: var(--accent-gradient); color: white; font-size: 0.85rem; padding: 14px 24px; border-radius: 18px !important; border:none; cursor:pointer;">
                         <i data-lucide="user-plus" size="20"></i> TAMBAH DATA
                     </button>
                 </div>
@@ -391,12 +336,8 @@
 
             <!-- Kontainer Kartu Pegawai -->
             <div id="dataContainer" class="data-grid">
-                <!-- Konten dirender oleh JavaScript (renderAdminTable) -->
+                <!-- Konten dirender oleh renderAdminTable() -->
             </div>
-
-            <p style="text-align: center; color: var(--text-dim); font-size: 0.7rem; margin-top: 60px; opacity: 0.5;">
-                SIM UPT PUSDA v3.2 • Sistem Basis Data Profesional
-            </p>
         </div>
     </main>
 
@@ -409,16 +350,14 @@
             </div>
             
             <form id="formAdmin" onsubmit="event.preventDefault(); saveAdminData();">
-                <!-- Foto Profile Section -->
                 <div style="display: flex; gap: 20px; margin-bottom: 30px; align-items: center; background: rgba(100, 150, 255, 0.05); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border);">
-                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 90px; height: 125px; border-radius: 18px; object-fit: cover; border: 2px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    <img id="formPreview" src="https://placehold.co/100x130?text=User" style="width: 90px; height: 125px; border-radius: 18px; object-fit: cover; border: 2px solid white;">
                     <div style="flex: 1;">
-                        <label style="font-size: 0.65rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px; letter-spacing: 0.5px;">FOTO PROFIL (PNG)</label>
+                        <label style="font-size: 0.65rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 12px;">FOTO PROFIL (PNG)</label>
                         <input type="file" id="fileFoto" accept="image/*" style="display: none;" onchange="handleAdminPhoto(this)">
-                        <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px; border-radius: 14px !important;">
+                        <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px; border-radius: 14px !important; border:none; cursor:pointer;">
                             <i data-lucide="upload" size="18"></i> GANTI FOTO
                         </button>
-                        <input type="text" id="formLinkFoto" placeholder="Atau tautan foto langsung..." style="margin-top: 15px; font-size: 0.75rem !important;">
                     </div>
                 </div>
 
@@ -461,7 +400,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">WHATSAPP</label>
-                        <input type="text" id="formHP" placeholder="628...">
+                        <input type="text" id="formHP" placeholder="08xxxxx">
                     </div>
                     <div class="input-group">
                         <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.6; display: block; margin-bottom: 8px;">KOORDINAT</label>
@@ -470,8 +409,8 @@
                 </div>
 
                 <div style="margin-top: 40px; display: flex; gap: 15px;">
-                    <button type="button" class="btn-premium" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 18px !important;">BATAL</button>
-                    <button type="submit" class="btn-premium" style="flex: 2; background: var(--accent-gradient); color: white; border-radius: 18px !important;">
+                    <button type="button" class="btn-premium" onclick="closeModalAdmin()" style="flex: 1; background: rgba(0,0,0,0.05); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 18px !important; cursor:pointer;">BATAL</button>
+                    <button type="submit" class="btn-premium" style="flex: 2; background: var(--accent-gradient); color: white; border-radius: 18px !important; border:none; cursor:pointer; font-weight:800;">
                         SIMPAN PERUBAHAN <i data-lucide="save" size="20"></i>
                     </button>
                 </div>
@@ -510,7 +449,7 @@
             if (!container) return;
             
             if (!window.appData || !window.appData.isLoaded) {
-                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:120px 20px; opacity:0.5;"><i data-lucide="loader-2" class="spin" size="40"></i><br><br>Menghubungkan ke Database Cloud...</div>`;
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:120px 20px; opacity:0.5;"><i data-lucide="loader-2" class="spin" size="40"></i><br><br>Menghubungkan ke Database...</div>`;
                 lucide.createIcons();
                 return;
             }
@@ -557,7 +496,7 @@
             lucide.createIcons();
         }
 
-        // Jalankan render awal & sinkronisasi
+        // Monitoring sinkronisasi data
         const checkDataSync = setInterval(() => {
             if(window.appData && window.appData.isLoaded) {
                 renderAdminTable();
@@ -574,11 +513,13 @@
         }
 
         /**
-         * Fungsi Edit Data - Tahan Error Tipe Data
+         * Fungsi Edit Data - Fix: Tombol Ubah agar Berfungsi
          */
         function editData(id) {
             const list = currentAdminTab === 'PEG' ? window.appData.pegawai : window.appData.korlap;
+            // Gunakan toString() untuk perbandingan yang aman (JS ID bisa number/string)
             const p = list.find(x => x.ID.toString() === id.toString());
+            
             if (p) {
                 document.getElementById('modalTitle').innerText = "Edit Info " + (currentAdminTab === 'PEG' ? "Pegawai" : "Korlap");
                 document.getElementById('formID').value = p.ID || '';
@@ -586,12 +527,15 @@
                 document.getElementById('formJabatan').value = p.Jabatan || '';
                 document.getElementById('formWilayah').value = p.Wilayah || '';
                 document.getElementById('formStatus').value = p.Status || 'Aktif';
-                document.getElementById('formHP').value = p.NoHP || '';
+                // Menghapus tanda kutip tampilan jika ada (fix untuk leading zero)
+                document.getElementById('formHP').value = p.NoHP ? p.NoHP.toString().replace(/^'/, '') : '';
                 document.getElementById('formLokasi').value = p.Lokasi_Kerja || '';
                 document.getElementById('formLinkFoto').value = p.Link_Foto_Profile || '';
                 document.getElementById('formPreview').src = p.Link_Foto_Profile || "https://placehold.co/100x130?text=USER";
                 document.getElementById('modalEditor').classList.add('show');
                 lucide.createIcons();
+            } else {
+                console.error("Data tidak ditemukan untuk ID:", id);
             }
         }
 
