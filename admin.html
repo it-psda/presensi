@@ -34,7 +34,7 @@
             --radius-md: 16px;
         }
 
-        /* MODE TERANG PREMIUM - Kontras diperbaiki agar berkesan */
+        /* MODE TERANG PREMIUM - Lebih Berkesan */
         body.light-theme {
             --bg-panel: #f1f5f9;
             --card-bg: rgba(255, 255, 255, 0.9);
@@ -56,7 +56,7 @@
             --text-main: #f8fafc;
             --text-dim: rgba(248, 250, 252, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --sidebar-bg: rgba(15, 23, 42, 0.9);
+            --sidebar-bg: rgba(15, 23, 42, 0.85);
             --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.4);
             --input-bg: rgba(0, 0, 0, 0.25);
             --tab-inactive: rgba(255, 255, 255, 0.05);
@@ -70,7 +70,7 @@
         .rounded-2xl { border-radius: var(--radius-lg) !important; }
         .rounded-xl { border-radius: var(--radius-md) !important; }
 
-        /* SIDEBAR FLOATING (Menyamakan dengan Index/Dashboard) */
+        /* SIDEBAR FLOATING (Sesuai Index) */
         .sidebar {
             width: var(--sidebar-width);
             height: calc(100vh - 40px);
@@ -89,15 +89,13 @@
             transition: 0.3s;
         }
 
-        /* MAIN CONTENT - MARGIN 0.5rem sesuai permintaan */
         .main-content {
             margin-left: calc(var(--sidebar-width) + 40px);
-            padding: 40px 0.5rem 120px 0.5rem;
+            padding: 40px 0.5rem 120px 0.5rem; /* Jarak Kanan Kiri 0.5rem */
             transition: all var(--transition-speed) ease;
             min-height: 100vh;
         }
 
-        /* Sidebar Footer (Jam & Tema) - Menyamakan dengan Index secara Presisi */
         .sidebar-footer {
             margin-top: auto;
             padding: 15px;
@@ -105,7 +103,6 @@
             border-radius: 15px;
             text-align: center;
         }
-        body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 
         /* Login Area */
         #loginArea { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
@@ -120,7 +117,7 @@
             border-radius: var(--radius-xl);
         }
         
-        /* Kotak Password - Fix Tumpul Konsisten 20px */
+        /* Kotak Password - Fix Tumpul Konsisten */
         .pass-input-wrapper { position: relative; margin-bottom: 25px; }
         .pass-input-wrapper input {
             text-align: center; font-weight: 800; font-size: 1.2rem;
@@ -155,7 +152,7 @@
         }
         .admin-card:hover { transform: translateY(-8px); border-color: var(--accent); }
 
-        /* Profile Col - Perbaikan Background & Status */
+        /* Profile Col - Background Transparan */
         .profile-col {
             display: flex;
             flex-direction: column;
@@ -170,30 +167,31 @@
             border-radius: 20px;
             overflow: hidden;
             border: 2px solid var(--glass-border);
-            background: transparent; /* Fix: Background Transparan menyatu */
+            background: transparent; /* Fix: Menyatu dengan kartu */
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         .card-img { width: 100%; height: 100%; object-fit: cover; }
 
         .card-info { flex: 1; min-width: 0; padding-top: 5px; }
         .card-name { font-weight: 800; font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; }
-        .card-id { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; opacity: 0.7; }
+        .card-id { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; opacity: 0.7; }
         .card-role { 
             font-size: 0.8rem; font-weight: 800; color: var(--accent); 
             display: inline-block; padding: 4px 12px; background: rgba(249, 115, 22, 0.1);
             border-radius: 12px; margin-bottom: 10px;
         }
+        .card-region { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
         .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
         .btn-action-small {
-            flex: 1; padding: 12px; border-radius: 14px;
+            flex: 1; padding: 10px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.2s;
             border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-main);
         }
         .btn-action-small:hover { background: var(--accent-gradient); color: white; border-color: transparent; }
 
-        /* Status Pill - Di bawah foto */
+        /* Status Pill - Posisi di bawah foto */
         .status-pill {
             padding: 5px 12px; border-radius: 10px;
             font-size: 0.6rem; font-weight: 900;
@@ -201,10 +199,9 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .status-aktif { background: #10b981; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
-        .status-non { background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+        .status-aktif { background: #10b981; color: white; }
+        .status-non { background: #ef4444; color: white; }
 
-        /* Tab Navigation */
         .tab-nav { display: flex; gap: 12px; margin-bottom: 35px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
         .tab-trigger {
             background: var(--tab-inactive); border: 1px solid var(--glass-border);
@@ -217,7 +214,7 @@
             box-shadow: 0 10px 20px rgba(234, 88, 12, 0.2); transform: translateY(-2px);
         }
 
-        /* Modal Structure */
+        /* Modal Stacking */
         .modal-admin {
             position: fixed; inset: 0;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
@@ -250,6 +247,14 @@
         .b-nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.65rem; font-weight: 800; gap: 5px; }
         .b-nav-item.active { color: var(--accent); }
         .presensi-fab { background: var(--accent-gradient); padding: 14px; border-radius: 20px; margin-top: -45px; border: 5px solid var(--bg-panel); color: white; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); }
+
+        .btn-premium {
+            border-radius: var(--radius-lg) !important;
+            font-weight: 800; padding: 16px 28px;
+            cursor: pointer; border: none;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.3s;
+        }
     </style>
 </head>
 <body class="dark-theme">
@@ -261,7 +266,7 @@
         <i data-lucide="sun-moon"></i>
     </div>
 
-    <!-- SIDEBAR (Senada Index secara Eksklusif) -->
+    <!-- SIDEBAR (Senada Index) -->
     <aside class="sidebar" id="sidebarMenu">
         <div class="brand">
             <img src="https://z-cdn-media.chatglm.cn/files/0f622017-3978-4699-8e99-bfc963a4d2e9.png?auth_key=1867236411-acaa4dc359f04f54b59d66be1b739ee8-0-61299f9b6ef2dc1a86a21dccfe1cec7d" id="sidebarLogo" alt="Logo" onerror="this.src='https://placehold.co/100x100?text=PUSDA'">
@@ -335,8 +340,12 @@
 
             <!-- Kontainer Kartu Pegawai -->
             <div id="dataContainer" class="data-grid">
-                <!-- Konten dirender oleh renderAdminTable() -->
+                <!-- Konten dirender oleh JavaScript (renderAdminTable) -->
             </div>
+
+            <p style="text-align: center; color: var(--text-dim); font-size: 0.7rem; margin-top: 60px; opacity: 0.5;">
+                SIM UPT PUSDA v3.2 • Sistem Basis Data Profesional
+            </p>
         </div>
     </main>
 
@@ -358,6 +367,8 @@
                         <button type="button" class="btn-premium" onclick="document.getElementById('fileFoto').click()" style="background: var(--primary); color: white; width: 100%; font-size: 0.8rem; padding: 12px; border-radius: 14px !important; border:none; cursor:pointer;">
                             <i data-lucide="upload" size="18"></i> GANTI FOTO
                         </button>
+                        <!-- Fix: Elemen ini harus ada agar editData tidak Error (setting value of null) -->
+                        <input type="text" id="formLinkFoto" placeholder="URL Foto Alternatif" style="margin-top: 15px; font-size: 0.75rem !important;">
                     </div>
                 </div>
 
@@ -441,9 +452,6 @@
             renderAdminTable();
         }
 
-        /**
-         * Render Kartu Data - Sinkron dengan main.js
-         */
         function renderAdminTable() {
             const container = document.getElementById('dataContainer');
             if (!container) return;
@@ -496,7 +504,6 @@
             lucide.createIcons();
         }
 
-        // Monitoring sinkronisasi data
         const checkDataSync = setInterval(() => {
             if(window.appData && window.appData.isLoaded) {
                 renderAdminTable();
@@ -512,12 +519,8 @@
             lucide.createIcons();
         }
 
-        /**
-         * Fungsi Edit Data - Fix: Tombol Ubah agar Berfungsi
-         */
         function editData(id) {
             const list = currentAdminTab === 'PEG' ? window.appData.pegawai : window.appData.korlap;
-            // Gunakan toString() untuk perbandingan yang aman (JS ID bisa number/string)
             const p = list.find(x => x.ID.toString() === id.toString());
             
             if (p) {
@@ -527,7 +530,6 @@
                 document.getElementById('formJabatan').value = p.Jabatan || '';
                 document.getElementById('formWilayah').value = p.Wilayah || '';
                 document.getElementById('formStatus').value = p.Status || 'Aktif';
-                // Menghapus tanda kutip tampilan jika ada (fix untuk leading zero)
                 document.getElementById('formHP').value = p.NoHP ? p.NoHP.toString().replace(/^'/, '') : '';
                 document.getElementById('formLokasi').value = p.Lokasi_Kerja || '';
                 document.getElementById('formLinkFoto').value = p.Link_Foto_Profile || '';
