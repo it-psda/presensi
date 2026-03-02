@@ -1,7 +1,7 @@
 /**
- * SIM UPT PUSDA - Global Stylesheet v4.2
- * Optimized for Mobile Layout, Grid Balance & Performance
- * Fixed: Card Elongation, Screen Clipping (<390px), Transparent PNG, & Modal Grid
+ * SIM UPT PUSDA - Global Stylesheet v4.3
+ * Optimized for: Proportional Modal Grid, Card Stability, & PNG Transparency
+ * Fixed: Hero Clipping, Icon Scaling, Admin Tab Fluidity, & Professional Alignment
  */
 
  :root {
@@ -173,7 +173,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     box-shadow: 0 8px 25px var(--card-shadow);
 }
 
-/* --- HERO SECTION --- */
+/* --- HERO SECTION (Pop-out Fix) --- */
 .hero-section {
     position: relative;
     background: var(--glass);
@@ -185,7 +185,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     align-items: center;
     justify-content: space-between;
     gap: 30px;
-    overflow: visible;
+    overflow: visible; /* Tetap izinkan pop-out */
     z-index: 1;
     box-shadow: 0 10px 30px var(--card-shadow);
 }
@@ -232,6 +232,22 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     box-shadow: 0 8px 20px var(--card-shadow);
 }
 .tool-card:hover { transform: translateY(-8px); border-color: var(--accent); }
+
+/* --- ICON SCALING (Fixed: Bigger & Stylish) --- */
+.tool-icon {
+    width: 60px; height: 60px; /* Ikon diperbesar */
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 26px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    background: var(--accent-gradient);
+    transition: 0.3s;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.35);
+}
 
 /* --- GRID SYSTEM: DATA CLOUD CARDS --- */
 .data-grid {
@@ -298,7 +314,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 .modal-card {
     background: var(--bg-body);
     width: 100%;
-    max-width: 580px;
+    max-width: 600px; /* Diperlebar sedikit agar lebih lega */
     border-radius: var(--radius-xl);
     border: 1px solid var(--glass-border);
     padding: 35px;
@@ -309,28 +325,47 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 .modal-card form {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 Kolom di Desktop */
-    gap: 15px;
+    gap: 20px; /* Jarak antar elemen ditingkatkan */
 }
 
 .modal-card .full-width { grid-column: span 2; }
+
+/* Section Foto di Modal */
+.modal-photo-section {
+    grid-column: span 2;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    padding: 20px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 10px;
+}
 
 .modal-card label {
     display: block;
     font-size: 0.7rem;
     font-weight: 800;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.7px;
 }
 
 .modal-card input, .modal-card select, .modal-card textarea {
     border-radius: var(--radius-md) !important;
     background: var(--input-bg) !important;
-    border: 1px solid var(--glass-border) !important;
+    border: 1.5px solid var(--glass-border) !important;
     color: var(--text-main) !important;
     width: 100%;
-    padding: 14px;
+    padding: 14px 18px;
+    transition: 0.3s;
+}
+
+.modal-card input:focus {
+    border-color: var(--primary-light) !important;
+    background: rgba(0,0,0,0.5) !important;
 }
 
 /* --- BOTTOM NAVIGATION (Unified Identity) --- */
@@ -378,9 +413,17 @@ body:not(.light-theme) .b-nav-item.active {
 /* --- RESPONSIVITAS GLOBAL --- */
 @media (max-width: 1024px) {
     .sidebar { display: none; }
-    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } /* Fix: Margin 0.5rem */
+    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } 
     .bottom-nav { display: flex; }
     .theme-toggle-mobile { display: flex; }
+    
+    .hero-section { flex-direction: column-reverse; text-align: center; padding: 60px 1.5rem 30px; margin-top: 40px; width: 100%; }
+    .hero-image-container { flex: none; width: 100%; min-height: 200px; margin-top: -120px; }
+    .hero-img { width: 190px; transform: scale(1.1) translateY(40px); }
+    
+    /* Tombol Tab Admin Responsive */
+    .tab-nav { display: flex; width: 100%; gap: 10px; }
+    .tab-trigger { flex: 1; text-align: center; padding: 14px 10px !important; font-size: 0.75rem !important; }
 }
 
 @media (max-width: 400px) {
@@ -389,13 +432,16 @@ body:not(.light-theme) .b-nav-item.active {
     .admin-card { padding: 18px; gap: 15px; }
     .card-img-wrapper { width: 75px; height: 100px; }
     
-    .modal-card { padding: 25px 20px; }
-    .modal-card form { grid-template-columns: 1fr; } /* Modal jadi 1 kolom di HP */
+    .modal-card { padding: 25px 15px; border-radius: 28px; }
+    .modal-card form { grid-template-columns: 1fr; gap: 15px; } /* Modal jadi 1 kolom di HP */
     .modal-card .full-width { grid-column: span 1; }
+    .modal-photo-section { flex-direction: column; text-align: center; }
     
-    .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .hero-img { width: 180px; }
-    .bottom-nav { height: 70px; bottom: 15px; left: 10px; right: 10px; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .tool-icon { width: 50px; height: 50px; font-size: 22px; }
+    
+    .bottom-nav { height: 70px; bottom: 15px; left: 10px; right: 10px; border-radius: 20px; }
+    .presensi-fab { width: 50px; height: 50px; margin-top: -40px; border-width: 4px; }
 }
 
 /* --- UTILS --- */
