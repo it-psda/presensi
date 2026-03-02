@@ -1,6 +1,7 @@
 /**
- * SIM UPT PUSDA - Global Stylesheet v3.8
- * Full Responsiveness, Mobile Optimization & Standardized Navigation
+ * SIM UPT PUSDA - Global Stylesheet v3.9.5
+ * Optimized for Mobile Layout, Grid Balance & Performance
+ * Fixed: Card Elongation & Screen Clipping (<390px)
  */
 
  :root {
@@ -27,7 +28,7 @@
     /* Input & Form */
     --input-bg: rgba(0, 0, 0, 0.3);
     
-    /* Layout */
+    /* Layout Variables */
     --sidebar-width: 280px;
     --radius-xl: 32px;
     --radius-lg: 24px;
@@ -144,11 +145,11 @@ body {
 }
 body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 
-/* --- MAIN CONTENT --- */
+/* --- MAIN CONTENT AREA --- */
 .main-content {
     flex: 1;
     margin-left: calc(var(--sidebar-width) + 40px);
-    padding: 40px 1.5rem 120px 0.5rem;
+    padding: 40px 1.5rem 120px 1.5rem;
     min-height: 100vh;
     transition: 0.3s ease;
 }
@@ -208,10 +209,46 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* --- GRID & CARD STANDARDS (Responsive Fix) --- */
-.data-grid, .tools-grid {
+/* --- GRID SYSTEM: DASHBOARD (TILE STYLE) --- */
+.tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Fix: Mencegah kartu memanjang */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tool-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 22px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 20px var(--card-shadow);
+}
+
+.tool-card:hover { 
+    transform: translateY(-8px); 
+    border-color: var(--accent);
+}
+
+.tool-icon {
+    width: 50px; height: 50px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 22px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* --- GRID SYSTEM: DATA CARDS (EMPLOYEE STYLE) --- */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Fix: Proporsi kartu seimbang */
     gap: 20px;
     margin-top: 15px;
     width: 100%;
@@ -243,11 +280,11 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     border-radius: 20px;
     overflow: hidden;
     border: 2px solid var(--glass-border);
-    background: transparent; 
+    background: transparent; /* Fix: Background Transparan menyatu */
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* Status Pill - Repositioned under photo */
+/* Status Pill - Posisi konsisten di bawah foto */
 .status-pill {
     padding: 5px 12px;
     border-radius: 12px;
@@ -261,7 +298,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 .status-aktif { background: #10b981; color: white; }
 .status-non { background: #ef4444; color: white; }
 
-/* --- BOTTOM NAVIGATION (Unified & Standardized) --- */
+/* --- BOTTOM NAVIGATION (Standardized Across All Pages) --- */
 .bottom-nav {
     display: none;
     position: fixed;
@@ -338,18 +375,20 @@ input, select, textarea {
 /* --- RESPONSIVITAS GLOBAL --- */
 @media (max-width: 1024px) {
     .sidebar { display: none; }
-    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } 
+    .main-content { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; } /* Fix: Konsistensi Margin 0.5rem */
     .bottom-nav { display: flex; }
     .theme-toggle-mobile { display: flex; }
     
     .hero-section { flex-direction: column-reverse; text-align: center; padding: 60px 20px 30px; margin-top: 40px; }
     .hero-image-container { flex: none; width: 100%; min-height: 200px; margin-top: -120px; }
-    .hero-img { width: 200px; transform: scale(1.1) translateY(40px); }
+    .hero-img { width: 190px; transform: scale(1.1) translateY(40px); }
 }
 
 /* Fix Khusus Layar Sangat Kecil (iPhone SE, < 400px) */
 @media (max-width: 400px) {
     .main-content { padding: 20px 0.4rem 120px 0.4rem; } 
+    .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } /* Dashboard tetap 2 kolom tile kecil */
+    .data-grid { grid-template-columns: 1fr; }
     .admin-card { padding: 18px; gap: 15px; }
     .card-img-wrapper { width: 75px; height: 105px; }
     .card-name { font-size: 1rem; }
