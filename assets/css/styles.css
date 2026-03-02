@@ -177,7 +177,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: 30px;
-    padding: 60px 40px 40px; /* Padding atas ditambah */
+    padding: 60px 40px 40px; /* Padding atas ditambah untuk badge */
     margin-bottom: 50px;
     display: flex;
     align-items: center;
@@ -191,8 +191,8 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 /* Badge di Pojok Kiri Atas */
 .official-badge {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 25px;
+    left: 25px;
     background: rgba(249, 115, 22, 0.2);
     color: var(--accent);
     padding: 6px 14px;
@@ -226,7 +226,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 /* Kotak Nama & Jabatan (Hero) - Posisi Turun Lagi */
 #heroLabel {
     position: absolute;
-    bottom: -15px; /* Diturunkan lagi agar lebih pas di bodi foto */
+    bottom: -20px; /* Diturunkan lagi agar lebih pas di bodi foto */
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
@@ -259,7 +259,7 @@ body.light-theme .sidebar-footer { background: rgba(0, 0, 0, 0.03); }
 
 /* ICON SCALING (Fixed: Bigger & Stylish Glow) */
 .tool-icon {
-    width: 65px; height: 65px;
+    width: 65px; height: 65px; /* Ikon diperbesar */
     border-radius: 18px;
     display: flex; align-items: center; justify-content: center;
     color: white; font-size: 28px;
@@ -451,6 +451,13 @@ body:not(.light-theme) .b-nav-item.active {
     .hero-image-container { flex: none; width: 100%; min-height: 220px; margin-top: -130px; }
     .hero-img { width: 210px; transform: scale(1.1) translateY(45px); }
     
+    /* Center Official Badge on Mobile */
+    .official-badge {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
     /* Tombol Tab Admin Responsive */
     .tab-nav { display: flex; width: 100%; gap: 10px; }
     .tab-trigger { flex: 1; text-align: center; padding: 14px 10px !important; font-size: 0.75rem !important; }
