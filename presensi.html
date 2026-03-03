@@ -9,11 +9,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f172a">
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- CORE STYLES v7.7 (ENHANCED ALERT & DISCIPLINE FOCUS) --- */
+        /* --- CORE STYLES v8.3 (ELITE UI & TITLE REFINEMENT) --- */
         :root {
             --primary: #1e3a8a;
             --primary-light: #3b82f6;
@@ -52,7 +52,6 @@
 
         /* --- SIDEBAR --- */
         .sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
-        
         body.light-theme .sidebar { background: rgba(255, 255, 255, 0.85); }
         body.light-theme .brand h1 { color: var(--primary) !important; }
         body.light-theme .brand p { color: #64748b !important; font-weight: 700; }
@@ -65,6 +64,66 @@
         .sidebar-footer { margin-top: auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 20px; text-align: center; }
 
         .main-content { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 1.5rem 120px 1.5rem; min-height: 100vh; position: relative; }
+
+        /* --- SECTION TITLE REFINEMENT --- */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 35px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        .header-bar {
+            width: 6px;
+            height: 32px;
+            background: var(--accent-gradient);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+        }
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--text-main);
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        .header-title span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- ARTISTIC LOGO BADGE (Adaptasi Referensi) --- */
+        .artistic-badge {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px 24px 24px 50px;
+            padding: 8px 24px 8px 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            max-width: fit-content;
+            margin: 0 auto 30px;
+            animation: slideIn 0.8s ease;
+        }
+        body.light-theme .artistic-badge { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        .badge-circle {
+            width: 50px; height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 2;
+            padding: 8px;
+        }
+        .badge-logo { width: 100%; height: auto; object-fit: contain; }
+        
+        .badge-text-container { padding-left: 15px; text-align: left; }
+        .badge-title { font-size: 0.85rem; font-weight: 900; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase; }
+        .badge-subtitle { font-size: 0.55rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
 
         /* --- UI PROFILE POPOUT --- */
         .profile-stage { position: relative; width: 100px; height: 135px; margin: 0 auto 20px; min-height: 135px; }
@@ -83,6 +142,7 @@
         }
         body.light-theme .input-group input, body.light-theme .input-group select, body.light-theme .input-group textarea { background: #fff; color: #1e293b; border-color: #cbd5e1; }
         
+        /* Dropdown Arrow Fix */
         .input-group select { 
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important; 
             background-repeat: no-repeat !important; background-position: right 20px center !important; background-size: 18px !important; 
@@ -95,9 +155,8 @@
         .input-group.is-valid .valid-mark { display: block; animation: scaleIn 0.3s ease; }
 
         .mic-btn { position: absolute; right: 10px; background: var(--accent-gradient); border: none; width: 38px; height: 38px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; transition: 0.2s; }
-        .mic-btn:active { transform: scale(0.9); }
 
-        /* --- STATUS BUTTONS --- */
+        /* --- STATUS GRID --- */
         .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
         .status-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 18px 10px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; position: relative; }
         body.light-theme .status-btn { background: #fff; border-color: #e2e8f0; }
@@ -109,11 +168,8 @@
         .status-btn.active.hadir-telat { background: var(--danger); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3); }
         .status-btn.active.pulang { background: var(--success); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
         .status-btn.active.margin { background: var(--pink); color: white; box-shadow: 0 10px 20px rgba(244, 114, 182, 0.3); }
-        .status-btn.active.izin { background: var(--warning); color: white; }
-        .status-btn.active.sakit { background: var(--info); color: white; }
-        .status-btn.active.dinas { background: var(--dinas); color: white; }
 
-        /* --- ALERT BOX (REFINED v7.7) --- */
+        /* --- ALERT BOX --- */
         .status-warning-box { 
             background: rgba(59, 130, 246, 0.08); 
             border: 1px solid rgba(59, 130, 246, 0.2); 
@@ -148,17 +204,15 @@
         }
         body.light-theme .alert-icon-wrapper { background: rgba(0, 0, 0, 0.03); }
 
-        /* --- GPS STATUS --- */
+        /* --- GPS & PHOTOS --- */
         .gps-status { background: rgba(255, 255, 255, 0.05); min-height: 48px; color: var(--text-muted); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; border: 1px solid var(--glass-border); position: relative; }
         body.light-theme .gps-status { background: #f1f5f9; border-color: #e2e8f0; }
         .gps-status.locked { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); }
         .gps-valid-badge { display: none; margin-left: auto; }
         .gps-status.locked .gps-valid-badge { display: block; animation: scaleIn 0.3s ease; }
 
-        /* --- FOTO LAMPIRAN --- */
         .photo-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .photo-slot { width: 100%; aspect-ratio: 3/4; background: rgba(0,0,0,0.2); border: 2px dashed var(--glass-border); border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative; transition: 0.3s; }
-        .photo-slot:hover { border-color: var(--primary-light); background: rgba(0,0,0,0.3); }
         body.light-theme .photo-slot { background: #f1f5f9; }
         .photo-slot.captured { border: 2.5px solid var(--success); }
         .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 2; }
@@ -172,32 +226,32 @@
         .btn-raport-link { width: 100%; padding: 15px; border-radius: 20px; border: 1.5px solid var(--glass-border); background: var(--glass); color: var(--text-main); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         body.light-theme .btn-raport-link { background: #fff; border-color: #cbd5e1; }
 
-        /* --- MODAL RAPORT (PRO v7.7) --- */
+        /* --- MODAL RAPORT (PRO v8.3) --- */
         .raport-modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(25px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
         .raport-modal.show { display: flex; }
-        .raport-content { background: #fff; width: 100%; max-width: 480px; border-radius: 35px; color: #1e293b; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.6); animation: raportAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .raport-content { background: #fff; width: 100%; max-width: 520px; border-radius: 35px; color: #1e293b; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.6); animation: raportAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         
         .raport-header-banner { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 40px 30px; text-align: center; color: white; position: relative; }
         .raport-score-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
         .raport-pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px; display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1rem; }
         .raport-pill.monthly { background: linear-gradient(135deg, #fbbf24, #d97706); border: none; color: white; box-shadow: 0 8px 15px rgba(217, 119, 6, 0.3); }
 
-        .raport-profile-box { display: flex; align-items: center; gap: 20px; padding: 25px 30px; border-bottom: 1px solid #f1f5f9; position: relative; }
+        .raport-profile-box { display: flex; align-items: center; gap: 20px; padding: 25px 35px; border-bottom: 1px solid #f1f5f9; position: relative; }
         .raport-avatar-stage { position: relative; width: 80px; height: 110px; flex-shrink: 0; }
-        .raport-avatar-frame { position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; background: #f8fafc; border-radius: 12px; border: 2.5px solid #eee; z-index: 1; }
+        .raport-avatar-frame { position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; background: #f8fafc; border-radius: 14px; border: 2.5px solid #eee; z-index: 1; }
         .raport-avatar-img { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 130%; height: auto; z-index: 5; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15)); }
 
-        .raport-history-list { padding: 10px 0; }
-        .history-item { display: flex; gap: 18px; padding: 25px 30px; border-bottom: 1px solid #f8fafc; align-items: flex-start; }
+        .raport-history-list { padding: 10px 0; max-height: 35vh; overflow-y: auto; }
+        .history-item { display: flex; gap: 18px; padding: 20px 35px; border-bottom: 1px solid #f8fafc; align-items: flex-start; }
         .history-icon { width: 42px; height: 42px; border-radius: 14px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary); }
         .history-details { flex: 1; }
         .history-details h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
         .pts-badge { font-size: 0.75rem; color: var(--accent); font-weight: 900; }
         
         .history-visuals { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
-        .visual-box { width: 65px; height: 65px; border-radius: 12px; border: 1.5px solid #e2e8f0; overflow: hidden; cursor: zoom-in; }
+        .visual-box { width: 70px; height: 70px; border-radius: 12px; border: 1.5px solid #e2e8f0; overflow: hidden; cursor: zoom-in; }
         .visual-box img { width: 100%; height: 100%; object-fit: cover; }
-        .map-box { width: 65px; height: 65px; border-radius: 12px; background: #e0f2fe; border: 1.5px solid #bae6fd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary-light); cursor: pointer; transition: 0.2s; }
+        .map-box { width: 70px; height: 70px; border-radius: 12px; background: #e0f2fe; border: 1.5px solid #bae6fd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary-light); cursor: pointer; transition: 0.2s; }
         .map-box:hover { background: var(--primary-light); color: white; }
 
         .photo-preview-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
@@ -207,12 +261,13 @@
         .theme-toggle-mobile { display: none; position: fixed; top: 20px; right: 20px; width: 48px; height: 48px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 14px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--card-shadow); }
         body.light-theme .theme-toggle-mobile { background: rgba(255, 255, 255, 0.9); }
 
-        /* --- BOTTOM NAV (Mobile Only) --- */
+        /* --- BOTTOM NAV --- */
         .bottom-nav { display: none; }
         @media (max-width: 1024px) {
             .sidebar { display: none; }
             .theme-toggle-mobile { display: flex; }
-            .main-content { margin-left: 0; padding: 20px 15px 120px; }
+            .main-content { margin-left: 0; padding: 25px 0.5rem 120px 0.5rem; }
+            .artistic-badge { display: flex; } 
             .bottom-nav { 
                 display: flex; position: fixed; bottom: 20px; left: 20px; right: 20px; 
                 height: 75px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(25px); 
@@ -223,12 +278,14 @@
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.65rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -45px; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-body); box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4); }
+            .header-title { font-size: 1.4rem; }
         }
 
         /* --- ANIMATIONS --- */
         @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes raportAppear { from { transform: scale(0.9) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
         @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="dark-theme">
@@ -254,16 +311,28 @@
         </nav>
         <div class="sidebar-footer">
             <div id="clockSidebar" style="font-size: 1.1rem; font-weight: 900; color: var(--accent); margin-bottom: 10px;">00:00:00</div>
-            <button class="btn btn-raport-link" onclick="toggleTheme()" style="width: 100%; background: var(--accent-gradient); border: none; color: white; padding: 10px; font-size: 0.7rem; border-radius: 12px; margin-top: 0;">
+            <button class="btn btn-raport-link" onclick="toggleTheme()" style="width: 100%; background: var(--accent-gradient); border: none; color: white; padding: 10px; font-size: 0.7rem; border-radius: 12px; margin-top: 0; cursor: pointer;">
                 <i data-lucide="sun-moon" size="14"></i> GANTI TEMA
             </button>
         </div>
     </aside>
 
     <main class="main-content">
-        <div class="section-title" style="margin-bottom: 30px; font-weight: 800; display: flex; align-items: center; gap: 14px;">
-            <div style="width: 6px; height: 26px; background: var(--accent); border-radius: 3px;"></div>
-            <span style="font-size: 1.5rem; letter-spacing: -0.5px;">E-Presensi Digital v7.7</span>
+        <!-- OFFICIAL ARTISTIC BADGE HEADER (Mobile Only) -->
+        <div class="artistic-badge">
+            <div class="badge-circle">
+                <img src="assets/img/logo.png" class="badge-logo" onerror="this.src='https://placehold.co/100x100?text=PUSDA'">
+            </div>
+            <div class="badge-text-container">
+                <div class="badge-title">SIM UPT PUSDA</div>
+                <div class="badge-subtitle">Bondoyudo Baru • Lumajang</div>
+            </div>
+        </div>
+
+        <!-- REFINED ELITE TITLE -->
+        <div class="section-header">
+            <div class="header-bar"></div>
+            <h2 class="header-title">E-Presensi <span>Digital</span></h2>
         </div>
 
         <div class="presensi-card fade-in">
@@ -371,16 +440,27 @@
         </div>
     </main>
 
-    <!-- RAPORT MODAL -->
+    <!-- RAPORT MODAL (ARTISTIC BRANDING v8.3) -->
     <div id="raportOverlay" class="raport-modal">
         <div class="raport-content">
             <div class="raport-header-banner">
-                <div style="font-size: 0.65rem; font-weight: 800; letter-spacing: 2px; opacity: 0.8; margin-bottom: 12px;">E-RAPORT PERSONAL</div>
+                <!-- OFFICIAL LOGO BADGE IN REPORT -->
+                <div class="artistic-badge" style="margin: 0 auto 20px; transform: scale(1.1); box-shadow: 0 15px 35px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.4);">
+                    <div class="badge-circle">
+                        <img src="assets/img/logo.png" class="badge-logo" onerror="this.style.display='none'">
+                    </div>
+                    <div class="badge-text-container">
+                        <div class="badge-title" style="color: white; font-size: 0.9rem;">LAPORAN KINERJA</div>
+                        <div class="badge-subtitle" style="color: white; opacity: 0.8; font-size: 0.5rem;">SIM UPT PUSDA • LOKASI TERVERIFIKASI</div>
+                    </div>
+                </div>
+                
+                <div style="font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; opacity: 0.8; margin-bottom: 15px; text-transform: uppercase;">Performa Kedisiplinan Pegawai</div>
+                
                 <div class="raport-score-container">
                     <div class="raport-pill"><i data-lucide="star" size="16"></i> <span id="rTodayScore">0</span> PTS</div>
                     <div class="raport-pill monthly"><i data-lucide="award" size="16"></i> <span id="rMonthlyScore">0</span> PTS</div>
                 </div>
-                <p style="font-size: 0.7rem; opacity: 0.7;">Performa Kehadiran Terpusat</p>
             </div>
 
             <div class="raport-profile-box">
@@ -389,8 +469,8 @@
                     <img id="rAvatar" class="raport-avatar-img">
                 </div>
                 <div>
-                    <h3 id="rName" style="font-size: 0.95rem; font-weight: 900; margin-bottom: 2px; text-transform: uppercase;">---</h3>
-                    <p id="rRole" style="font-size: 0.65rem; opacity: 0.6;">---</p>
+                    <h3 id="rName" style="font-size: 1rem; font-weight: 900; margin-bottom: 2px; text-transform: uppercase;">---</h3>
+                    <p id="rRole" style="font-size: 0.7rem; opacity: 0.6; font-weight: 700;">---</p>
                 </div>
             </div>
 
@@ -510,17 +590,11 @@
             showAlert(s); validateForm();
         }
 
-        /**
-         * SHOW ALERT (v7.7 REFINED)
-         * Menambahkan Pesan Hadir Tepat Waktu
-         */
         function showAlert(status) {
             const alertBox = document.getElementById('statusAlert');
             const now = new Date();
             const tm = now.getHours() * 60 + now.getMinutes();
-            let msg = "";
-            let icon = "info";
-            let typeClass = "";
+            let msg = ""; let icon = "info"; let typeClass = "";
 
             if (status === 'Hadir') {
                 if (tm <= 460) {
@@ -534,16 +608,16 @@
                     icon = "alert-circle"; typeClass = "alert-danger";
                 }
             } else if (status === 'Sakit') {
-                msg = "🤕 <strong>STATUS SAKIT</strong>: Harap lampirkan foto Surat Keterangan Dokter pada kolom Lokasi & segera hubungi Pengamat untuk verifikasi.";
+                msg = "🏥 <strong>STATUS SAKIT</strong>: Harap lampirkan foto Surat Keterangan Dokter pada kolom Lokasi & segera hubungi Pengamat untuk verifikasi.";
                 icon = "thermometer";
             } else if (status === 'Izin') {
                 msg = "📝 <strong>STATUS IZIN/CUTI</strong>: Pastikan permohonan Anda sudah disetujui oleh Pengamat/Atasan melalui pesan WhatsApp resmi.";
                 icon = "clipboard-list";
             } else if (status === 'Dinas') {
-                msg = "💼 <strong>STATUS DINAS</strong>: Silakan lampirkan bukti Surat Tugas (ST) atau dokumentasi kegiatan dinas luar yang sedang dilaksanakan.";
+                msg = "💼 <strong>STATUS DINAS</strong>: Silakan lampirkan bukti Surat Tugas (ST) atau dokumentasi kegiatan dinas luar di lokasi.";
                 icon = "briefcase";
             } else if (status === 'Margin Error') {
-                msg = "🧭 <strong>MARGIN ERROR</strong> (10 PTS): Posisi Anda berada di luar radius kerja. Laporkan kendala GPS ini ke Pengamat & tetap lakukan absen HADIR saat tiba di lokasi.";
+                msg = "📍 <strong>MARGIN ERROR</strong> (10 PTS): Posisi Anda berada di luar radius kerja. Laporkan kendala GPS ini ke Pengamat segera.";
                 icon = "map-pin"; typeClass = "alert-warning";
             } else if (status === 'Pulang') {
                 msg = "🏡 <strong>STATUS PULANG</strong>: Dedikasi Anda hari ini sangat berharga bagi instansi. Selamat beristirahat, tetap utamakan keselamatan dalam perjalanan pulang. Sampai jumpa esok hari!";
@@ -552,10 +626,7 @@
 
             if (msg !== "") {
                 alertBox.className = "status-warning-box show " + typeClass;
-                alertBox.innerHTML = `
-                    <div class="alert-icon-wrapper"><i data-lucide="${icon}" size="20"></i></div>
-                    <div style="flex:1;">${msg}</div>
-                `;
+                alertBox.innerHTML = `<div class="alert-icon-wrapper"><i data-lucide="${icon}" size="20"></i></div><div style="flex:1;">${msg}</div>`;
                 lucide.createIcons();
             } else {
                 alertBox.classList.remove('show');
@@ -612,10 +683,8 @@
             const note = document.getElementById('presensiNote').value.trim();
             const selfie = document.getElementById('imgSelfie').src.includes('data:');
             const work = document.getElementById('imgWork').src.includes('data:');
-            
             document.getElementById('groupKegiatan').classList.toggle('is-valid', kegiatan !== '');
             document.getElementById('groupCatatan').classList.toggle('is-valid', note.length >= 10);
-            
             const ok = userData && selectedStatus && kegiatan !== '' && note.length >= 10 && selfie && work && gpsLocked;
             document.getElementById('btnSubmit').disabled = !ok;
         }
@@ -644,7 +713,6 @@
                 else { finalStatus = 'Hadir Terlambat'; finalScore = 30; }
             } else if (selectedStatus === 'Pulang') finalScore = 50;
             else if (selectedStatus === 'Margin Error') finalScore = 10;
-            
             const payload = { action: 'presensi', idPegawai: userData.ID, nama: userData.Nama, status: finalStatus, kegiatan: document.getElementById('selKegiatan').value, keterangan: document.getElementById('presensiNote').value, gps: coords, wilayah: userData.Wilayah, selfieBase64: document.getElementById('imgSelfie').src, workBase64: document.getElementById('imgWork').src };
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', mode: 'cors', body: JSON.stringify(payload) });
@@ -658,12 +726,12 @@
         }
 
         function openManualRaport() { if(!userData) { alert("Pilih identitas."); return; } showRaport('Status Hari Ini', 0); }
+        function closeRaport() { document.getElementById('raportOverlay').classList.remove('show'); }
 
         function showRaport(currentStatus, currentScore) {
             const today = new Date().toISOString().split('T')[0];
             const allLogs = appData.presensi.filter(p => p.ID_Pegawai == userData.ID);
             const todayLogs = allLogs.filter(p => p.Timestamp.includes(today));
-            
             const uiLogs = todayLogs.map(l => {
                 let pts = 0;
                 if (l.Status === 'Hadir') pts = 50;
@@ -675,21 +743,15 @@
                 else if (l.Status === 'Margin Error') pts = 10;
                 return {...l, pts: pts};
             });
-
-            if (currentScore > 0) {
-                uiLogs.push({ Status: currentStatus, Timestamp: new Date().toISOString(), Foto_Selfie: document.getElementById('imgSelfie').src, Foto_Lokasi: document.getElementById('imgWork').src, GPS: coords, pts: currentScore });
-            }
-            
+            if (currentScore > 0) uiLogs.push({ Status: currentStatus, Timestamp: new Date().toISOString(), Foto_Selfie: document.getElementById('imgSelfie').src, Foto_Lokasi: document.getElementById('imgWork').src, GPS: coords, pts: currentScore });
             const todayPts = uiLogs.reduce((acc, log) => acc + (log.pts || 0), 0);
             const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 30);
             const monthlyPts = allLogs.filter(p => new Date(p.Timestamp) >= monthAgo).reduce((acc, log) => acc + (log.Nilai || 0), 0) + currentScore;
-            
             document.getElementById('rAvatar').src = userData.Link_Foto_Profile;
             document.getElementById('rName').innerText = userData.Nama;
             document.getElementById('rRole').innerText = userData.Jabatan;
             document.getElementById('rTodayScore').innerText = todayPts;
             document.getElementById('rMonthlyScore').innerText = monthlyPts;
-            
             const historyHtml = uiLogs.map(log => `
                 <div class="history-item">
                     <div class="history-icon" style="background:${log.Status.includes('Pulang') ? '#dcfce7' : '#f1f5f9'}"><i data-lucide="${log.Status.includes('Pulang') ? 'log-out' : 'check'}"></i></div>
