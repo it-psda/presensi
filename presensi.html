@@ -1,4 +1,4 @@
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- CORE STYLES v10.3 (FIXED & RESTORED) --- */
+        /* --- CORE STYLES v10.4 (OPTIMIZED & SECURE) --- */
         :root {
             --primary: #1e3a8a;
             --primary-light: #3b82f6;
@@ -105,7 +105,7 @@
         .valid-mark { position: absolute; right: 58px; color: var(--success); display: none; z-index: 10; pointer-events: none; }
         .input-group.is-valid .valid-mark { display: block; animation: scaleIn 0.3s ease; }
 
-        /* --- STATUS GRID & STATES (v10.3 RESTORED) --- */
+        /* --- STATUS GRID & STATES (v10.4 RESTORED) --- */
         .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
         .status-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 18px 10px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; position: relative; }
         body.light-theme .status-btn { background: #fff; border-color: #e2e8f0; }
@@ -113,13 +113,13 @@
         .btn-check-icon { position: absolute; top: 8px; right: 8px; color: #fff; display: none; background: rgba(0,0,0,0.2); border-radius: 50%; padding: 2px; }
         .status-btn.active .btn-check-icon { display: block; animation: scaleIn 0.3s ease; }
 
-        /* Restoration of v8.7 Specific Colors */
+        /* Restoration of Specific Colors */
         .status-btn.active.hadir { background: var(--success); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4); }
         .status-btn.active.hadir-telat { background: var(--accent); color: white; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4); }
         .status-btn.active.pulang { background: var(--success); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4); }
         .status-btn.active.margin { background: var(--accent); color: white; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4); }
         .status-btn.active.izin { background: #f59e0b; color: white; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.4); }
-        .status-btn.active.sakit { background: var(--primary-light); color: white; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+        .status-btn.active.sakit { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.4); }
         .status-btn.active.dinas { background: var(--dinas); color: white; box-shadow: 0 10px 20px rgba(6, 182, 212, 0.4); }
 
         /* --- DYNAMIC ALERT BOX --- */
@@ -132,7 +132,7 @@
         .status-warning-box.alert-danger { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
         .status-warning-box.alert-warning { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
 
-        /* --- GPS & PHOTOS (RESTORED) --- */
+        /* --- GPS & PHOTOS --- */
         .gps-status { background: rgba(255, 255, 255, 0.05); min-height: 52px; color: var(--text-muted); padding: 12px 18px; border-radius: 18px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border: 1px solid var(--glass-border); transition: 0.3s; }
         .gps-status.locked { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); }
         .gps-valid-badge { display: none; margin-left: auto; }
@@ -166,7 +166,7 @@
         .btn-modal-footer.tutup { background: #64748b; color: white; }
         .btn-modal-footer.selesai { background: var(--accent-gradient); color: white; box-shadow: 0 5px 15px rgba(249, 115, 22, 0.2); }
 
-        /* --- PHOTO PREVIEW OVERLAY (GHOSTING BUG FIXED) --- */
+        /* --- PHOTO PREVIEW OVERLAY --- */
         .photo-preview-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: none !important; flex-direction: column; align-items: center; justify-content: center; padding: 40px; pointer-events: auto; }
         .photo-preview-overlay.active { display: flex !important; }
         .photo-preview-overlay img { max-width: 90%; max-height: 80vh; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
@@ -238,18 +238,21 @@
         </div>
 
         <div class="presensi-card fade-in">
+            <!-- GPS INDICATOR -->
             <div class="gps-status" id="gpsIndicator">
                 <i data-lucide="loader-2" class="spin" size="18"></i>
                 <span id="gpsText">Menghubungkan GPS...</span>
                 <i data-lucide="check-circle" class="gps-valid-badge" size="20"></i>
             </div>
 
+            <!-- SEARCH IDENTITY -->
             <div class="input-group" id="groupIdentitas">
                 <input type="text" id="searchPegawai" placeholder="Cari Nama / NIP / No HP..." oninput="filterPegawai()">
                 <i data-lucide="check-circle" class="valid-mark" size="20"></i>
                 <button class="mic-btn" onclick="speechToText('searchPegawai', this)"><i data-lucide="mic" size="20"></i></button>
             </div>
 
+            <!-- PROFILE DISPLAY -->
             <div class="profile-stage">
                 <div class="profile-frame" id="profFrame"></div>
                 <img id="profileImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="profile-img-pop" onload="this.classList.add('show')">
@@ -328,7 +331,7 @@
         </div>
     </div>
 
-    <!-- PHOTO PREVIEW OVERLAY (FIXED) -->
+    <!-- PHOTO PREVIEW OVERLAY (FIXED BUG) -->
     <div id="photoPreviewOverlay" class="photo-preview-overlay" onclick="this.classList.remove('active')"><img id="previewFullImg" src=""><p class="close-preview-hint">Klik dimana saja untuk menutup</p></div>
 
     <script>
@@ -364,7 +367,7 @@
                 document.getElementById('gpsIndicator').classList.add('locked');
                 document.getElementById('gpsText').innerText = "GPS TERKUNCI: " + coords;
                 gpsLocked = true; validateForm(); lucide.createIcons();
-            }, null, { enableHighAccuracy: true });
+            }, (err) => { document.getElementById('gpsText').innerText = "⚠️ AKTIFKAN GPS!"; }, { enableHighAccuracy: true });
         }
 
         function filterPegawai() {
@@ -451,7 +454,10 @@
         function openCamera(mode) { 
             currentCamMode = mode; 
             const input = document.getElementById('cameraInput');
-            if (input) input.click(); 
+            if (!input) return;
+            // Force Camera App Instructing the OS
+            input.setAttribute('capture', mode === 'user' ? 'user' : 'environment');
+            input.click(); 
         }
 
         function processCapture(e) {
@@ -461,11 +467,13 @@
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.getElementById('wmCanvas'); const ctx = canvas.getContext('2d');
+                    // Optimization: Memory efficient drawing for low RAM devices
                     canvas.width = 800; canvas.height = 1000; ctx.drawImage(img, 0, 0, 800, 1000);
                     ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0, 850, 800, 150);
                     ctx.fillStyle = "white"; ctx.font = "bold 32px Arial"; ctx.fillText(userData.Nama, 40, 905);
                     ctx.font = "20px Arial";
-                    ctx.fillText(new Date(Date.now() + serverOffset).toLocaleString('id-ID') + " | GPS: " + coords, 40, 950);
+                    const serverNow = new Date(Date.now() + serverOffset);
+                    ctx.fillText(serverNow.toLocaleString('id-ID') + " | GPS: " + coords, 40, 950);
                     ctx.fillStyle = "#f97316"; ctx.fillText("OFFICIAL SIM UPT PUSDA", 40, 985);
                     const finalData = canvas.toDataURL('image/jpeg', 0.8);
                     const targetId = currentCamMode === 'user' ? 'imgSelfie' : 'imgWork';
@@ -487,7 +495,8 @@
             const hasW = document.getElementById('imgWork').src.includes('data:');
             document.getElementById('groupKegiatan').classList.toggle('is-valid', keg !== '');
             document.getElementById('groupCatatan').classList.toggle('is-valid', note.length >= 10);
-            document.getElementById('btnSubmit').disabled = !(userData && selectedStatus && keg && note.length >= 10 && hasS && hasW && gpsLocked);
+            const ok = userData && selectedStatus && keg && note.length >= 10 && hasS && hasW && gpsLocked;
+            document.getElementById('btnSubmit').disabled = !ok;
         }
 
         async function submitWithQueue() {
@@ -500,7 +509,7 @@
             } catch (e) { alert("Server Sibuk."); btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM PRESENSI`; }
         }
 
-        function openManualRaport() { if(!userData) { alert("Pilih identitas."); return; } showRaport('Absensi Hari Ini', 0); }
+        function openManualRaport() { if(!userData) { alert("Pilih identitas terlebih dahulu."); return; } showRaport('Absensi Hari Ini', 0); }
 
         function showRaport(currentStatus, currentScore) {
             const today = new Date(Date.now() + serverOffset).toLocaleDateString('sv-SE');
