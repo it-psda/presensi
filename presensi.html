@@ -117,12 +117,12 @@
         .btn-check-icon { position: absolute; top: 10px; right: 10px; color: #fff; display: none; background: rgba(0,0,0,0.2); border-radius: 50%; padding: 2px; }
         .status-btn.active .btn-check-icon { display: block; animation: scaleIn 0.3s ease; }
 
-        .status-btn.active.hadir { background: var(--success); color: white; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
-        .status-btn.active.hadir-telat { background: var(--warning); color: white; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4); }
-        .status-btn.active.pulang { background: var(--success); color: white; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
-        .status-btn.active.margin { background: var(--warning); color: white; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4); }
-        .status-btn.active.sakit { background: var(--primary); color: white; box-shadow: 0 10px 25px rgba(30, 58, 138, 0.4); }
-        .status-btn.active.izin { background: #f59e0b; color: white; }
+        .status-btn.active.hadir, .status-btn.active.pulang { background: var(--success); color: white; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
+        .status-btn.active.hadir-telat-ringan { background: var(--warning); color: white; }
+        .status-btn.active.hadir-telat-berat { background: var(--danger); color: white; }
+        .status-btn.active.margin { background: var(--pink); color: white; box-shadow: 0 10px 25px rgba(244, 114, 182, 0.4); }
+        .status-btn.active.sakit { background: var(--purple); color: white; }
+        .status-btn.active.izin { background: var(--yellow); color: #1e293b; }
         .status-btn.active.dinas { background: var(--dinas); color: white; }
 
         /* --- DYNAMIC ALERT BOX --- */
@@ -659,3 +659,4 @@
     </script>
 </body>
 </html>
+
