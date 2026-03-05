@@ -112,7 +112,7 @@
         /* --- STATUS GRID (v8.7 RESTORED) --- */
         .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
         .status-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px 10px; border-radius: 22px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; position: relative; }
-        body.light-theme .status-btn { background: #fff; border-color: #e2e8f0; }
+        body.light-theme .status-btn { background: #fff; border-color: #cbd5e1; }
         .status-btn.disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
         .btn-check-icon { position: absolute; top: 10px; right: 10px; color: #fff; display: none; background: rgba(0,0,0,0.2); border-radius: 50%; padding: 2px; }
         .status-btn.active .btn-check-icon { display: block; animation: scaleIn 0.3s ease; }
@@ -497,11 +497,25 @@
             let msg = "", icon = "info", typeClass = "";
 
             if (status === 'Hadir') {
-                if (tm <= 460) { msg = "☀️ <strong>SELAMAT PAGI!</strong> Terima kasih telah hadir tepat waktu. Selamat bekerja dan tetap semangat memberikan pelayanan terbaik!"; icon = "sun"; typeClass = "alert-success"; }
-                else if (tm <= 480) { msg = "⚠️ <strong>TERLAMBAT RINGAN</strong> (07:40 - 08:00). Skor kehadiran Anda dikurangi menjadi 40 PTS."; icon = "alert-triangle"; typeClass = "alert-warning"; }
-                else { msg = "⚠️ <strong>TERLAMBAT BERAT</strong> (Lewat 08:00). Skor kehadiran Anda dikurangi menjadi 30 PTS."; icon = "alert-circle"; typeClass = "alert-danger"; }
-            } else if (status === 'Pulang') { msg = "🏡 <strong>STATUS PULANG</strong>: Dedikasi Anda hari ini sangat berharga bagi instansi. Selamat beristirahat, tetap utamakan keselamatan dalam perjalanan pulang!"; icon = "home"; typeClass = "alert-success"; }
-            else if (status === 'Margin Error') { msg = "📍 <strong>MARGIN ERROR</strong> (10 PTS): Posisi Anda berada di luar radius kerja. Laporkan kendala GPS ini ke Pengamat segera."; icon = "map-pin"; typeClass = "alert-warning"; }
+                if (tm <= 460) { msg = "☀️ <strong>SELAMAT PAGI!</strong> Kehadiran tepat waktu tercatat. Selamat bekerja!"; icon = "sun"; typeClass = "alert-success"; }
+                else if (tm <= 480) { msg = "⚠️ <strong>TERLAMBAT RINGAN</strong> (07:41 - 08:00). Skor hari ini dikurangi (40 PTS)."; icon = "alert-triangle"; typeClass = "alert-warning"; }
+                else { msg = "⚠️ <strong>TERLAMBAT BERAT</strong> (Lewat 08:00). Skor hari ini dikurangi (30 PTS)."; icon = "alert-circle"; typeClass = "alert-danger"; }
+            } else if (status === 'Sakit') {
+                msg = "🏥 <strong>STATUS SAKIT</strong>: Semoga lekas sembuh. Lampirkan foto SKD pada kolom bukti.";
+                icon = "thermometer"; typeClass = "alert-purple";
+            } else if (status === 'Izin') {
+                msg = "📝 <strong>STATUS IZIN/CUTI</strong>: Pastikan permohonan izin Anda telah disetujui Pengamat/Atasan.";
+                icon = "clipboard-list"; typeClass = "alert-yellow";
+            } else if (status === 'Dinas') {
+                msg = "💼 <strong>STATUS DINAS</strong>: Tugas luar kedinasan. Lampirkan foto kegiatan.";
+                icon = "briefcase"; typeClass = "alert-toska";
+            } else if (status === 'Pulang') {
+                msg = "🏡 <strong>STATUS PULANG</strong>: Dedikasi hari ini sangat berharga. Selamat beristirahat!";
+                icon = "home"; typeClass = "alert-success";
+            } else if (status === 'Margin Error') {
+                msg = "📍 <strong>MARGIN ERROR</strong> (10 PTS): Posisi di luar radius. Lapor kendala GPS ke Pengamat.";
+                icon = "map-pin"; typeClass = "alert-pink";
+            }
             
             if (msg) {
                 document.getElementById('statusAlert').className = "status-warning-box show " + typeClass;
@@ -659,4 +673,5 @@
     </script>
 </body>
 </html>
+
 
