@@ -298,7 +298,6 @@
 
             <div id="statusAlert" class="status-warning-box"><div class="alert-content-inner" id="alertContent"></div></div>
 
-            <!-- STATUS GRID -->
             <div class="status-grid">
                 <div class="status-btn" id="btn-hadir" onclick="handleStatus('Hadir')"><i data-lucide="check-circle"></i>HADIR<i data-lucide="check" class="btn-check-icon"></i></div>
                 <div class="status-btn" id="btn-pulang" onclick="handleStatus('Pulang')"><i data-lucide="log-out"></i>PULANG<i data-lucide="check" class="btn-check-icon"></i></div>
@@ -312,11 +311,12 @@
             <div class="input-group" id="groupKegiatan">
                 <select id="selKegiatan" onchange="validateForm()">
                     <option value="">-- PILIH JENIS KEGIATAN --</option>
-                    <option value="Pembersihan Saluran">Pembersihan Saluran (Rumput/Sampah)</option>
-                    <option value="Pengerukan Sedimen">Pengerukan Sedimen (Waled)</option>
-                    <option value="Perawatan Bangunan">Perawatan Bangunan & Pintu Air</option>
-                    <option value="Monitoring Debit">Monitoring & Pengaturan Debit</option>
-                    <option value="Tugas Dinas">Tugas Kedinasan Lainnya</option>
+                    <option value="Pembersihan Saluran (Rumput/Sampah/Gulma)">Pembersihan Saluran (Rumput/Sampah/Gulma)</option>
+                    <option value="Pengerukan & Penggelontoran Sedimen (Waled)">Pengerukan & Penggelontoran Sedimen (Waled)</option>
+                    <option value="Perawatan Rutin Bangunan & Pintu Air (Cat/Pelumas)">Perawatan Rutin Bangunan & Pintu Air (Cat/Pelumas)</option>
+                    <option value="Perbaikan Tanggul & Penanganan Pohon (Tumbang/Perempesan)">Perbaikan Tanggul & Penanganan Pohon (Tumbang/Perempesan)</option>
+                    <option value="Monitoring & Pengaturan Debit Air">Monitoring & Pengaturan Debit Air</option>
+                    <option value="Tugas Kedinasan Lainnya">Tugas Kedinasan Lainnya</option>
                 </select>
                 <i data-lucide="check-circle" class="valid-mark" size="20"></i>
             </div>
@@ -676,6 +676,7 @@
     </script>
 </body>
 </html>
+
 
 
 
