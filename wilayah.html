@@ -357,21 +357,24 @@
             // Marker Kantor Utama
             const mainIcon = L.icon({
                 iconUrl: 'https://cdn-icons-png.flaticon.com/512/8030/8030335.png',
-                iconSize: [45, 45],
+                iconSize: [40, 40],
                 iconAnchor: [22, 45]
             });
             
-            L.marker([-8.232, 113.250], {icon: mainIcon}).addTo(map)
-                .bindPopup('<b>Kantor UPT PSDA</b><br>WS Bondoyudo Baru')
+            L.marker([-8.43372, 114.22131], {icon: mainIcon}).addTo(map)
+                .bindPopup('<b>Kantor UPT PSDA</b><br>Satker Banyuwangi')
+                .openPopup();
+            L.marker([-8.13553, 113.22595], {icon: mainIcon}).addTo(map)
+                .bindPopup('<b>Kantor UPT PSDA</b><br>WS Bondoyudo Baru Lumajang')
                 .openPopup();
         }
 
         function focusMap(wilayah) {
             const coords = {
-                'Bangorejo': [-8.482, 114.150],
-                'Cluring': [-8.423, 114.218],
-                'Pesanggaran': [-8.560, 114.050],
-                'Porolinggo': [-8.350, 114.120]
+                'Bangorejo': [-8.46177, 114.16771],
+                'Cluring': [-8.4369, 114.2279],
+                'Pesanggaran': [-8.5616, 114.1006],
+                'Porolinggo': [-8.31357, 114.05213]
             };
             
             const target = coords[wilayah];
@@ -395,4 +398,5 @@
 </body>
 
 </html>
+
 
