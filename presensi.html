@@ -499,7 +499,7 @@
             if (status === 'Hadir') {
                 if (tm <= 460) { msg = "☀️ <strong>SELAMAT PAGI!</strong> Kehadiran tepat waktu tercatat. Selamat bekerja!"; icon = "sun"; typeClass = "alert-success"; }
                 else if (tm <= 480) { msg = "⚠️ <strong>TERLAMBAT RINGAN</strong> (07:41 - 08:00). Skor hari ini dikurangi (40 PTS)."; icon = "alert-triangle"; typeClass = "alert-warning"; }
-                else { msg = "⚠️ <strong>TERLAMBAT BERAT</strong> (Lewat 08:00). Skor hari ini dikurangi (30 PTS)."; icon = "alert-circle"; typeClass = "alert-danger"; }
+                else { msg = "⚠️ <strong>TERLAMBAT BERAT</strong> (Lewat 08:00). Skor hari ini dikurangi (25 PTS)."; icon = "alert-circle"; typeClass = "alert-danger"; }
             } else if (status === 'Sakit') {
                 msg = "🏥 <strong>STATUS SAKIT</strong>: Semoga lekas sembuh. Lampirkan foto SKD pada kolom bukti.";
                 icon = "thermometer"; typeClass = "alert-purple";
@@ -604,7 +604,7 @@
                 if (dailyLogs.length > 0) {
                     if (totalPts >= 50) cls = "heat-full";
                     else if (totalPts >= 40) cls = "heat-partial";
-                    else if (totalPts >= 30) cls = "heat-minimal";
+                    else if (totalPts >= 25) cls = "heat-minimal";
                     else cls = "heat-none";
                 }
                 html += `<div class="heat-box ${cls}" onclick="setDateAndHistory('${dateKey}')">${i}</div>`;
@@ -673,5 +673,6 @@
     </script>
 </body>
 </html>
+
 
 
