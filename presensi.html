@@ -500,9 +500,9 @@
             let msg = "", icon = "info", typeClass = "";
 
             if (status === 'Hadir') {
-                if (tm <= 460) { msg = "☀️ <strong>SELAMAT PAGI!</strong> Kehadiran tepat waktu tercatat. Terima kasih atas kedisiplinan Anda dalam memulai tugas pelayanan publik di UPT PSDA. Selamat bekerja!"; icon = "sun"; typeClass = "alert-success"; }
+                if (tm <= 460) { msg = "☀️ <strong>SELAMAT PAGI!</strong> Kehadiran tepat waktu tercatat. Terima kasih atas kedisiplinan Anda dalam memulai tugas pelayanan publik di UPT PSDA. Selamat bekerja! Skor hadir (50 PTS)."; icon = "sun"; typeClass = "alert-success"; }
                 else if (tm <= 480) { msg = "⚠️ <strong>TERLAMBAT RINGAN</strong> (07:41 - 08:00). Presensi berhasil diterima dengan catatan keterlambatan. Mohon senantiasa menjaga ketepatan waktu demi efektivitas kinerja organisasi. Skor hari ini dikurangi (40 PTS)."; icon = "alert-triangle"; typeClass = "alert-warning"; }
-                else { msg = "⚠️ <strong>TERLAMBAT BERAT</strong> (Lewat 08:00). Sistem mencatat keterlambatan signifikan. Mohon segera melapor kepada atasan langsung/Koordinator untuk klarifikasi dan tindak lanjut administrasi. Skor hari ini dikurangi (25 PTS)."; icon = "alert-circle"; typeClass = "alert-danger"; }
+                else { msg = "⚠️ <strong>TERLAMBAT SIGNIFIKAN</strong> (Lewat 08:00). Sistem mencatat keterlambatan signifikan. Mohon segera melapor kepada atasan langsung/Koordinator untuk klarifikasi dan tindak lanjut administrasi. Skor hari ini dikurangi (25 PTS)."; icon = "alert-circle"; typeClass = "alert-danger"; }
             } else if (status === 'Sakit') {
                 msg = "🏥 <strong>STATUS SAKIT</strong>: Status Sakit terverifikasi. Mohon melampirkan Surat Keterangan Dokter melalui aplikasi dan mengonfirmasi kondisi Anda kepada Koordinator. Semoga lekas pulih.";
                 icon = "thermometer"; typeClass = "alert-purple";
@@ -513,10 +513,10 @@
                 msg = "💼 <strong>STATUS DINAS</strong>: Presensi Tugas Kedinasan aktif. Pastikan pelaksanaan tugas sesuai dengan Surat Perintah Tugas (SPT) dan tetap utamakan keselamatan selama di lapangan.";
                 icon = "briefcase"; typeClass = "alert-toska";
             } else if (status === 'Pulang') {
-                msg = "🏡 <strong>STATUS PULANG</strong>: Terima kasih atas dedikasi Anda dalam pengelolaan sumber daya air hari ini. Tetap utamakan keselamatan dalam perjalanan dan selamat beristirahat.";
+                msg = "🏡 <strong>STATUS PULANG</strong>: Terima kasih atas dedikasi Anda dalam pengelolaan sumber daya air hari ini. Tetap utamakan keselamatan dalam perjalanan dan selamat beristirahat. Skor Pulang (50 PTS).";
                 icon = "home"; typeClass = "alert-success";
             } else if (status === 'Margin Error') {
-                msg = "📍 <strong>MARGIN ERROR</strong> (10 PTS): Posisi di luar radius. Lapor kendala GPS ke Pengamat.";
+                msg = "📍 <strong>MARGIN ERROR</strong> Posisi di luar radius. Lapor kendala GPS ke Pengamat. Lanjutkan Presensi Hadir di lokasi kerja. Skor Margin Error (10 PTS).";
                 icon = "map-pin"; typeClass = "alert-pink";
             }
             
@@ -676,6 +676,7 @@
     </script>
 </body>
 </html>
+
 
 
 
