@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Raport Master - SIM UPT PUSDA v21.0</title>
+    <title>E-Raport Master - SIM UPT PUSDA v21.1</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,10 @@
     
     <script>
         /**
-         * CONFIG & GLOBAL ENGINE v21.0 (PRO NAV & PRINT AUTHORITY)
-         * Menu Order: 1.Dashboard, 2.Raport, 3.Presensi, 4.Wilayah, 5.Admin.
-         * Fix: Light Mode Theme Text Visibility.
-         * Feature: Professional Official Print Layout.
+         * CONFIG & GLOBAL ENGINE v21.1 (AUTHORITY BRANDED)
+         * Menu: Dashboard, Raport, Presensi (Fingerprint), Live, Wilayah.
+         * Terms: Bonus -> Quickresponse.
+         * Layout: Side-by-side Dates & 50:50 Buttons.
          */
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
         const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
@@ -26,15 +26,15 @@
     </script>
 
     <style>
-        /* --- MASTER THEME v21.0 --- */
+        /* --- MASTER THEME v21.1 --- */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
-            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --toska: #06b6d4; --purple: #a855f7;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --toska: #06b6d4;
             --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
-            --glass-blur: blur(15px); --card-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            --glass-blur: blur(15px); --card-shadow: 0 20px 50px rgba(0,0,0,0.4);
             --sidebar-width: 280px;
         }
 
@@ -52,7 +52,7 @@
 
         /* --- SIDEBAR MASTER --- */
         #master-app-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
-        body.light-theme #master-app-sidebar { background: rgba(255,255,255,0.85); }
+        body.light-theme #master-app-sidebar { background: rgba(255,255,255,0.9); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
         .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -74,7 +74,7 @@
             font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; 
             justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; 
         }
-        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
         /* --- MAIN CONTENT --- */
         #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; max-width: 100%; }
@@ -101,10 +101,12 @@
 
         /* --- FILTERS GRID --- */
         .filter-section { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 25px; border-radius: 32px; margin-bottom: 35px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; box-shadow: var(--card-shadow); align-items: flex-end; }
-        .filter-group { grid-column: span 3; position: relative; }
+        
+        .filter-group { position: relative; }
         .filter-group.col-5 { grid-column: span 5; }
         .filter-group.col-4 { grid-column: span 4; }
         .filter-group.col-3 { grid-column: span 3; }
+        .filter-group.col-6 { grid-column: span 6; }
         .filter-group label { display: block; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; opacity: 0.6; letter-spacing: 1px; }
         
         .search-container { position: relative; display: flex; align-items: center; width: 100%; }
@@ -123,15 +125,16 @@
         .btn-filter-action { flex: 1; height: 50px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .btn-filter-action.analisa { background: var(--accent-gradient); color: white; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
         .btn-filter-action.pdf { background: var(--success); color: white; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+        .btn-filter-action:hover { transform: translateY(-3px); filter: brightness(1.1); }
 
-        /* --- VIEW: LIST (TABLE) --- */
+        /* --- VIEW: LIST --- */
         .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 28px; overflow-x: auto; box-shadow: var(--card-shadow); display: none; width: 100%; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th { background: rgba(255,255,255,0.03); padding: 18px 20px; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); text-align: center; }
         td { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; text-align: center; font-size: 0.8rem; }
         .td-avatar { width: 45px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid var(--glass-border); }
 
-        /* --- VIEW: GRID (KOTAK) --- */
+        /* --- VIEW: GRID --- */
         .grid-view-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 25px; }
         .raport-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 25px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible; }
         .raport-card:hover { border-color: var(--primary-light); transform: translateY(-8px); box-shadow: var(--card-shadow); }
@@ -147,7 +150,7 @@
 
         .grade-badge { position: absolute; top: 15px; right: 15px; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.3rem; color: white; transform: rotate(5deg); box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 10; }
 
-        /* --- MOBILE REFINEMENT --- */
+        /* --- MOBILE PROTECTION & OPTIMIZATION --- */
         .theme-toggle-mobile { display: none; position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         #master-bottom-nav { display: none; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: var(--card-shadow); border: 1px solid var(--glass-border); }
         
@@ -167,6 +170,7 @@
             .filter-section { display: flex; flex-direction: column; padding: 20px; border-radius: 24px; gap: 12px; }
             .filter-group { min-width: 100%; margin-bottom: 2px; }
             
+            /* Mobile Date Side-by-side */
             .mobile-date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin: 5px 0; }
             .mobile-date-grid .filter-group { grid-column: span 1; }
             
@@ -177,28 +181,24 @@
             .raport-card { border-radius: 28px; padding: 20px; }
         }
 
-        /* --- PROFESSIONAL PRINT LAYOUT --- */
+        @media (max-width: 480px) {
+            .summary-grid { grid-template-columns: 1fr; }
+            .summary-card:last-child { grid-column: span 1; }
+            .master-title-text { font-size: 1.4rem; }
+        }
+
+        /* --- PROFESSIONAL PRINT Header --- */
         #print-header { display: none; }
         @media print {
             body { display: block !important; background: #fff !important; color: #000 !important; overflow: visible !important; }
             #master-app-sidebar, #master-bottom-nav, .theme-toggle-mobile, .filter-section, .summary-grid, .view-toggle, .fixed-bg { display: none !important; }
             #master-main-dashboard { margin: 0 !important; width: 100% !important; padding: 20px !important; }
-            
-            #print-header { 
-                display: block !important; text-align: center; border-bottom: 3px double #000; 
-                margin-bottom: 30px; padding-bottom: 15px; position: relative;
-            }
-            #print-header img { position: absolute; left: 0; top: 0; height: 75px; }
-            #print-header h2 { font-size: 1.4rem; font-weight: 900; margin-bottom: 5px; }
-            #print-header p { font-size: 0.8rem; font-weight: 700; opacity: 0.8; }
-
-            .table-responsive { display: block !important; border: 1px solid #000 !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
-            .grid-view-container { display: none !important; }
-            
+            #print-header { display: block !important; text-align: center; border-bottom: 3px double #000; margin-bottom: 30px; padding-bottom: 15px; }
             table { min-width: 100% !important; border-collapse: collapse !important; color: #000 !important; }
-            th, td { border: 1px solid #000 !important; padding: 10px !important; font-size: 0.75rem !important; }
-            th { background: #eee !important; color: #000 !important; }
-            .td-avatar { display: none !important; } /* Hide photos on print for professional paper looks */
+            th, td { border: 1px solid #000 !important; padding: 10px !important; }
+            .td-avatar { display: none !important; }
+            .table-responsive { display: block !important; }
+            .grid-view-container { display: none !important; }
         }
     </style>
 </head>
@@ -217,12 +217,12 @@
             </div>
         </div>
         <nav class="nav-items">
-            <!-- URUTAN MENU STANDARDIZED -->
+            <!-- STANDARDIZED NAVIGATION -->
             <a href="index.html" class="nav-link"><i data-lucide="layout-grid"></i> Dashboard</a>
             <a href="raport.html" class="nav-link active"><i data-lucide="file-bar-chart"></i> E-Raport</a>
-            <a href="presensi.html" class="nav-link"><i data-lucide="scan-face"></i> E-Presensi</a>
+            <a href="presensi.html" class="nav-link"><i data-lucide="fingerprint"></i> E-Presensi</a>
+            <a href="livepresensi.html" class="nav-link"><i data-lucide="monitor-play"></i> Live Preview</a>
             <a href="wilayah.html" class="nav-link"><i data-lucide="map"></i> Wilayah</a>
-            <a href="admin.html" class="nav-link"><i data-lucide="shield-check"></i> Admin Panel</a>
         </nav>
         <div class="sidebar-footer">
             <div class="authority-box">
@@ -237,9 +237,8 @@
     </aside>
 
     <main id="master-main-dashboard">
-        <!-- OFFICIAL PRINT HEADER -->
+        <!-- OFFICIAL Header for Print -->
         <div id="print-header">
-            <img src="" class="main-logo-src">
             <h2>DINAS PEKERJAAN UMUM SUMBER DAYA AIR</h2>
             <p>LAPORAN EVALUASI KINERJA PEGAWAI UPT PSDA BONDOYUDO BARU</p>
             <p id="print-date-range" style="font-size: 0.7rem; margin-top: 5px; font-weight: 400;">Periode: -</p>
@@ -251,6 +250,7 @@
             <div class="master-title-text"><span class="logo-sim">EVAL</span><span class="logo-pu">UASI</span> <span class="logo-sda">KINERJA</span></div>
         </div>
 
+        <!-- SUMMARY WIDGETS -->
         <div class="summary-grid">
             <div class="summary-card"><span class="sum-lbl">Hari Kerja Efektif</span><span class="sum-val" id="valEffDays">0</span></div>
             <div class="summary-card"><span class="sum-lbl">Rata-rata Skor</span><span class="sum-val" id="valAvgScore" style="color:var(--primary-light)">0</span></div>
@@ -262,7 +262,7 @@
             <div class="filter-group col-5">
                 <label>Pencarian Nama / NIP</label>
                 <div class="search-container">
-                    <input type="text" id="reportSearch" placeholder="CARI NAMA / NIP..." oninput="generateReport()">
+                    <input type="text" id="reportSearch" placeholder="CARI..." oninput="generateReport()">
                     <button class="mic-btn" onclick="speechToText('reportSearch', this)"><i data-lucide="mic"></i></button>
                 </div>
             </div>
@@ -319,9 +319,9 @@
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item active"><i data-lucide="file-text"></i><span>Raport</span></a>
-        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="scan-face" color="white" size="28"></i></div>
+        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="28"></i></div>
+        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
         <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
-        <a href="admin.html" class="b-nav-item"><i data-lucide="user-cog"></i><span>Admin</span></a>
     </nav>
 
     <script>
@@ -417,6 +417,7 @@
                 dayOther.forEach(l => { totalPoin += Number(l.Nilai) || 0; if (['Sakit', 'Izin'].includes(l.Status)) izinSakit++; });
             });
             const workDays = countWorkDays(start, end);
+            const targetPoin = workDays * 100;
             const score = Math.min(100, Math.round((totalPoin / (workDays * 100)) * 100));
             let grade = 'D', color = 'var(--danger)';
             if(score >= 85) { grade = 'A'; color = 'var(--success)'; }
@@ -442,7 +443,6 @@
             const wilayah = document.getElementById('reportWilayah').value;
             const allUsers = [...(window.appData.pegawai || []), ...(window.appData.korlap || [])];
             
-            // Update Print Header Date Range
             document.getElementById('print-date-range').innerText = `Periode: ${start} s/d ${end}`;
 
             const results = allUsers.map(p => {
