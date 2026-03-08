@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Raport Master - SIM UPT PUSDA v20.9</title>
+    <title>E-Raport Master - SIM UPT PUSDA v21.0</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,10 @@
     
     <script>
         /**
-         * CONFIG & GLOBAL ENGINE v20.9 (LOADING AUTHORITY)
-         * Feature: Data Loading Indicator for Grid & Table.
-         * Fix: Desktop Filter Grid Proportion (5-4-3 | 3-3-6).
-         * Layout: Side margins 0.5rem for Mobile.
+         * CONFIG & GLOBAL ENGINE v21.0 (PRO NAV & PRINT AUTHORITY)
+         * Menu Order: 1.Dashboard, 2.Raport, 3.Presensi, 4.Wilayah, 5.Admin.
+         * Fix: Light Mode Theme Text Visibility.
+         * Feature: Professional Official Print Layout.
          */
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
         const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
@@ -26,7 +26,7 @@
     </script>
 
     <style>
-        /* --- MASTER THEME v20.9 --- */
+        /* --- MASTER THEME v21.0 --- */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
@@ -50,16 +50,6 @@
         body { background: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
-        /* --- LOADING INDICATOR --- */
-        .loading-container { 
-            grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; padding: 80px 20px; gap: 20px; 
-            background: var(--glass); border-radius: 35px; border: 1px dashed var(--glass-border);
-        }
-        .loading-text { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; opacity: 0.5; text-transform: uppercase; }
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
         /* --- SIDEBAR MASTER --- */
         #master-app-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
         body.light-theme #master-app-sidebar { background: rgba(255,255,255,0.85); }
@@ -72,11 +62,19 @@
         .nav-link { padding: 15px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-weight: 600; cursor: pointer; }
         .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3); }
 
+        /* SIDEBAR FOOTER & THEME FIX */
         .sidebar-footer { margin-top: auto; padding: 5px; }
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
         .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
-        .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: white; font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        
+        .theme-btn-sidebar { 
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); 
+            font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; 
+            justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; 
+        }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
         /* --- MAIN CONTENT --- */
         #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; max-width: 100%; }
@@ -85,24 +83,28 @@
         .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; }
         .master-title-text span { font-weight: 900; text-transform: uppercase; }
 
+        /* --- LOADING INDICATOR --- */
+        .loading-container { 
+            grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; padding: 80px 20px; gap: 20px; 
+            background: var(--glass); border-radius: 35px; border: 1px dashed var(--glass-border);
+        }
+        .loading-text { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; opacity: 0.5; text-transform: uppercase; }
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         /* --- SUMMARY WIDGETS --- */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .summary-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 22px; box-shadow: var(--card-shadow); }
         .sum-val { font-size: 1.8rem; font-weight: 900; display: block; }
         .sum-lbl { font-size: 0.6rem; font-weight: 800; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- FILTERS (ULTIMATE DESKTOP GRID) --- */
-        .filter-section { 
-            background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); 
-            padding: 25px; border-radius: 32px; margin-bottom: 35px; 
-            display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; 
-            box-shadow: var(--card-shadow); align-items: flex-end; 
-        }
-        .filter-group { position: relative; }
+        /* --- FILTERS GRID --- */
+        .filter-section { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 25px; border-radius: 32px; margin-bottom: 35px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; box-shadow: var(--card-shadow); align-items: flex-end; }
+        .filter-group { grid-column: span 3; position: relative; }
         .filter-group.col-5 { grid-column: span 5; }
         .filter-group.col-4 { grid-column: span 4; }
         .filter-group.col-3 { grid-column: span 3; }
-        .filter-group.col-6 { grid-column: span 6; }
         .filter-group label { display: block; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; opacity: 0.6; letter-spacing: 1px; }
         
         .search-container { position: relative; display: flex; align-items: center; width: 100%; }
@@ -145,7 +147,7 @@
 
         .grade-badge { position: absolute; top: 15px; right: 15px; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.3rem; color: white; transform: rotate(5deg); box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 10; }
 
-        /* --- MOBILE PROTECTION & OPTIMIZATION --- */
+        /* --- MOBILE REFINEMENT --- */
         .theme-toggle-mobile { display: none; position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         #master-bottom-nav { display: none; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: var(--card-shadow); border: 1px solid var(--glass-border); }
         
@@ -175,11 +177,28 @@
             .raport-card { border-radius: 28px; padding: 20px; }
         }
 
+        /* --- PROFESSIONAL PRINT LAYOUT --- */
+        #print-header { display: none; }
         @media print {
-            #master-app-sidebar, #master-bottom-nav, .theme-toggle-mobile, .filter-section, .summary-grid, .view-toggle { display: none !important; }
-            #master-main-dashboard { margin-left: 0 !important; padding: 0 !important; }
-            .table-responsive { display: block !important; }
+            body { display: block !important; background: #fff !important; color: #000 !important; overflow: visible !important; }
+            #master-app-sidebar, #master-bottom-nav, .theme-toggle-mobile, .filter-section, .summary-grid, .view-toggle, .fixed-bg { display: none !important; }
+            #master-main-dashboard { margin: 0 !important; width: 100% !important; padding: 20px !important; }
+            
+            #print-header { 
+                display: block !important; text-align: center; border-bottom: 3px double #000; 
+                margin-bottom: 30px; padding-bottom: 15px; position: relative;
+            }
+            #print-header img { position: absolute; left: 0; top: 0; height: 75px; }
+            #print-header h2 { font-size: 1.4rem; font-weight: 900; margin-bottom: 5px; }
+            #print-header p { font-size: 0.8rem; font-weight: 700; opacity: 0.8; }
+
+            .table-responsive { display: block !important; border: 1px solid #000 !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
             .grid-view-container { display: none !important; }
+            
+            table { min-width: 100% !important; border-collapse: collapse !important; color: #000 !important; }
+            th, td { border: 1px solid #000 !important; padding: 10px !important; font-size: 0.75rem !important; }
+            th { background: #eee !important; color: #000 !important; }
+            .td-avatar { display: none !important; } /* Hide photos on print for professional paper looks */
         }
     </style>
 </head>
@@ -198,9 +217,10 @@
             </div>
         </div>
         <nav class="nav-items">
+            <!-- URUTAN MENU STANDARDIZED -->
             <a href="index.html" class="nav-link"><i data-lucide="layout-grid"></i> Dashboard</a>
-            <a href="presensi.html" class="nav-link"><i data-lucide="scan-face"></i> E-Presensi</a>
             <a href="raport.html" class="nav-link active"><i data-lucide="file-bar-chart"></i> E-Raport</a>
+            <a href="presensi.html" class="nav-link"><i data-lucide="scan-face"></i> E-Presensi</a>
             <a href="wilayah.html" class="nav-link"><i data-lucide="map"></i> Wilayah</a>
             <a href="admin.html" class="nav-link"><i data-lucide="shield-check"></i> Admin Panel</a>
         </nav>
@@ -208,19 +228,29 @@
             <div class="authority-box">
                 <span class="auth-label">SERVER AUTHORITY TIME</span>
                 <div id="clockSidebar">00:00:00</div>
-                <button class="theme-btn-sidebar" onclick="toggleTheme()" id="sidebarThemeBtn"><i data-lucide="moon" id="sidebarThemeIcon"></i><span id="themeLabel">DARK MODE</span></button>
+                <button class="theme-btn-sidebar" onclick="toggleTheme()" id="sidebarThemeBtn">
+                    <i data-lucide="moon" id="sidebarThemeIcon"></i>
+                    <span id="themeLabel">DARK MODE</span>
+                </button>
             </div>
         </div>
     </aside>
 
     <main id="master-main-dashboard">
+        <!-- OFFICIAL PRINT HEADER -->
+        <div id="print-header">
+            <img src="" class="main-logo-src">
+            <h2>DINAS PEKERJAAN UMUM SUMBER DAYA AIR</h2>
+            <p>LAPORAN EVALUASI KINERJA PEGAWAI UPT PSDA BONDOYUDO BARU</p>
+            <p id="print-date-range" style="font-size: 0.7rem; margin-top: 5px; font-weight: 400;">Periode: -</p>
+        </div>
+
         <!-- BRANDED TITLE -->
         <div class="master-title-container">
             <div class="master-accent-bar"></div>
             <div class="master-title-text"><span class="logo-sim">EVAL</span><span class="logo-pu">UASI</span> <span class="logo-sda">KINERJA</span></div>
         </div>
 
-        <!-- SUMMARY WIDGETS -->
         <div class="summary-grid">
             <div class="summary-card"><span class="sum-lbl">Hari Kerja Efektif</span><span class="sum-val" id="valEffDays">0</span></div>
             <div class="summary-card"><span class="sum-lbl">Rata-rata Skor</span><span class="sum-val" id="valAvgScore" style="color:var(--primary-light)">0</span></div>
@@ -412,6 +442,9 @@
             const wilayah = document.getElementById('reportWilayah').value;
             const allUsers = [...(window.appData.pegawai || []), ...(window.appData.korlap || [])];
             
+            // Update Print Header Date Range
+            document.getElementById('print-date-range').innerText = `Periode: ${start} s/d ${end}`;
+
             const results = allUsers.map(p => {
                 const stats = calculateStats(p.ID, start, end);
                 return { ...p, stats };
@@ -472,8 +505,10 @@
         function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
         function updateThemeIcons(isLight) {
             const mIcon = document.getElementById('mobileThemeIcon'), sIcon = document.getElementById('sidebarThemeIcon');
+            const sLbl = document.getElementById('themeLabel');
             if (mIcon) mIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
             if (sIcon) sIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (sLbl) sLbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
     </script>
