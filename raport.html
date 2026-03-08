@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Raport Master - SIM UPT PUSDA v19.8</title>
+    <title>E-Raport Master - SIM UPT PUSDA v20.9</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,10 +14,10 @@
     
     <script>
         /**
-         * CONFIG & GLOBAL ENGINE v19.8 (BRANDED TITLE)
-         * Judul: EVAL (Orange) UASI (Blue) KINERJA (Toska)
-         * Logic: Senin-Jumat (Wajib), Sabtu-Minggu (Bonus)
-         * Collision: Margin Error vs Hadir > 08.40 Handled
+         * CONFIG & GLOBAL ENGINE v20.9 (LOADING AUTHORITY)
+         * Feature: Data Loading Indicator for Grid & Table.
+         * Fix: Desktop Filter Grid Proportion (5-4-3 | 3-3-6).
+         * Layout: Side margins 0.5rem for Mobile.
          */
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
         const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
@@ -26,7 +26,7 @@
     </script>
 
     <style>
-        /* --- MASTER THEME v19.8 --- */
+        /* --- MASTER THEME v20.9 --- */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
@@ -46,53 +46,44 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
+        html, body { width: 100%; overflow-x: hidden; position: relative; }
+        body { background: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
+
+        /* --- LOADING INDICATOR --- */
+        .loading-container { 
+            grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; padding: 80px 20px; gap: 20px; 
+            background: var(--glass); border-radius: 35px; border: 1px dashed var(--glass-border);
+        }
+        .loading-text { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; opacity: 0.5; text-transform: uppercase; }
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* --- SIDEBAR MASTER --- */
         #master-app-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
         body.light-theme #master-app-sidebar { background: rgba(255,255,255,0.85); }
-        
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
         .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
-        
-        /* BRANDING COLORS */
         .logo-sim { color: var(--accent); } .logo-pu { color: var(--primary-light); } .logo-sda { color: var(--toska); }
 
         .nav-items { flex: 1; display: flex; flex-direction: column; gap: 8px; }
         .nav-link { padding: 15px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-weight: 600; cursor: pointer; }
         .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3); }
 
-        /* STANDARDIZED SIDEBAR FOOTER */
         .sidebar-footer { margin-top: auto; padding: 5px; }
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
         .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
-        
         .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: white; font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        body.light-theme .authority-box { background: rgba(0,0,0,0.03); }
-        body.light-theme .theme-btn-sidebar { color: var(--primary); background: white; }
 
         /* --- MAIN CONTENT --- */
-        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2rem 120px 2rem; min-height: 100vh; position: relative; }
+        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; max-width: 100%; }
         .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
-        
-        /* BRANDED TITLE STYLE */
-        .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); letter-spacing: -1.5px; }
+        .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; }
         .master-title-text span { font-weight: 900; text-transform: uppercase; }
-
-        /* --- FILTERS & TOGGLE --- */
-        .filter-section { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 25px; border-radius: 32px; margin-bottom: 35px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; box-shadow: var(--card-shadow); }
-        .filter-group { flex: 1; min-width: 140px; }
-        .filter-group label { display: block; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; opacity: 0.6; letter-spacing: 1px; }
-        input, select { width: 100%; padding: 12px 16px; border-radius: 14px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 600; outline: none; transition: 0.3s; font-size: 0.85rem; }
-        body.light-theme input, body.light-theme select { background: white; color: #1e293b; border-color: #cbd5e1; }
-
-        .view-toggle { display: flex; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 14px; border: 1.5px solid var(--glass-border); }
-        .toggle-btn { flex: 1; padding: 10px 15px; border-radius: 10px; cursor: pointer; border: none; background: transparent; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
-        .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
         /* --- SUMMARY WIDGETS --- */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
@@ -100,48 +91,95 @@
         .sum-val { font-size: 1.8rem; font-weight: 900; display: block; }
         .sum-lbl { font-size: 0.6rem; font-weight: 800; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* --- FILTERS (ULTIMATE DESKTOP GRID) --- */
+        .filter-section { 
+            background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); 
+            padding: 25px; border-radius: 32px; margin-bottom: 35px; 
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; 
+            box-shadow: var(--card-shadow); align-items: flex-end; 
+        }
+        .filter-group { position: relative; }
+        .filter-group.col-5 { grid-column: span 5; }
+        .filter-group.col-4 { grid-column: span 4; }
+        .filter-group.col-3 { grid-column: span 3; }
+        .filter-group.col-6 { grid-column: span 6; }
+        .filter-group label { display: block; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; opacity: 0.6; letter-spacing: 1px; }
+        
+        .search-container { position: relative; display: flex; align-items: center; width: 100%; }
+        input, select { width: 100%; height: 50px; padding: 0 16px; border-radius: 14px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 600; outline: none; transition: 0.3s; font-size: 0.85rem; }
+        input#reportSearch { padding-right: 50px; text-transform: uppercase; }
+        
+        .mic-btn { position: absolute; right: 8px; background: var(--accent-gradient); border: none; width: 34px; height: 34px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; z-index: 10; }
+        .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1.2s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); } }
+
+        .view-toggle { display: flex; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 14px; border: 1.5px solid var(--glass-border); height: 50px; align-items: center; }
+        .toggle-btn { flex: 1; height: 38px; border-radius: 10px; cursor: pointer; border: none; background: transparent; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+        .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        .filter-btn-group { grid-column: span 6; display: flex; gap: 15px; }
+        .btn-filter-action { flex: 1; height: 50px; border-radius: 14px; border: none; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-filter-action.analisa { background: var(--accent-gradient); color: white; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
+        .btn-filter-action.pdf { background: var(--success); color: white; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+
         /* --- VIEW: LIST (TABLE) --- */
-        .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 28px; overflow-x: auto; box-shadow: var(--card-shadow); display: none; }
+        .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 28px; overflow-x: auto; box-shadow: var(--card-shadow); display: none; width: 100%; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th { background: rgba(255,255,255,0.03); padding: 18px 20px; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); text-align: center; }
         td { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; text-align: center; font-size: 0.8rem; }
-        .td-left { text-align: left; }
         .td-avatar { width: 45px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid var(--glass-border); }
 
         /* --- VIEW: GRID (KOTAK) --- */
-        .grid-view-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
-        .raport-card { 
-            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; 
-            padding: 30px 25px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible;
-        }
+        .grid-view-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 25px; }
+        .raport-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 25px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible; }
         .raport-card:hover { border-color: var(--primary-light); transform: translateY(-8px); box-shadow: var(--card-shadow); }
         
-        .card-top { display: flex; align-items: center; gap: 20px; overflow: visible; }
-        .card-avatar-stage { position: relative; width: 75px; height: 100px; flex-shrink: 0; overflow: visible; }
-        .avatar-box { width: 100%; height: 85%; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1.5px solid var(--glass-border); position: absolute; bottom: 0; z-index: 1; }
-        .card-avatar { width: 140%; height: auto; object-fit: contain; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 5; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); transition: 0.4s; transform-origin: bottom center; }
-        .raport-card:hover .card-avatar { transform: translateX(-50%) scale(1.25) translateY(-10px); filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6)); }
+        .card-avatar-stage { position: relative; width: 70px; height: 95px; flex-shrink: 0; overflow: visible; }
+        .avatar-box { width: 100%; height: 85%; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1.5px solid var(--glass-border); position: absolute; bottom: 0; z-index: 1; }
+        .card-avatar { width: 130%; height: auto; object-fit: contain; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 5; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); transition: 0.4s; transform-origin: bottom center; }
 
-        .card-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .card-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
         .card-stat-item { text-align: center; }
-        .card-stat-val { font-weight: 900; font-size: 1rem; display: block; }
+        .card-stat-val { font-weight: 900; font-size: 0.95rem; display: block; }
         .card-stat-lbl { font-size: 0.45rem; opacity: 0.5; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
 
-        .grade-badge { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.4rem; color: white; transform: rotate(5deg); box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 10; }
+        .grade-badge { position: absolute; top: 15px; right: 15px; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.3rem; color: white; transform: rotate(5deg); box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 10; }
 
-        /* --- MOBILE PROTECTION --- */
+        /* --- MOBILE PROTECTION & OPTIMIZATION --- */
         .theme-toggle-mobile { display: none; position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         #master-bottom-nav { display: none; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: var(--card-shadow); border: 1px solid var(--glass-border); }
         
         @media (min-width: 1025px) { #master-bottom-nav, .theme-toggle-mobile { display: none !important; } }
+        
         @media (max-width: 1024px) {
             #master-app-sidebar { display: none; }
-            #master-main-dashboard { margin-left: 0; padding: 25px 0.8rem 120px 0.8rem; }
+            #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 130px 0.5rem; width: 100%; }
             #master-bottom-nav, .theme-toggle-mobile { display: flex; }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; display: flex; align-items: center; justify-content: center; border: 5px solid var(--bg-body); color: white; }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
+
+            .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .summary-card:last-child { grid-column: span 2; }
+            
+            .filter-section { display: flex; flex-direction: column; padding: 20px; border-radius: 24px; gap: 12px; }
+            .filter-group { min-width: 100%; margin-bottom: 2px; }
+            
+            .mobile-date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin: 5px 0; }
+            .mobile-date-grid .filter-group { grid-column: span 1; }
+            
+            .filter-btn-group { flex-direction: column; gap: 10px; width: 100%; }
+            .btn-filter-action { width: 100%; height: 55px; font-size: 0.9rem; }
+
+            .grid-view-container { grid-template-columns: 1fr; gap: 15px; }
+            .raport-card { border-radius: 28px; padding: 20px; }
+        }
+
+        @media print {
+            #master-app-sidebar, #master-bottom-nav, .theme-toggle-mobile, .filter-section, .summary-grid, .view-toggle { display: none !important; }
+            #master-main-dashboard { margin-left: 0 !important; padding: 0 !important; }
+            .table-responsive { display: block !important; }
+            .grid-view-container { display: none !important; }
         }
     </style>
 </head>
@@ -166,16 +204,11 @@
             <a href="wilayah.html" class="nav-link"><i data-lucide="map"></i> Wilayah</a>
             <a href="admin.html" class="nav-link"><i data-lucide="shield-check"></i> Admin Panel</a>
         </nav>
-        
-        <!-- SIDEBAR FOOTER -->
         <div class="sidebar-footer">
             <div class="authority-box">
                 <span class="auth-label">SERVER AUTHORITY TIME</span>
                 <div id="clockSidebar">00:00:00</div>
-                <button class="theme-btn-sidebar" onclick="toggleTheme()" id="sidebarThemeBtn">
-                    <i data-lucide="moon" id="sidebarThemeIcon"></i>
-                    <span id="themeLabel">DARK MODE</span>
-                </button>
+                <button class="theme-btn-sidebar" onclick="toggleTheme()" id="sidebarThemeBtn"><i data-lucide="moon" id="sidebarThemeIcon"></i><span id="themeLabel">DARK MODE</span></button>
             </div>
         </div>
     </aside>
@@ -184,11 +217,10 @@
         <!-- BRANDED TITLE -->
         <div class="master-title-container">
             <div class="master-accent-bar"></div>
-            <div class="master-title-text">
-                <span class="logo-sim">EVAL</span><span class="logo-pu">UASI</span> <span class="logo-sda">KINERJA</span>
-            </div>
+            <div class="master-title-text"><span class="logo-sim">EVAL</span><span class="logo-pu">UASI</span> <span class="logo-sda">KINERJA</span></div>
         </div>
 
+        <!-- SUMMARY WIDGETS -->
         <div class="summary-grid">
             <div class="summary-card"><span class="sum-lbl">Hari Kerja Efektif</span><span class="sum-val" id="valEffDays">0</span></div>
             <div class="summary-card"><span class="sum-lbl">Rata-rata Skor</span><span class="sum-val" id="valAvgScore" style="color:var(--primary-light)">0</span></div>
@@ -197,14 +229,26 @@
 
         <!-- FILTERS -->
         <div class="filter-section fade-in">
-            <div class="filter-group" style="flex: 2;">
-                <label>Pencarian</label>
-                <input type="text" id="reportSearch" placeholder="Nama / NIP Staf..." oninput="generateReport()">
+            <div class="filter-group col-5">
+                <label>Pencarian Nama / NIP</label>
+                <div class="search-container">
+                    <input type="text" id="reportSearch" placeholder="CARI NAMA / NIP..." oninput="generateReport()">
+                    <button class="mic-btn" onclick="speechToText('reportSearch', this)"><i data-lucide="mic"></i></button>
+                </div>
             </div>
-            <div class="filter-group"><label>Mulai</label><input type="date" id="reportStart"></div>
-            <div class="filter-group"><label>Hingga</label><input type="date" id="reportEnd"></div>
             
-            <div class="filter-group">
+            <div class="filter-group col-4">
+                <label>Filter Wilayah</label>
+                <select id="reportWilayah" onchange="generateReport()">
+                    <option value="ALL">SEMUA WILAYAH</option>
+                    <option value="Bangorejo">BANGOREJO</option>
+                    <option value="Cluring">CLURING</option>
+                    <option value="Pesanggaran">PESANGGARAN</option>
+                    <option value="Porolinggo">POROLINGGO</option>
+                </select>
+            </div>
+
+            <div class="filter-group col-3">
                 <label>Tampilan</label>
                 <div class="view-toggle">
                     <button class="toggle-btn" id="btnList" onclick="switchView('list')"><i data-lucide="list"></i></button>
@@ -212,34 +256,32 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; flex: 1; min-width: 100%; margin-top: 10px;">
-                <button class="nav-link active" onclick="generateReport()" style="flex:2; justify-content:center; padding:14px; border:none; color:white;"><i data-lucide="zap"></i> ANALISA ULANG</button>
-                <button class="nav-link" onclick="window.print()" style="flex:1; justify-content:center; background:var(--success); color:white; border:none;"><i data-lucide="printer"></i> PDF</button>
+            <div class="filter-group col-3">
+                <label>Mulai</label>
+                <input type="date" id="reportStart">
+            </div>
+            <div class="filter-group col-3">
+                <label>Hingga</label>
+                <input type="date" id="reportEnd">
+            </div>
+
+            <div class="filter-btn-group">
+                <button class="btn-filter-action analisa" onclick="generateReport()"><i data-lucide="zap"></i> ANALISA</button>
+                <button class="btn-filter-action pdf" onclick="window.print()"><i data-lucide="printer"></i> PDF</button>
             </div>
         </div>
 
-        <!-- VIEW: LIST -->
         <div class="table-responsive fade-in" id="listView">
             <table>
                 <thead>
                     <tr>
-                        <th>NO</th>
-                        <th>PROFIL</th>
-                        <th class="td-left">NAMA / JABATAN</th>
-                        <th>HADIR</th>
-                        <th>PULANG</th>
-                        <th>TELAT</th>
-                        <th>SAKIT/IZIN</th>
-                        <th>BONUS</th>
-                        <th>SKOR</th>
-                        <th>GRADE</th>
+                        <th>NO</th><th>PROFIL</th><th class="td-left">NAMA / JABATAN</th><th>HADIR</th><th>PULANG</th><th>TELAT</th><th>SAKIT/IZIN</th><th>QUICKRESPONSE</th><th>SKOR</th><th>GRADE</th>
                     </tr>
                 </thead>
                 <tbody id="raportTableBody"></tbody>
             </table>
         </div>
 
-        <!-- VIEW: GRID -->
         <div class="grid-view-container" id="gridView"></div>
     </main>
 
@@ -263,6 +305,7 @@
         };
 
         async function fetchReportData() {
+            showLoading(true);
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { method: 'GET', mode: 'cors' });
                 const result = await res.json();
@@ -270,7 +313,28 @@
                     window.appData = result; window.appData.isLoaded = true;
                     updateLogos(); generateReport();
                 }
-            } catch (e) { console.error("Sync Failure"); }
+            } catch (e) { 
+                console.error("Sync Failure"); 
+                document.getElementById('raportTableBody').innerHTML = '<tr><td colspan="10">Gagal memuat data.</td></tr>';
+                document.getElementById('gridView').innerHTML = '<div class="loading-container">Gagal memuat data.</div>';
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(active) {
+            const tableBody = document.getElementById('raportTableBody');
+            const gridView = document.getElementById('gridView');
+            if (active) {
+                const loader = `
+                    <div class="loading-container">
+                        <i data-lucide="loader-2" class="spin" size="48" color="var(--accent)"></i>
+                        <span class="loading-text">Menyinkronkan Data Cloud...</span>
+                    </div>`;
+                if (currentView === 'list') tableBody.innerHTML = `<tr><td colspan="10">${loader}</td></tr>`;
+                else gridView.innerHTML = loader;
+                lucide.createIcons();
+            }
         }
 
         function updateLogos() {
@@ -294,67 +358,41 @@
                 const ts = l.Timestamp ? l.Timestamp.split(' ')[0] : '';
                 return String(l.ID_Pegawai) === String(pegID) && ts >= start && ts <= end;
             });
-
             const dailyLogs = {};
-            logs.forEach(l => {
-                const date = l.Timestamp.split(' ')[0];
-                if (!dailyLogs[date]) dailyLogs[date] = [];
-                dailyLogs[date].push(l);
-            });
+            logs.forEach(l => { const d = l.Timestamp.split(' ')[0]; if(!dailyLogs[d]) dailyLogs[d] = []; dailyLogs[d].push(l); });
 
             let hadirCount = 0, pulangCount = 0, totalTelat = 0, izinSakit = 0, bonusWeekend = 0, totalPoin = 0;
-
             Object.keys(dailyLogs).forEach(date => {
                 const dayLogs = dailyLogs[date];
                 const dayObj = new Date(date);
                 const isWeekend = (dayObj.getDay() === 0 || dayObj.getDay() === 6);
-                let dayHadir = null, dayMargin = null, dayPulang = null;
-                let dayOther = [];
-
+                let dayHadir = null, dayMargin = null, dayPulang = null, dayOther = [];
                 dayLogs.forEach(l => {
                     if (l.Status === 'Hadir') dayHadir = l;
                     else if (l.Status === 'Margin Error') dayMargin = l;
                     else if (l.Status === 'Pulang') dayPulang = l;
                     else if (['Sakit', 'Izin', 'Dinas'].includes(l.Status)) dayOther.push(l);
                 });
-
                 if (dayHadir) {
-                    const pts = Number(dayHadir.Nilai) || 0;
-                    totalPoin += pts;
+                    const pts = Number(dayHadir.Nilai) || 0; totalPoin += pts;
                     if (pts < 50) totalTelat++;
                     if (isWeekend) bonusWeekend++; else hadirCount++;
                 }
-
                 if (dayMargin) {
                     const mPts = Number(dayMargin.Nilai) || 0;
                     const hasHadirLate = dayHadir && (Number(dayHadir.Nilai) <= 10);
-                    if (!hasHadirLate) {
-                        totalPoin += mPts;
-                        if (!isWeekend) hadirCount++; else bonusWeekend++;
-                    }
+                    if (!hasHadirLate) { totalPoin += mPts; if (!isWeekend) hadirCount++; else bonusWeekend++; }
                 }
-
-                if (dayPulang) {
-                    totalPoin += Number(dayPulang.Nilai) || 0;
-                    pulangCount++;
-                }
-
-                dayOther.forEach(l => {
-                    totalPoin += Number(l.Nilai) || 0;
-                    if (['Sakit', 'Izin'].includes(l.Status)) izinSakit++;
-                });
+                if (dayPulang) { totalPoin += Number(dayPulang.Nilai) || 0; pulangCount++; }
+                dayOther.forEach(l => { totalPoin += Number(l.Nilai) || 0; if (['Sakit', 'Izin'].includes(l.Status)) izinSakit++; });
             });
-
             const workDays = countWorkDays(start, end);
-            const targetPoin = workDays * 100;
-            const score = Math.min(100, Math.round((totalPoin / targetPoin) * 100));
-
+            const score = Math.min(100, Math.round((totalPoin / (workDays * 100)) * 100));
             let grade = 'D', color = 'var(--danger)';
             if(score >= 85) { grade = 'A'; color = 'var(--success)'; }
             else if(score >= 70) { grade = 'B'; color = 'var(--primary-light)'; }
             else if(score >= 50) { grade = 'C'; color = 'var(--warning)'; }
-
-            return { hadirCount, pulangCount, totalTelat, izinSakit, bonusWeekend, score, grade, color, workDays };
+            return { hadirCount, pulangCount, totalTelat, izinSakit, bonusWeekend, score, grade, color };
         }
 
         function switchView(view) {
@@ -371,43 +409,34 @@
             const start = document.getElementById('reportStart').value;
             const end = document.getElementById('reportEnd').value;
             const query = document.getElementById('reportSearch').value.toLowerCase();
+            const wilayah = document.getElementById('reportWilayah').value;
             const allUsers = [...(window.appData.pegawai || []), ...(window.appData.korlap || [])];
             
             const results = allUsers.map(p => {
                 const stats = calculateStats(p.ID, start, end);
                 return { ...p, stats };
-            }).filter(p => p.Nama.toLowerCase().includes(query) || String(p.ID).includes(query));
+            }).filter(p => {
+                const matchName = p.Nama.toLowerCase().includes(query) || String(p.ID).includes(query);
+                const matchWil = wilayah === 'ALL' || p.Wilayah === wilayah;
+                return matchName && matchWil;
+            });
 
             results.sort((a, b) => b.stats.score - a.stats.score);
 
-            // Table Body
             document.getElementById('raportTableBody').innerHTML = results.map((p, i) => `
-                <tr>
+                <tr class="fade-in">
                     <td style="opacity:0.3; font-weight:800;">${i+1}</td>
                     <td><img src="${p.Link_Foto_Profile || ''}" class="td-avatar" onerror="this.src='https://placehold.co/100x130?text=?'"></td>
                     <td class="td-left"><div style="font-weight:900;">${p.Nama}</div><div style="font-size:0.6rem; opacity:0.6;">${p.Jabatan}</div></td>
-                    <td>${p.stats.hadirCount}</td>
-                    <td>${p.stats.pulangCount}</td>
-                    <td style="color:var(--danger); font-weight:800;">${p.stats.totalTelat}</td>
-                    <td>${p.stats.izinSakit}</td>
-                    <td style="color:var(--success); font-weight:900;">+${p.stats.bonusWeekend}</td>
-                    <td style="font-weight:900; color:${p.stats.color}; font-size:1.1rem;">${p.stats.score}</td>
-                    <td><span style="background:${p.stats.color}; color:white; padding:5px 10px; border-radius:8px; font-weight:900;">${p.stats.grade}</span></td>
+                    <td>${p.stats.hadirCount}</td><td>${p.stats.pulangCount}</td><td style="color:var(--danger); font-weight:800;">${p.stats.totalTelat}</td><td>${p.stats.izinSakit}</td><td style="color:var(--success); font-weight:900;">+${p.stats.bonusWeekend}</td><td style="font-weight:900; color:${p.stats.color}; font-size:1.1rem;">${p.stats.score}</td><td><span style="background:${p.stats.color}; color:white; padding:5px 10px; border-radius:8px; font-weight:900;">${p.stats.grade}</span></td>
                 </tr>`).join('');
 
-            // Grid Layout
             document.getElementById('gridView').innerHTML = results.map(p => `
                 <div class="raport-card fade-in">
                     <div class="grade-badge" style="background:${p.stats.color}">${p.stats.grade}</div>
                     <div class="card-top">
-                        <div class="card-avatar-stage">
-                            <div class="avatar-box"></div>
-                            <img src="${p.Link_Foto_Profile || ''}" class="card-avatar" onerror="this.src='https://placehold.co/100x130?text=?'">
-                        </div>
-                        <div style="flex:1;">
-                            <div class="staf-name">${p.Nama}</div>
-                            <div class="staf-role">${p.Jabatan} • WIL. ${p.Wilayah}</div>
-                        </div>
+                        <div class="card-avatar-stage"><div class="avatar-box"></div><img src="${p.Link_Foto_Profile || ''}" class="card-avatar" onerror="this.src='https://placehold.co/100x130?text=?'"></div>
+                        <div style="flex:1;"><div style="font-weight:900; text-transform:uppercase; font-size:1rem; word-break:break-word;">${p.Nama}</div><div style="font-size:0.6rem; opacity:0.6; font-weight:800;">${p.Jabatan} • WIL. ${p.Wilayah}</div></div>
                     </div>
                     <div class="card-stats-grid">
                         <div class="card-stat-item"><span class="card-stat-val">${p.stats.hadirCount}</span><span class="card-stat-lbl">Hadir</span></div>
@@ -415,15 +444,9 @@
                         <div class="card-stat-item"><span class="card-stat-val" style="color:var(--danger)">${p.stats.totalTelat}</span><span class="card-stat-lbl">Telat</span></div>
                         <div class="card-stat-item"><span class="card-stat-val" style="color:var(--warning)">${p.stats.izinSakit}</span><span class="card-stat-lbl">Izin/Skt</span></div>
                     </div>
-                    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-top:5px; padding-top:10px;">
-                        <div>
-                            <span style="font-size:0.5rem; font-weight:800; opacity:0.4; text-transform:uppercase; display:block; margin-bottom:2px;">Bonus Weekend</span>
-                            <span style="font-weight:900; color:var(--success); font-size:1.1rem;">+${p.stats.bonusWeekend} <small style="font-size:0.6rem;">BONUS</small></span>
-                        </div>
-                        <div style="text-align:right;">
-                            <span style="font-size:0.5rem; font-weight:800; opacity:0.4; text-transform:uppercase; display:block;">Perform Score</span>
-                            <div style="font-weight:900; font-size:2.2rem; color:${p.stats.color}; line-height:1;">${p.stats.score}</div>
-                        </div>
+                    <div style="display:flex; align-items:flex-end; justify-content:space-between; padding-top:10px;">
+                        <div><span style="font-size:0.5rem; font-weight:800; opacity:0.4; text-transform:uppercase; display:block;">Quickresponse</span><span style="font-weight:900; color:var(--success); font-size:0.9rem;">+${p.stats.bonusWeekend} <small style="font-size:0.6rem;">Quickresponse</small></span></div>
+                        <div style="text-align:right;"><span style="font-size:0.5rem; font-weight:800; opacity:0.4; text-transform:uppercase; display:block;">Perform Score</span><div style="font-weight:900; font-size:2rem; color:${p.stats.color}; line-height:1;">${p.stats.score}</div></div>
                     </div>
                 </div>`).join('');
 
@@ -435,16 +458,22 @@
             lucide.createIcons();
         }
 
+        function speechToText(id, btn) {
+            if (!('webkitSpeechRecognition' in window)) return;
+            const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID';
+            rec.onstart = () => btn.classList.add('listening');
+            rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; generateReport(); };
+            rec.onend = () => btn.classList.remove('listening');
+            rec.start();
+        }
+
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}).replace(/:/g, '.'); }, 1000); }
         function initTheme() { const isLight = localStorage.getItem('theme') === 'light'; if(isLight) document.body.classList.add('light-theme'); updateThemeIcons(isLight); }
         function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
         function updateThemeIcons(isLight) {
-            const mIcon = document.getElementById('mobileThemeIcon');
-            const sIcon = document.getElementById('sidebarThemeIcon');
-            const sLbl = document.getElementById('themeLabel');
+            const mIcon = document.getElementById('mobileThemeIcon'), sIcon = document.getElementById('sidebarThemeIcon');
             if (mIcon) mIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
             if (sIcon) sIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (sLbl) sLbl.innerText = isLight ? "DARK MODE" : "DARK MODE";
             lucide.createIcons();
         }
     </script>
