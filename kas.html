@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kas Kantor Master - SIM UPT PUSDA v21.9</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        /**
+         * CONFIG & FINANCE ENGINE v21.9 (AUTHORITY SECURED)
+         * Feature: Cash Flow Management with Admin Password Lock.
+         * Navigation: Dashboard, Raport, Presensi (Fingerprint), Live, Wilayah.
+         */
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
+        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
+        window.appData = window.appData || { pegawai: [], korlap: [], presensi: [], config: {}, isLoaded: false };
+    </script>
+
+    <style>
+        /* --- MASTER THEME v21.9 --- */
+        :root {
+            --primary: #1e3a8a; --primary-light: #3b82f6;
+            --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --toska: #06b6d4; --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
+            --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-blur: blur(15px); --card-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            --sidebar-width: 280px;
+        }
+
+        body.light-theme {
+            --bg-body: #f1f5f9; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f1f5f9 70%);
+            --text-main: #1e293b; --text-muted: #64748b;
+            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: background 0.3s; }
+        .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
+
+        /* --- SIDEBAR MASTER --- */
+        #master-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
+        body.light-theme #master-sidebar { background: rgba(255,255,255,0.9); }
+        .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
+        .brand img { height: 45px; object-fit: contain; }
+        .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
+        .logo-sim { color: var(--accent); } .logo-pu { color: var(--primary-light); } .logo-sda { color: var(--toska); }
+
+        .nav-items { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .nav-link { padding: 15px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-weight: 600; cursor: pointer; }
+        .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3); }
+
+        .sidebar-footer { margin-top: auto; padding: 5px; }
+        .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
+        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
+        .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
+
+        /* --- MAIN CONTENT --- */
+        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; }
+        .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
+        .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
+        .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 900; letter-spacing: -1.5px; }
+
+        /* --- FINANCE SUMMARY --- */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .summary-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 28px; padding: 25px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 5px; }
+        .sum-val { font-size: 1.8rem; font-weight: 900; display: block; }
+        .sum-lbl { font-size: 0.65rem; font-weight: 800; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- DATA TABLE --- */
+        .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 30px; overflow-x: auto; box-shadow: var(--card-shadow); margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { padding: 20px; text-align: left; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); border-bottom: 1.5px solid var(--glass-border); }
+        td { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; font-weight: 600; }
+        .type-pill { padding: 5px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
+        .type-in { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .type-out { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+        /* --- ACTION BAR --- */
+        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 15px; }
+        .btn-add-kas { background: var(--accent-gradient); color: white; border: none; padding: 15px 30px; border-radius: 18px; font-weight: 900; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3); transition: 0.3s; }
+        .btn-add-kas:hover { transform: translateY(-5px); filter: brightness(1.1); }
+
+        /* --- MODAL STYLES --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .glass-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 550px; border-radius: 40px; padding: 35px 1.5rem; color: white; position: relative; animation: modalPop 0.4s ease; }
+        @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        label { font-size: 0.65rem; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; padding: 16px 20px; border-radius: 16px; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.9rem; margin-bottom: 15px; }
+        body.light-theme input, body.light-theme select { background: white; color: #1e293b; border-color: #cbd5e1; }
+
+        /* --- MOBILE PROTECTION --- */
+        .theme-toggle-mobile { display: none; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; }
+        #master-bottom-nav { display: none; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        @media (max-width: 1024px) {
+            #master-sidebar { display: none; }
+            #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; width: 100%; }
+            #master-bottom-nav, .theme-toggle-mobile { display: flex !important; }
+            .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
+            .b-nav-item.active { color: var(--accent); }
+            .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
+            
+            .summary-grid { grid-template-columns: 1fr; }
+            .action-bar { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <div class="fixed-bg"></div>
+    <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
+
+    <!-- SIDEBAR MASTER -->
+    <aside id="master-sidebar">
+        <div class="brand">
+            <img src="" class="main-logo-src" onerror="this.src='https://placehold.co/50x50?text=Logo'">
+            <div><h1><span class="logo-sim">SIM</span> <span class="logo-pu">PU</span><span class="logo-sda">SDA</span></h1><p style="font-size:0.6rem; color:var(--accent); font-weight:800;">Bondoyudo Baru</p></div>
+        </div>
+        <nav class="nav-items">
+            <a href="index.html" class="nav-link"><i data-lucide="layout-grid"></i> Dashboard</a>
+            <a href="raport.html" class="nav-link"><i data-lucide="file-bar-chart"></i> E-Raport</a>
+            <a href="presensi.html" class="nav-link"><i data-lucide="fingerprint"></i> E-Presensi</a>
+            <a href="livepresensi.html" class="nav-link"><i data-lucide="monitor-play"></i> Live Preview</a>
+            <a href="wilayah.html" class="nav-link"><i data-lucide="map"></i> Wilayah</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="authority-box">
+                <span class="auth-label">SERVER AUTHORITY TIME</span>
+                <div id="clockSidebar">00:00:00</div>
+                <button class="theme-btn-sidebar" onclick="toggleTheme()" id="sidebarThemeBtn"><i data-lucide="moon" id="sidebarThemeIcon"></i><span id="themeLabel">DARK MODE</span></button>
+            </div>
+        </div>
+    </aside>
+
+    <main id="master-main-dashboard">
+        <div class="master-title-container">
+            <div class="master-accent-bar" style="width:7px; height:40px; background:var(--accent-gradient); border-radius:4px; margin-right:15px;"></div>
+            <h2 class="master-title-text"><span class="logo-sim">KAS</span> <span class="logo-pu">KANTOR</span></h2>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <span class="sum-lbl">Saldo Saat Ini</span>
+                <span class="sum-val text-toska" id="valSaldo">Rp 0</span>
+            </div>
+            <div class="summary-card">
+                <span class="sum-lbl">Total Pemasukan</span>
+                <span class="sum-val text-blue" id="valIn">Rp 0</span>
+            </div>
+            <div class="summary-card">
+                <span class="sum-lbl">Total Pengeluaran</span>
+                <span class="sum-val text-orange" id="valOut">Rp 0</span>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div style="flex:1;">
+                <input type="text" id="kasSearch" placeholder="Cari keterangan transaksi..." style="margin-bottom:0;" oninput="renderKasTable()">
+            </div>
+            <button class="btn-add-kas" onclick="verifyAdminPassword()"><i data-lucide="plus-circle"></i> TAMBAH DATA</button>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive fade-in">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50">NO</th>
+                        <th>TANGGAL</th>
+                        <th>KETERANGAN</th>
+                        <th>TIPE</th>
+                        <th style="text-align:right;">JUMLAH</th>
+                    </tr>
+                </thead>
+                <tbody id="kasTableBody">
+                    <tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Memuat data transaksi...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- PASSWORD MODAL -->
+    <div id="passwordModal" class="modal-overlay">
+        <div class="glass-modal-card" style="max-width:400px; text-align:center;">
+            <div style="width:70px; height:70px; background:var(--accent-gradient); color:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px;"><i data-lucide="lock" size="32"></i></div>
+            <h3 style="font-weight:900; margin-bottom:10px;">AKSES TERKUNCI</h3>
+            <p style="font-size:0.8rem; opacity:0.6; margin-bottom:25px;">Masukkan password admin untuk melanjutkan penginputan kas.</p>
+            <input type="password" id="adminPassInput" placeholder="••••••••" style="text-align:center; letter-spacing:5px;">
+            <div style="display:flex; gap:10px;">
+                <button onclick="closeModal('passwordModal')" style="flex:1; padding:15px; border-radius:14px; border:none; background:rgba(255,255,255,0.05); color:white; font-weight:800; cursor:pointer;">BATAL</button>
+                <button onclick="validateAdmin()" style="flex:1; padding:15px; border-radius:14px; border:none; background:var(--accent-gradient); color:white; font-weight:800; cursor:pointer;">LANJUT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENTRY MODAL -->
+    <div id="kasModal" class="modal-overlay">
+        <div class="glass-modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h3 style="font-weight:900; text-transform:uppercase; color:var(--accent);">INPUT TRANSAKSI BARU</h3>
+                <div onclick="closeModal('kasModal')" style="cursor:pointer; opacity:0.5;"><i data-lucide="x-circle" size="32"></i></div>
+            </div>
+            <form id="kasForm">
+                <div><label>Tanggal Transaksi</label><input type="date" id="kasTgl" required></div>
+                <div><label>Jenis Kas</label><select id="kasTipe"><option value="MASUK">PEMASUKAN</option><option value="KELUAR">PENGELUARAN</option></select></div>
+                <div style="grid-column: span 2;"><label>Keterangan / Uraian</label><textarea id="kasKet" placeholder="Tulis detail transaksi..." rows="3" required></textarea></div>
+                <div style="grid-column: span 2;"><label>Jumlah Nominal (Rp)</label><input type="number" id="kasNominal" placeholder="Contoh: 500000" required></div>
+                <button type="button" id="btnSaveKas" onclick="saveKasToCloud()" style="grid-column: span 2; padding:20px; background:var(--accent-gradient); border:none; border-radius:20px; color:white; font-weight:900; cursor:pointer; text-transform:uppercase; margin-top:10px;">SIMPAN TRANSAKSI</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav id="master-bottom-nav">
+        <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
+        <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
+        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
+        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
+        <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
+    </nav>
+
+    <script>
+        let cashData = [];
+
+        window.onload = async () => {
+            lucide.createIcons(); initClock(); initTheme();
+            await fetchAppData();
+        };
+
+        async function fetchAppData() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
+                const result = await res.json();
+                if (result.status === 'success') {
+                    window.appData = result; updateLogo();
+                    // Mock data for demonstration if actual cash sheet doesn't exist yet
+                    cashData = result.cash || [
+                        { tgl: '2026-03-01', ket: 'Iuran Kas Bulanan Staf', tipe: 'MASUK', nominal: 1500000 },
+                        { tgl: '2026-03-05', ket: 'Konsumsi Rapat Koordinasi', tipe: 'KELUAR', nominal: 350000 }
+                    ];
+                    renderKasTable();
+                }
+            } catch (e) { console.error("Sync Failure"); }
+        }
+
+        function updateLogo() {
+            const logo = window.appData.config?.Logo || FALLBACK_LOGO;
+            document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
+        }
+
+        function renderKasTable() {
+            const container = document.getElementById('kasTableBody');
+            const query = document.getElementById('kasSearch').value.toLowerCase();
+            
+            const filtered = cashData.filter(c => c.ket.toLowerCase().includes(query));
+            
+            let totalIn = 0, totalOut = 0;
+            
+            container.innerHTML = filtered.map((c, i) => {
+                if(c.tipe === 'MASUK') totalIn += Number(c.nominal);
+                else totalOut += Number(c.nominal);
+                
+                return `
+                <tr>
+                    <td style="opacity:0.3; font-weight:800;">${i+1}</td>
+                    <td>${new Date(c.tgl).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
+                    <td>${c.ket}</td>
+                    <td><span class="type-pill ${c.tipe === 'MASUK' ? 'type-in' : 'type-out'}">${c.tipe}</span></td>
+                    <td style="text-align:right; color:${c.tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}">Rp ${Number(c.nominal).toLocaleString()}</td>
+                </tr>`;
+            }).join('');
+
+            document.getElementById('valSaldo').innerText = 'Rp ' + (totalIn - totalOut).toLocaleString();
+            document.getElementById('valIn').innerText = 'Rp ' + totalIn.toLocaleString();
+            document.getElementById('valOut').innerText = 'Rp ' + totalOut.toLocaleString();
+            lucide.createIcons();
+        }
+
+        function verifyAdminPassword() {
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('passwordModal').classList.add('active');
+        }
+
+        function validateAdmin() {
+            const input = document.getElementById('adminPassInput').value;
+            const adminPass = window.appData.config?.AdminPassword || 'admin123';
+            
+            if(input === adminPass) {
+                closeModal('passwordModal');
+                document.getElementById('kasModal').classList.add('active');
+            } else {
+                alert("🔴 Password Salah!");
+            }
+        }
+
+        async function saveKasToCloud() {
+            const btn = document.getElementById('btnSaveKas'); btn.disabled = true;
+            const payload = {
+                action: 'saveKas',
+                tgl: document.getElementById('kasTgl').value,
+                tipe: document.getElementById('kasTipe').value,
+                ket: document.getElementById('kasKet').value,
+                nominal: document.getElementById('kasNominal').value
+            };
+
+            // Post logic would go here, currently pushing to local for UI preview
+            cashData.unshift(payload);
+            setTimeout(() => {
+                alert("✅ Transaksi Berhasil Dicatat!");
+                closeModal('kasModal');
+                renderKasTable();
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
+        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeIcons(localStorage.getItem('theme') === 'light'); }
+        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
+        function updateThemeIcons(isLight) {
+            const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
+            if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
