@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Dashboard Master - SIM UPT PUSDA v21.7</title>
+    <title>Dashboard Master - SIM UPT PUSDA v22.0</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,13 +13,18 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
+        /**
+         * CONFIG & GLOBAL ENGINE v22.0 (ULTIMATE SYNC)
+         * Features: Search Filter + Speak to Text, LAPKIN Grouping, Kas Kantor, Admin Panel Icon.
+         * Layout: Hero 60/40 Pro, Mobile Fixed Nav.
+         */
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
         const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
         window.appData = window.appData || { pegawai: [], korlap: [], presensi: [], tools: [], config: {}, isLoaded: false };
     </script>
 
     <style>
-        /* --- MASTER THEME v21.7 --- */
+        /* --- MASTER THEME v22.0 --- */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
@@ -32,19 +37,19 @@
         }
 
         body.light-theme {
-            --bg-body: #f1f5f9; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f1f5f9 70%);
-            --text-main: #1e293b; --text-muted: #64748b;
-            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.08);
-            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.1);
+            --bg-body: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f8fafc 70%);
+            --text-main: #1e293b; --text-muted: #475569;
+            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: background 0.3s; }
+        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
         /* --- SIDEBAR MASTER --- */
         #master-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
-        body.light-theme #master-sidebar { background: rgba(255,255,255,0.9); }
+        body.light-theme #master-sidebar { background: rgba(255,255,255,0.95); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
         .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -58,29 +63,33 @@
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
         .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
-        
-        /* Light Mode Theme Button Fix */
         .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
 
         /* --- MAIN CONTENT --- */
         #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 150px 2.5rem; min-height: 100vh; position: relative; }
         .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
         .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 900; color: var(--text-main); letter-spacing: -1.5px; }
-        .master-title-text span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
 
-        /* --- HERO AREA 60/40 (ENLARGED PROFILE) --- */
+        /* --- HERO AREA 60/40 --- */
         .hero-section { position: relative; background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 35px; padding: 45px; margin-bottom: 45px; display: flex; align-items: center; justify-content: space-between; gap: 20px; overflow: visible; z-index: 1; box-shadow: var(--card-shadow); min-height: 380px; }
         .hero-text { flex: 0 0 60%; z-index: 10; padding-right: 15px; }
         .hero-image-container { flex: 0 0 40%; position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: 380px; overflow: visible; }
         
-        /* Enlarged Box */
-        .hero-img-box { position: relative; width: 160px; height: 215px; background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); border: 1.5px solid var(--glass-border); border-radius: 32px; z-index: 5; display: flex; align-items: flex-end; justify-content: center; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .hero-img { width: 185%; height: auto; max-height: 300px; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5)); margin-bottom: -5px; transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        
+        .hero-img-box { position: relative; width: 160px; height: 215px; background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); border: 1.5px solid var(--glass-border); border-radius: 32px; z-index: 5; display: flex; align-items: flex-end; justify-content: center; }
+        .hero-img { width: 185%; height: auto; max-height: 300px; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5)); margin-bottom: -5px; }
         #heroLabel { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: max-content; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); padding: 12px 24px; border: 1px solid var(--glass-border); border-radius: 22px; text-align: center; z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        body.light-theme #heroLabel { background: white; }
+
+        /* --- SEARCH FILTER BAR --- */
+        .search-filter-container { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .search-wrapper { position: relative; flex: 1; display: flex; align-items: center; }
+        .search-wrapper input { width: 100%; height: 55px; padding: 0 60px 0 25px; border-radius: 20px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.95rem; }
+        body.light-theme .search-wrapper input { background: white; color: #1e293b; border-color: #cbd5e1; }
+        
+        .mic-btn-search { position: absolute; right: 10px; width: 42px; height: 42px; border-radius: 12px; background: var(--accent-gradient); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .mic-btn-search.listening { background: var(--danger) !important; animation: pulse-red 1s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { transform: scale(1); } }
 
         /* --- TOOLS GRID --- */
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
@@ -88,45 +97,32 @@
         .tool-card:hover { transform: translateY(-8px); border-color: var(--accent); background: rgba(255,255,255,0.1); }
         .tool-icon { width: 65px; height: 65px; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; background: var(--accent-gradient); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
-        /* --- MOBILE PROTECTION (FIXED BUGS) --- */
+        /* --- MODALS --- */
+        .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .sub-modal.show { display: flex; }
+        .sub-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 500px; border-radius: 35px; padding: 35px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+
+        /* --- MOBILE NAVIGATION FIXED --- */
         .theme-toggle-mobile { display: none !important; }
         #master-bottom-nav { display: none !important; }
 
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 20px 0.5rem 140px 0.5rem; width: 100%; }
-            
-            /* FORCE DISPLAY MOBILE NAVIGATION */
-            #master-bottom-nav { 
-                display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; 
-                height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; 
-                justify-content: space-around; align-items: center; z-index: 2000; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
-            }
-            .theme-toggle-mobile { 
-                display: flex !important; position: fixed; top: 20px; right: 20px; 
-                width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); 
-                border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; 
-                cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
-            }
+            #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
+            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+            body.light-theme #master-bottom-nav { background: white; }
             body.light-theme .theme-toggle-mobile { background: white; color: var(--primary); }
 
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
-
+            
             .hero-section { flex-direction: column; padding: 35px 20px; text-align: center; min-height: auto; margin-top: 20px; }
             .hero-text { flex: none; width: 100%; order: 2; margin-top: 15px; padding-right: 0; }
             .hero-image-container { flex: none; width: 100%; order: 1; min-height: 280px; margin-top: -20px; }
-            .hero-img-box { width: 150px; height: 200px; }
             .hero-img { width: 180%; }
         }
-
-        /* --- SUB MODAL (GROUPING) --- */
-        .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .sub-modal.show { display: flex; }
-        .sub-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 500px; border-radius: 35px; padding: 35px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
-
     </style>
 </head>
 <body class="dark-theme">
@@ -134,14 +130,12 @@
     <div class="fixed-bg"></div>
     <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
-    <!-- SIDEBAR MASTER -->
     <aside id="master-sidebar">
         <div class="brand">
             <img src="" class="main-logo-src" onerror="this.src='https://placehold.co/50x50?text=Logo'">
             <div><h1><span class="logo-sim">SIM</span> <span class="logo-pu">PU</span><span class="logo-sda">SDA</span></h1><p style="font-size:0.6rem; color:var(--accent); font-weight:800;">Bondoyudo Baru</p></div>
         </div>
         <nav class="nav-items">
-            <!-- STANDARDIZED ORDER -->
             <a href="index.html" class="nav-link active"><i data-lucide="layout-grid"></i> Dashboard</a>
             <a href="raport.html" class="nav-link"><i data-lucide="file-bar-chart"></i> E-Raport</a>
             <a href="presensi.html" class="nav-link"><i data-lucide="fingerprint"></i> E-Presensi</a>
@@ -170,22 +164,24 @@
                 <h2><span style="color: var(--primary-light);">Selamat</span> <span style="color: var(--toska);">Datang,</span><br><span style="color: var(--accent);">Rekan</span> <span style="color: var(--primary-light);">PU</span><span style="color: var(--toska);">SDA</span>.</h2>
                 <p style="opacity:0.7; line-height:1.5; font-size: 0.95rem; margin-top:10px;">Portal manajemen presensi, raport, dan pemetaan wilayah kerja UPT PSDA Bondoyudo Baru secara terpadu.</p>
             </div>
-            
             <div class="hero-image-container">
                 <div class="hero-img-box"><img id="heroImage" src="" class="hero-img" onerror="this.src='https://placehold.co/155x210?text=?'"></div>
                 <div id="heroLabel"></div>
             </div>
         </div>
 
-        <div style="margin-bottom: 25px; font-weight: 800; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 5px; height: 22px; background: var(--accent); border-radius: 3px;"></div>
-            <span style="font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Layanan Digital Terpadu</span>
+        <!-- SEARCH BAR FOR TOOLS -->
+        <div class="search-filter-container">
+            <div class="search-wrapper">
+                <input type="text" id="toolSearch" placeholder="Cari layanan digital..." oninput="renderTools()">
+                <button class="mic-btn-search" id="micDashboard" onclick="speechToText('toolSearch', this)"><i data-lucide="mic"></i></button>
+            </div>
         </div>
         
         <div class="tools-grid" id="toolsContainer"></div>
     </main>
 
-    <!-- BOTTOM NAV -->
+    <!-- MOBILE NAVIGATION -->
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item active"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
@@ -215,8 +211,7 @@
                 const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
                 const result = await res.json();
                 if (result.status === 'success') {
-                    window.appData = result;
-                    updateLogos(); renderTools(); startHeroSlider();
+                    window.appData = result; updateLogos(); renderTools(); startHeroSlider();
                 }
             } catch (e) { console.error("Sync Failure"); }
         }
@@ -229,16 +224,17 @@
         function renderTools() {
             const container = document.getElementById('toolsContainer');
             if(!container) return;
+            const query = document.getElementById('toolSearch').value.toLowerCase();
             const rawTools = [...(window.appData.tools || [])];
             
-            // Pengelompokan LAPKIN (Lapkin & Cek Lapkin)
+            // Pengelompokan LAPKIN
             const lapkinGroup = rawTools.filter(t => t.Nama.toLowerCase().includes("lapkin"));
             const otherTools = rawTools.filter(t => !t.Nama.toLowerCase().includes("lapkin"));
 
             let html = "";
             
-            // 1. Folder LAPKIN
-            if(lapkinGroup.length > 0) {
+            // 1. Folder LAPKIN (Hanya muncul jika tidak sedang mencari atau hasil cari masuk kategori ini)
+            if(lapkinGroup.length > 0 && (!query || "lapkin".includes(query))) {
                 html += `
                 <div class="tool-card fade-in" onclick="openLapkinModal(${JSON.stringify(lapkinGroup).replace(/"/g, '&quot;')})">
                     <div class="tool-icon" style="background:var(--accent-gradient)"><i data-lucide="folder-kanban"></i></div>
@@ -247,8 +243,9 @@
                 </div>`;
             }
 
-            // 2. Layanan Utama
-            html += otherTools.map(t => {
+            // 2. Layanan Utama Statis & Dinamis dengan filter
+            const filteredOther = otherTools.filter(t => t.Nama.toLowerCase().includes(query));
+            html += filteredOther.map(t => {
                 let url = t.Link_URL || '';
                 if(t.Nama === "E-Presensi") url = 'presensi.html';
                 else if(t.Nama === "E-Raport") url = 'raport.html';
@@ -261,15 +258,21 @@
                 </div>`;
             }).join('');
 
-            // 3. Ikon Admin Panel (Manual)
-            html += `
-            <div class="tool-card fade-in" onclick="location.href='admin.html'">
-                <div class="tool-icon" style="background:var(--bg-body); border:1px solid var(--glass-border); color:var(--text-main);"><i data-lucide="shield-check"></i></div>
-                <div class="tool-name" style="font-weight:900; font-size:0.85rem;">Admin Panel</div>
-            </div>`;
+            // 3. Ikon Kas Kantor & Admin (Hanya muncul jika cocok filter)
+            if("kas kantor".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='kas.html'"><div class="tool-icon" style="background:var(--toska);"><i data-lucide="wallet"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Kas Kantor</div></div>`;
+            if("admin panel".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='admin.html'"><div class="tool-icon" style="background:var(--bg-body); border:1px solid var(--glass-border); color:var(--text-main);"><i data-lucide="shield-check"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Admin Panel</div></div>`;
 
-            container.innerHTML = html;
+            container.innerHTML = html || `<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5; font-weight:800;">Layanan tidak ditemukan.</div>`;
             lucide.createIcons();
+        }
+
+        function speechToText(id, btn) {
+            if (!('webkitSpeechRecognition' in window)) return;
+            const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID';
+            rec.onstart = () => btn.classList.add('listening');
+            rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; renderTools(); };
+            rec.onend = () => btn.classList.remove('listening');
+            rec.start();
         }
 
         function openLapkinModal(items) {
