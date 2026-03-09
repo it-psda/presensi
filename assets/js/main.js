@@ -1,11 +1,11 @@
 /**
- * SIM UPT PUSDA - Global JavaScript Engine
- * Versi: 3.0.0 (Ultimate Production Sync)
- * Sinkronisasi: MS_PEG, MS_WIL, TOOLS, CONF, E_PRES, E_AGN
- * Fitur: No-Preflight POST (CORS Fix), Reset Logic, Auto-Scoring, lh3 Link Support
+ * SIM UPT PUSDA - Master Engine v5.0.0 (Ultimate Speed & Sync)
+ * Pengembang: Authority Control System
+ * Fitur: Instant Loading, Background Sync, Cache Busting, Voice Command.
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
+const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
 
 // State Global Aplikasi
 window.appData = {
@@ -14,354 +14,216 @@ window.appData = {
     korlap: [],
     presensi: [],
     tools: [],
-    agenda: [],
+    cash: [],
     isLoaded: false
 };
 
-let slideIdx = 0;
-let slideInterval;
-
-// Inisialisasi saat halaman selesai dimuat
-window.addEventListener('load', async () => {
-    console.log("🚀 Engine SIM PUSDA v3.0 Memulai...");
-    
-    // Aktifkan Ikon Lucide
+// --- INISIALISASI PADA SAAT LOAD ---
+window.addEventListener('DOMContentLoaded', async () => {
+    // Inisialisasi Komponen Statis
     if (typeof lucide !== 'undefined') lucide.createIcons();
-    
-    // Fitur Dasar
     initTheme();
     initClock();
-    
-    // Sinkronisasi Database
-    await fetchAppData();
 
-    // Inisialisasi Komponen UI berdasarkan elemen yang ada di halaman
-    if (document.getElementById('toolsContainer')) renderDashboardTools();
-    if (document.getElementById('heroImage')) startHeroSlide();
-    if (document.getElementById('adminContent')) renderAdminTable();
-    if (document.getElementById('selPegawai')) populateCombinedPegawai();
+    // Protokol Speed Optimized: Gunakan Cache Sesi jika tersedia
+    const cached = sessionStorage.getItem('pusda_app_data');
+    if (cached) {
+        window.appData = JSON.parse(cached);
+        applyGlobalUI();
+        triggerActiveRenderers();
+        console.log("⚡ Loading Instan: Menggunakan data dari memori sesi.");
+        
+        // Background Sync: Update data di latar belakang tanpa mengganggu UI
+        fetchFreshData(true);
+    } else {
+        await fetchFreshData();
+    }
 });
 
-/**
- * --- 1. DATA SYNC (GET) ---
- */
-async function fetchAppData() {
+// --- ENGINE: AMBIL DATA DARI CLOUD ---
+async function fetchFreshData(isBackground = false) {
     try {
-        const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, {
-            method: 'GET',
-            mode: 'cors',
-            redirect: 'follow'
-        });
-        
-        if (!response.ok) throw new Error("Server tidak merespon.");
+        const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
         const result = await response.json();
 
         if (result.status === 'success') {
-            window.appData = {
-                config: result.config || {},
-                pegawai: result.pegawai || [],
-                korlap: result.korlap || [],
-                presensi: result.presensi || [],
-                tools: result.tools || [],
-                agenda: result.agenda || [],
-                isLoaded: true
-            };
+            window.appData = result;
+            window.appData.isLoaded = true;
             
-            updateGlobalUI();
-            console.log("✅ Sinkronisasi Database Berhasil.");
+            // Simpan ke Memori Browser (Session Only)
+            sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
             
-            // Render ulang komponen jika diperlukan
-            if (typeof renderAdminTable === 'function' && document.getElementById('tableBody')) renderAdminTable();
+            applyGlobalUI();
+            if (!isBackground) triggerActiveRenderers();
+            
+            // Broadcast event untuk skrip spesifik halaman jika diperlukan
+            window.dispatchEvent(new Event('pusdaDataReady'));
         }
     } catch (error) {
-        window.appData.isLoaded = false;
-        console.error("🔴 Sync Error:", error);
-        showToast("Gagal menyambung ke database Cloud.", "danger");
+        console.error("Cloud Sync Error:", error);
     }
 }
 
-function updateGlobalUI() {
-    const logoUrl = window.appData.config.Logo;
-    if (logoUrl) {
-        const logos = document.querySelectorAll('#sidebarLogo, #printLogo, #adminLogo');
-        logos.forEach(el => { if (el) el.src = logoUrl; });
+// --- ENGINE: PENGIRIMAN DATA (POST) ---
+async function submitToCloud(payload) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Limitasi Apps Script
+            body: JSON.stringify(payload)
+        });
+        
+        // Cache Busting: Hapus cache lokal agar data baru dipaksa ditarik saat reload
+        sessionStorage.removeItem('pusda_app_data');
+        return { status: 'success' };
+    } catch (error) {
+        console.error("Cloud Post Error:", error);
+        return { status: 'error' };
     }
 }
 
-/**
- * --- 2. NOTIFIKASI (TOAST) ---
- */
-function showToast(message, type = "success") {
-    const existing = document.querySelector('.pusda-toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = `pusda-toast fade-in ${type}`;
-    const icons = { success: 'check-circle', danger: 'alert-circle', info: 'info', warning: 'alert-triangle' };
-
-    toast.innerHTML = `
-        <div class="toast-content" style="
-            position: fixed; top: 25px; right: 25px; z-index: 9999;
-            background: ${type === 'success' ? '#10b981' : type === 'danger' ? '#ef4444' : '#3b82f6'};
-            color: white; padding: 15px 25px; border-radius: 20px;
-            display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 800; font-size: 0.85rem;
-            border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-            max-width: 320px;
-        ">
-            <i data-lucide="${icons[type] || 'bell'}"></i>
-            <span style="flex:1;">${message}</span>
-        </div>`;
-
-    document.body.appendChild(toast);
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4500);
-}
-
-/**
- * --- 3. LOGIN & ADMIN LOGIC ---
- */
-async function login() {
-    const passInput = document.getElementById('pass');
-    if (!passInput) return;
+// --- RENDERER: DISTRIBUSI LOGIKA PER HALAMAN ---
+function triggerActiveRenderers() {
+    // Dashboard: Ikon Layanan Digital
+    if (document.getElementById('toolsContainer')) renderDashboardTools();
     
-    if (!window.appData.isLoaded) {
-        showToast("Database sedang memuat...", "warning");
+    // Dashboard: Slider Hero
+    if (document.getElementById('heroImage')) startHeroSlider();
+    
+    // Admin: Grid Pegawai/Korlap
+    if (document.getElementById('dataContainer')) typeof renderCards === 'function' ? renderCards() : null;
+    
+    // Kas: Tabel Keuangan
+    if (document.getElementById('kasTableBody')) typeof renderKasTable === 'function' ? renderKasTable() : null;
+}
+
+// --- UI: BRANDING & CONSISTENCY ---
+function applyGlobalUI() {
+    const finalLogo = window.appData.config?.Logo || FALLBACK_LOGO;
+    document.querySelectorAll('.main-logo-src, #sidebarLogo, #printLogo').forEach(el => {
+        el.src = finalLogo;
+    });
+}
+
+// --- FITUR: SEARCH & FILTER LOGIC (DASHBOARD) ---
+function renderDashboardTools() {
+    const container = document.getElementById('toolsContainer');
+    if (!container || !window.appData.tools) return;
+
+    const query = (document.getElementById('toolSearch')?.value || "").toLowerCase();
+    const rawTools = [...window.appData.tools];
+    
+    // Auto-Grouping LAPKIN
+    const lapkinGroup = rawTools.filter(t => t.Nama.toLowerCase().includes("lapkin"));
+    const otherTools = rawTools.filter(t => !t.Nama.toLowerCase().includes("lapkin"));
+
+    let html = "";
+    
+    // Render Folder LAPKIN
+    if(lapkinGroup.length > 0 && (!query || "lapkin".includes(query))) {
+        html += `
+        <div class="tool-card fade-in" onclick="openLapkinModal(${JSON.stringify(lapkinGroup).replace(/"/g, '&quot;')})">
+            <div class="tool-icon" style="background:var(--accent-gradient)"><i data-lucide="folder-kanban"></i></div>
+            <div class="tool-name" style="font-weight:900; font-size:0.85rem;">LAPKIN</div>
+            <div style="font-size:0.55rem; opacity:0.5; margin-top:-10px;">${lapkinGroup.length} Modul</div>
+        </div>`;
+    }
+
+    // Render Layanan Terfilter
+    html += otherTools.filter(t => t.Nama.toLowerCase().includes(query)).map(t => {
+        let url = t.Link_URL || '#';
+        if(t.Nama === "E-Presensi") url = 'presensi.html';
+        else if(t.Nama === "E-Raport") url = 'raport.html';
+        else if(t.Nama === "Wilayah") url = 'wilayah.html';
+        else if(t.Nama === "Live Preview") url = 'livepresensi.html';
+
+        return `
+        <div class="tool-card fade-in" onclick="location.href='${url}'">
+            <div class="tool-icon" style="background:${t.Warna || 'var(--primary)'}"><i data-lucide="${t.Icon || 'layers'}"></i></div>
+            <div class="tool-name" style="font-weight:900; font-size:0.85rem;">${t.Nama}</div>
+        </div>`;
+    }).join('');
+
+    // Layanan Statis (Kas & Admin)
+    if("kas kantor".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='kas.html'"><div class="tool-icon" style="background:var(--toska);"><i data-lucide="wallet"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Kas Kantor</div></div>`;
+    if("admin panel".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='admin.html'"><div class="tool-icon" style="background:var(--bg-body); border:1px solid var(--glass-border); color:var(--text-main);"><i data-lucide="shield-check"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Admin Panel</div></div>`;
+
+    container.innerHTML = html || `<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.3; font-weight:800;">Layanan tidak ditemukan.</div>`;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// --- FITUR: VOICE COMMAND (SPEAK TO TEXT) ---
+function speechToText(targetInputId, btnElement) {
+    if (!('webkitSpeechRecognition' in window)) {
+        alert("Browser tidak mendukung pencarian suara.");
         return;
     }
 
-    const passValue = passInput.value;
-    const adminPass = window.appData.config.AdminPassword || 'pusda123';
-
-    if (passValue === adminPass) {
-        showToast("Akses Diterima!");
-        document.getElementById('loginArea').style.display = 'none';
-        const adminContent = document.getElementById('adminContent');
-        if (adminContent) {
-            adminContent.classList.remove('hidden');
-            adminContent.classList.add('fade-in');
-            renderAdminTable();
-        }
-    } else {
-        showToast("Kata Sandi Salah!", "danger");
-        passInput.value = '';
-    }
-}
-
-/**
- * --- 4. CRUD: SAVE PEGAWAI/KORLAP (POST) ---
- */
-async function saveAdminData() {
-    const btn = document.querySelector('#formAdmin button[type="submit"]');
-    if (!btn) return;
-
-    const payload = {
-        action: "savePegawai",
-        isKorlap: document.getElementById('modalTitle').innerText.includes("Korlap"),
-        ID: document.getElementById('formID').value,
-        Nama: document.getElementById('formNama').value,
-        Jabatan: document.getElementById('formJabatan').value,
-        Wilayah: document.getElementById('formWilayah').value,
-        NoHP: document.getElementById('formHP').value,
-        Lokasi_Kerja: document.getElementById('formLokasi').value,
-        Status: document.getElementById('formStatus').value,
-        Link_Foto_Profile: document.getElementById('formLinkFoto').value
-    };
-
-    if (document.getElementById('formPreview').src.startsWith('data:image')) {
-        payload.fotoBase64 = document.getElementById('formPreview').src;
-    }
-
-    try {
-        btn.disabled = true;
-        btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Sinkronisasi...';
-        lucide.createIcons();
-
-        // Gunakan text/plain untuk bypass CORS OPTIONS di GitHub Pages
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            redirect: 'follow',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        });
-        
-        const result = await response.json();
-        if (result.status === 'success') {
-            showToast("Data tersimpan di Cloud.");
-            if (typeof closeModalAdmin === 'function') closeModalAdmin();
-            await fetchAppData(); 
-        }
-    } catch (error) {
-        showToast("Gagal menyimpan data.", "danger");
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'Simpan Perubahan';
-        lucide.createIcons();
-    }
-}
-
-/**
- * --- 5. PRESENSI LOGIC ---
- */
-async function submitPresensi() {
-    const btn = document.getElementById('btnSubmit');
-    if (!btn) return;
-
-    const payload = {
-        action: "presensi",
-        idPegawai: document.getElementById('selPegawai').value,
-        nama: document.getElementById('profName').innerText,
-        status: typeof selectedStatus !== 'undefined' ? selectedStatus : '',
-        keterangan: document.getElementById('inpNote').value,
-        gps: typeof coords !== 'undefined' ? coords : '',
-        wilayah: typeof currentRegion !== 'undefined' ? currentRegion : '',
-        selfieBase64: document.getElementById('prevSelfie').src.includes('data:image') ? document.getElementById('prevSelfie').src : "",
-        workBase64: document.getElementById('prevWork').src.includes('data:image') ? document.getElementById('prevWork').src : ""
-    };
-
-    try {
-        btn.disabled = true;
-        btn.innerHTML = 'Mengirim...';
-
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            redirect: 'follow',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        });
-        
-        const result = await response.json();
-        if (result.status === 'success') {
-            showToast(`Presensi Berhasil! Skor: ${result.score}`);
-            setTimeout(() => location.reload(), 2000);
-        }
-    } catch (error) {
-        showToast("Gagal kirim presensi.", "danger");
-        btn.disabled = false;
-    }
-}
-
-/**
- * --- 6. RESET LOGIC (FITUR BARU) ---
- */
-async function resetTodayPresence(idPegawai) {
-    const confirmReset = confirm("Hapus data presensi pegawai ini untuk HARI INI? Pegawai bisa melakukan absen ulang setelah direset.");
-    if (!confirmReset) return;
-
-    const payload = {
-        action: "resetPresensi",
-        idPegawai: idPegawai,
-        tanggal: new Date().toISOString().split('T')[0]
-    };
-
-    try {
-        showToast("Mereset data...", "info");
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            redirect: 'follow',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-        if (result.status === 'success') {
-            showToast(result.message);
-            await fetchAppData(); // Refresh tabel
-        } else {
-            showToast(result.message, "warning");
-        }
-    } catch (error) {
-        showToast("Gagal menghubungi server.", "danger");
-    }
-}
-
-/**
- * --- 7. UI RENDERING ---
- */
-function startHeroSlide() {
-    const heroImg = document.getElementById('heroImage');
-    const heroLabel = document.getElementById('heroLabel');
-    const data = window.appData.korlap;
-
-    if (!heroImg || !data || data.length === 0) return;
-
-    const update = () => {
-        const p = data[slideIdx % data.length];
-        heroImg.style.opacity = '0';
-        setTimeout(() => {
-            heroImg.src = p.Link_Foto_Profile || '';
-            heroImg.onload = () => {
-                heroImg.style.opacity = '1';
-                if (heroLabel) {
-                    heroLabel.innerHTML = `
-                        <div style="background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); padding: 8px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: inline-block;">
-                            <span style="display:block; font-size:0.85rem; font-weight:800; color:#fff;">${p.Nama.toUpperCase()}</span>
-                            <span style="font-weight:600; font-size:0.65rem; color:var(--accent); text-transform:uppercase;">KORLAP ${p.Wilayah}</span>
-                        </div>`;
-                }
-            };
-        }, 500);
-        slideIdx++;
-    };
-
-    update();
-    if (slideInterval) clearInterval(slideInterval);
-    slideInterval = setInterval(update, 8000);
-}
-
-function renderDashboardTools() {
-    const container = document.getElementById('toolsContainer');
-    if (!container || !window.appData.tools.length) return;
-
-    container.innerHTML = window.appData.tools.map(tool => `
-        <div class="tool-card fade-in" onclick="location.href='${getToolUrl(tool)}'">
-            <div class="tool-icon" style="background:${tool.Warna || '#1e3a8a'}">
-                <i data-lucide="${tool.Icon || 'box'}"></i>
-            </div>
-            <div class="tool-name">${tool.Nama}</div>
-        </div>`).join('');
-    lucide.createIcons();
-}
-
-function getToolUrl(tool) {
-    const map = { 'E-Presensi': 'presensi.html', 'E-Raport': 'raport.html', 'Wilayah': 'wilayah.html', 'Admin Panel': 'admin.html' };
-    return tool.Link_URL && tool.Link_URL !== '#' ? tool.Link_URL : (map[tool.Nama] || '#');
-}
-
-/**
- * --- 8. UTILS ---
- */
-function initClock() {
-    const el = document.getElementById('clockSidebar');
-    if (!el) return;
-    const tick = () => { el.innerText = new Date().toLocaleTimeString('id-ID'); };
-    tick(); setInterval(tick, 1000);
-}
-
-function initTheme() {
-    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
-}
-
-function toggleTheme() {
-    document.body.classList.toggle('light-theme');
-    localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-}
-
-// Speak to Text
-function startSpeechToText() {
-    const btn = document.getElementById('voiceBtn');
-    const noteArea = document.getElementById('inpNote');
-    if (!('webkitSpeechRecognition' in window)) return;
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'id-ID';
-    recognition.onstart = () => { btn.classList.add('listening'); };
-    recognition.onresult = (event) => { noteArea.value += event.results[0][0].transcript; };
-    recognition.onend = () => { btn.classList.remove('listening'); if (typeof validateForm === 'function') validateForm(); };
+    recognition.onstart = () => btnElement.classList.add('listening');
+    recognition.onresult = (event) => {
+        const result = event.results[0][0].transcript;
+        document.getElementById(targetInputId).value = result;
+        // Trigger fungsi render jika di dashboard atau admin
+        if (targetInputId === 'toolSearch') renderDashboardTools();
+        if (targetInputId === 'adminSearch') typeof renderCards === 'function' ? renderCards() : null;
+        if (targetInputId === 'kasSearch') typeof renderKasTable === 'function' ? renderKasTable() : null;
+    };
+    recognition.onend = () => btnElement.classList.remove('listening');
     recognition.start();
 }
 
-window.onerror = (msg) => { console.error("🔴 Runtime Error:", msg); return false; };
+// --- UTILS: THEME & CLOCK ---
+function initTheme() {
+    const isLight = localStorage.getItem('theme') === 'light';
+    if (isLight) document.body.classList.add('light-theme');
+}
 
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-theme');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    // Sinkronisasi Ikon di sidebar/mobile jika ada
+    const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
+    if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+    if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+    if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
 
+function initClock() {
+    const el = document.getElementById('clockSidebar');
+    if (!el) return;
+    setInterval(() => {
+        el.innerText = new Date().toLocaleTimeString('id-ID', { hour12: false });
+    }, 1000);
+}
+
+// --- HERO SLIDER ENGINE ---
+let slideIdx = 0;
+function startHeroSlider() {
+    const img = document.getElementById('heroImage');
+    const data = window.appData.korlap;
+    if (!img || !data || data.length === 0) return;
+
+    const updateSlider = () => {
+        const p = data[slideIdx % data.length];
+        img.style.opacity = '0';
+        setTimeout(() => {
+            img.src = p.Link_Foto_Profile || '';
+            img.onload = () => {
+                img.style.opacity = '1';
+                const label = document.getElementById('heroLabel');
+                if(label) {
+                    label.innerHTML = `
+                        <div style="font-weight:900; font-size:0.85rem; color:white; text-transform:uppercase;">${p.Nama}</div>
+                        <div style="font-weight:800; font-size:0.55rem; color:var(--accent); text-transform:uppercase;">${p.Jabatan} ${p.Wilayah}</div>
+                    `;
+                }
+            };
+        }, 400);
+        slideIdx++;
+    };
+    updateSlider();
+    setInterval(updateSlider, 8000);
+}
