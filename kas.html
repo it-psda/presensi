@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kas Kantor Master - SIM UPT PUSDA v23.0</title>
+    <title>Kas Kantor Master - SIM UPT PUSDA v23.5</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,8 +14,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Finance Stylesheet v5.3 (Single-File Authority)
-         * Optimized for Multi-Year Financial Reporting.
+         * SIM UPT PUSDA - Finance Stylesheet v5.4 (Authority Reporting)
+         * Optimized for High-End Desktop UI & Professional A4 Print.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -94,38 +94,54 @@
         .type-pill { padding: 5px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
         .type-pill.in { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .type-pill.out { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        tr.total-row td { background: rgba(255,255,255,0.03); border-top: 2px solid var(--glass-border); font-size: 1rem; color: var(--text-main); }
 
         /* --- MODAL --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .glass-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 550px; border-radius: 40px; padding: 35px 0.5rem; color: white; position: relative; animation: modalPop 0.4s ease; }
-        @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
         label { font-size: 0.65rem; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; margin-left: 1rem; }
         input.form-input, select.form-input, textarea.form-input { width: calc(100% - 2rem); margin: 0 1rem 15px 1rem; padding: 16px 20px; border-radius: 16px; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.9rem; }
-        body.light-theme input.form-input, body.light-theme select.form-input { background: white; color: #1e293b; border-color: #cbd5e1; }
 
-        /* --- PRINT --- */
-        #print-header { display: none; }
+        /* --- PROFESSIONAL PRINT SYSTEM (A4) --- */
+        #print-header, #print-footer { display: none; }
+
         @media print {
-            body { background: white !important; color: black !important; }
+            body { background: white !important; color: black !important; padding: 0 !important; display: block !important; }
             .fixed-bg, #master-sidebar, #master-bottom-nav, .theme-toggle-mobile, .action-bar, .summary-grid, .modal-overlay { display: none !important; }
             #master-main-dashboard { margin: 0 !important; padding: 0 !important; width: 100% !important; }
-            #print-header { display: block !important; text-align: center; border-bottom: 3px double #000; margin-bottom: 30px; padding-bottom: 15px; }
-            table { min-width: 100% !important; border: 1px solid #000 !important; }
-            th, td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.8rem; }
-            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 800; }
+            
+            /* Official Kop Surat */
+            #print-header { display: block !important; text-align: center; margin-bottom: 30px; position: relative; }
+            .kop-container { display: flex; align-items: center; justify-content: center; gap: 20px; border-bottom: 4px double #000; padding-bottom: 15px; }
+            .kop-logo { height: 85px; }
+            .kop-text h2 { font-size: 1.4rem; font-weight: 900; line-height: 1.2; text-transform: uppercase; }
+            .kop-text p { font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+            
+            .report-title { text-align: center; margin: 25px 0; }
+            .report-title h3 { text-decoration: underline; font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
+            
+            /* Table Print */
+            .table-responsive { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
+            table { min-width: 100% !important; border-collapse: collapse !important; border: 1.5px solid #000 !important; }
+            th { border: 1.5px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.75rem; background: #eee !important; -webkit-print-color-adjust: exact; }
+            td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.85rem; font-weight: 500 !important; }
+            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 900; border: none; }
+            tr.total-row td { background: #f9f9f9 !important; font-weight: 900 !important; -webkit-print-color-adjust: exact; }
+
+            /* Signatures */
+            #print-footer { display: block !important; margin-top: 40px; width: 100%; }
+            .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center; }
+            .sig-box { display: flex; flex-direction: column; height: 140px; justify-content: space-between; }
+            .sig-name { font-weight: 900; text-decoration: underline; text-transform: uppercase; }
         }
 
         /* --- MOBILE --- */
-        .theme-toggle-mobile { display: none !important; }
-        #master-bottom-nav { display: none !important; }
-
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 20px 0.5rem 140px 0.5rem; width: 100%; }
-            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-            body.light-theme .theme-toggle-mobile { background: white; color: var(--primary); }
+            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; }
             #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
@@ -135,10 +151,10 @@
             .action-bar { flex-direction: column; align-items: stretch; }
         }
 
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .spin { animation: spin 1.5s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -169,16 +185,25 @@
     </aside>
 
     <main id="master-main-dashboard">
-        <!-- OFFICIAL HEADER FOR PRINT -->
+        <!-- PROFESSIONAL HEADER FOR PRINT -->
         <div id="print-header">
-            <h2 style="font-size:1.4rem; font-weight:900;">DINAS PEKERJAAN UMUM SUMBER DAYA AIR</h2>
-            <p style="font-size:0.9rem; font-weight:700;">LAPORAN REKAPITULASI KAS KANTOR UPT PSDA BONDOYUDO BARU</p>
-            <p id="print-period" style="font-size:0.75rem; margin-top:5px;">Periode: -</p>
+            <div class="kop-container">
+                <img src="" class="main-logo-src kop-logo" onerror="this.src='https://placehold.co/80x80?text=Logo'">
+                <div class="kop-text">
+                    <h2>Dinas Pekerjaan Umum Sumber Daya Air</h2>
+                    <p>UPT Pengelolaan Sumber Daya Air Bondoyudo Baru</p>
+                    <p style="font-size: 0.65rem; opacity: 0.8;">Jalan Raya Lumajang-Jember, Indonesia | Email: pusda.wsbb@jatimprov.go.id</p>
+                </div>
+            </div>
+            <div class="report-title">
+                <h3>Laporan Rekapitulasi Kas Kantor</h3>
+                <p id="print-period" style="font-size: 0.85rem; font-weight: 800; margin-top: 5px;">Periode: -</p>
+            </div>
         </div>
 
         <div class="master-title-container">
             <div class="master-accent-bar"></div>
-            <h2 class="master-title-text"><span class="logo-sim">MANAJEMEN</span> <span class="logo-pu">KAS</span> <span class="logo-sda">KANTOR</span></h2>
+            <h2 class="master-title-text"><span class="logo-sim">KAS</span> <span class="logo-pu">KANTOR</span></h2>
         </div>
 
         <!-- SUMMARY -->
@@ -200,13 +225,12 @@
                     <option value="10">OKTOBER</option><option value="11">NOVEMBER</option><option value="12">DESEMBER</option>
                 </select>
                 <select id="filterYear" class="filter-input" onchange="renderKasTable()">
-                    <option value="2024">2024</option>
                     <option value="2025">2025</option>
                     <option value="2026" selected>2026</option>
                 </select>
             </div>
             <div style="display:flex; gap:10px;">
-                <button class="btn-kas-action btn-print" onclick="window.print()"><i data-lucide="printer"></i></button>
+                <button class="btn-kas-action btn-print" onclick="window.print()"><i data-lucide="printer"></i> CETAK</button>
                 <button class="btn-kas-action" onclick="verifyAdminPassword()">+ TRANSAKSI</button>
             </div>
         </div>
@@ -215,7 +239,7 @@
         <div class="table-responsive fade-in">
             <table>
                 <thead>
-                    <tr><th width="50">NO</th><th>TANGGAL</th><th>KETERANGAN / URAIAN</th><th>TIPE</th><th style="text-align:right;">NOMINAL</th></tr>
+                    <tr><th width="50">NO</th><th>TANGGAL</th><th>KETERANGAN / URAIAN</th><th width="120">TIPE</th><th style="text-align:right;">NOMINAL</th></tr>
                 </thead>
                 <tbody id="kasTableBody">
                     <tr><td colspan="5" style="text-align:center; padding:60px; opacity:0.3; font-weight:800;">
@@ -224,16 +248,28 @@
                 </tbody>
             </table>
         </div>
-    </main>
 
-    <!-- MOBILE NAVIGATION -->
-    <nav id="master-bottom-nav">
-        <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
-        <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
-        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
-        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
-        <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
-    </nav>
+        <!-- SIGNATURE AREA FOR PRINT -->
+        <div id="print-footer">
+            <div style="text-align: right; margin-bottom: 20px; font-size: 0.9rem;" id="print-date-footer">Lumajang, 10 Maret 2026</div>
+            <div class="signature-grid">
+                <div class="sig-box">
+                    <span>Mengetahui,</span>
+                    <span>Kepala UPT PSDA Bondoyudo Baru</span>
+                    <br><br><br>
+                    <span class="sig-name">( __________________________ )</span>
+                    <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
+                </div>
+                <div class="sig-box">
+                    <span>Bendahara,</span>
+                    <span>UPT PSDA Bondoyudo Baru</span>
+                    <br><br><br>
+                    <span class="sig-name">( __________________________ )</span>
+                    <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- MODALS -->
     <div id="passwordModal" class="modal-overlay">
@@ -265,6 +301,15 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAV -->
+    <nav id="master-bottom-nav">
+        <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
+        <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
+        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
+        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
+        <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
+    </nav>
+
     <!-- LOGIKA TERPADU -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
@@ -275,7 +320,12 @@
             initTheme();
             initClock();
             
-            // Speed Protocol: Cek memori browser
+            // Set Print Date Footer
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+            const printDateFooter = document.getElementById('print-date-footer');
+            if(printDateFooter) printDateFooter.innerText = `Lumajang, ${dateStr}`;
+
             const cached = sessionStorage.getItem('pusda_app_data');
             if (cached) {
                 try {
@@ -283,7 +333,7 @@
                     window.appData.isLoaded = true;
                     applyGlobalUI();
                     renderKasTable();
-                    fetchDataFromCloud(true); // Update background
+                    fetchDataFromCloud(true); 
                 } catch(e) { await fetchDataFromCloud(); }
             } else {
                 await fetchDataFromCloud();
@@ -332,31 +382,48 @@
             filtered.sort((a,b) => new Date(b.Tanggal) - new Date(a.Tanggal));
 
             let totalIn = 0, totalOut = 0;
-            
+            let html = "";
+
             if (filtered.length === 0) {
-                container.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Data tidak ditemukan untuk periode ini.</td></tr>';
+                html = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Data tidak ditemukan untuk periode ini.</td></tr>';
             } else {
-                container.innerHTML = filtered.map((c, i) => {
+                html = filtered.map((c, i) => {
                     const nominal = Number(c.Nominal) || 0;
                     if(c.Tipe === 'MASUK') totalIn += nominal;
                     else totalOut += nominal;
                     return `
                     <tr class="fade-in">
-                        <td style="opacity:0.3; font-weight:800;">${i+1}</td>
+                        <td style="opacity:0.3; font-weight:800; text-align:center;">${i+1}</td>
                         <td style="white-space:nowrap;">${new Date(c.Tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
                         <td style="word-break:break-word;">${c.Keterangan}</td>
-                        <td><span class="type-pill ${c.Tipe === 'MASUK' ? 'in' : 'out'}">${c.Tipe}</span></td>
+                        <td style="text-align:center;"><span class="type-pill ${c.Tipe === 'MASUK' ? 'in' : 'out'}">${c.Tipe}</span></td>
                         <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap; font-weight:800;">Rp ${nominal.toLocaleString('id-ID')}</td>
                     </tr>`;
                 }).join('');
+
+                // Add TOTAL Row for professionalism
+                html += `
+                <tr class="total-row">
+                    <td colspan="3" style="text-align:right; font-weight:900;">REKAPITULASI TOTAL:</td>
+                    <td style="text-align:center; font-size: 0.65rem;">
+                        <div style="color:var(--success)">IN: Rp ${totalIn.toLocaleString('id-ID')}</div>
+                        <div style="color:var(--danger)">OUT: Rp ${totalOut.toLocaleString('id-ID')}</div>
+                    </td>
+                    <td style="text-align:right; font-weight:900; color:var(--toska);">
+                        Rp ${(totalIn - totalOut).toLocaleString('id-ID')}
+                    </td>
+                </tr>`;
             }
+
+            container.innerHTML = html;
 
             document.getElementById('valSaldo').innerText = 'Rp ' + (totalIn - totalOut).toLocaleString('id-ID');
             document.getElementById('valIn').innerText = 'Rp ' + totalIn.toLocaleString('id-ID');
             document.getElementById('valOut').innerText = 'Rp ' + totalOut.toLocaleString('id-ID');
             
-            const mText = monthFilter === 'ALL' ? 'Semua Bulan' : document.getElementById('filterMonth').options[document.getElementById('filterMonth').selectedIndex].text;
-            document.getElementById('print-period').innerText = `Periode: ${mText} ${yearFilter}`;
+            const monthLabel = monthFilter === 'ALL' ? 'Semua Bulan' : document.getElementById('filterMonth').options[document.getElementById('filterMonth').selectedIndex].text;
+            document.getElementById('print-period').innerText = `Periode: ${monthLabel} ${yearFilter}`;
+            
             lucide.createIcons();
         }
 
@@ -371,15 +438,14 @@
             };
 
             if(!payload.tgl || !payload.ket || !payload.nominal) return alert("Lengkapi data!");
-
             btn.disabled = true; btn.innerHTML = `MENGIRIM...`;
             
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-                sessionStorage.removeItem('pusda_app_data'); // Cache busting
+                sessionStorage.removeItem('pusda_app_data');
                 alert("Berhasil!");
                 location.reload();
-            } catch (e) { alert("Gagal!"); btn.disabled = false; }
+            } catch (e) { alert("Gagal!"); btn.disabled = false; btn.innerText = "SIMPAN KE CLOUD"; }
         }
 
         function verifyAdminPassword() { document.getElementById('passwordModal').classList.add('active'); }
