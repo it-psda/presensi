@@ -137,6 +137,10 @@
             .sig-name { font-weight: 900; text-decoration: underline; text-transform: uppercase; }
         }
 
+        /* --- UI PROTECTION (DESKTOP HIDDEN BY DEFAULT) --- */
+        #master-bottom-nav { display: none !important; }
+        .theme-toggle-mobile { display: none !important; }
+
         /* --- MOBILE --- */
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
@@ -145,7 +149,7 @@
             #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
-            .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
+            .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 4px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
             .summary-grid { grid-template-columns: 1fr; }
             .filters-container { flex-direction: column; }
             .action-bar { flex-direction: column; align-items: stretch; }
@@ -225,6 +229,7 @@
                     <option value="10">OKTOBER</option><option value="11">NOVEMBER</option><option value="12">DESEMBER</option>
                 </select>
                 <select id="filterYear" class="filter-input" onchange="renderKasTable()">
+                    <option value="2024">2024</option>
                     <option value="2025">2025</option>
                     <option value="2026" selected>2026</option>
                 </select>
