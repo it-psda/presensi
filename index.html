@@ -12,17 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <script>
-        /**
-         * CONFIG & GLOBAL ENGINE v22.0 (ULTIMATE SYNC)
-         * Features: Search Filter + Speak to Text, LAPKIN Grouping, Kas Kantor, Admin Panel Icon.
-         * Layout: Hero 60/40 Pro, Mobile Fixed Nav.
-         */
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
-        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
-        window.appData = window.appData || { pegawai: [], korlap: [], presensi: [], tools: [], config: {}, isLoaded: false };
-    </script>
-
     <style>
         /* --- MASTER THEME v22.0 --- */
         :root {
@@ -47,7 +36,7 @@
         body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
-        /* --- SIDEBAR MASTER --- */
+        /* --- SIDEBAR --- */
         #master-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
         body.light-theme #master-sidebar { background: rgba(255,255,255,0.95); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
@@ -102,7 +91,7 @@
         .sub-modal.show { display: flex; }
         .sub-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 500px; border-radius: 35px; padding: 35px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
 
-        /* --- MOBILE NAVIGATION FIXED --- */
+        /* --- MOBILE NAVIGATION --- */
         .theme-toggle-mobile { display: none !important; }
         #master-bottom-nav { display: none !important; }
 
@@ -130,6 +119,7 @@
     <div class="fixed-bg"></div>
     <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
+    <!-- SIDEBAR MASTER -->
     <aside id="master-sidebar">
         <div class="brand">
             <img src="" class="main-logo-src" onerror="this.src='https://placehold.co/50x50?text=Logo'">
@@ -198,32 +188,15 @@
         </div>
     </div>
 
+    <!-- LOGIKA MENGGUNAKAN main.js -->
+    <script src="assets/js/main.js"></script>
+
     <script>
-        let slideIdx = 0;
-
-        window.onload = async () => {
-            lucide.createIcons(); initClock(); initTheme();
-            await fetchDashboardData();
-        };
-
-        async function fetchDashboardData() {
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
-                const result = await res.json();
-                if (result.status === 'success') {
-                    window.appData = result; updateLogos(); renderTools(); startHeroSlider();
-                }
-            } catch (e) { console.error("Sync Failure"); }
-        }
-
-        function updateLogos() {
-            const finalLogo = window.appData.config.Logo || FALLBACK_LOGO;
-            document.querySelectorAll('.main-logo-src').forEach(el => el.src = finalLogo);
-        }
-
+        // Fungsi pembantu lokal untuk Dashboard
         function renderTools() {
             const container = document.getElementById('toolsContainer');
-            if(!container) return;
+            if(!container || !window.appData.isLoaded) return;
+
             const query = document.getElementById('toolSearch').value.toLowerCase();
             const rawTools = [...(window.appData.tools || [])];
             
@@ -233,7 +206,6 @@
 
             let html = "";
             
-            // 1. Folder LAPKIN (Hanya muncul jika tidak sedang mencari atau hasil cari masuk kategori ini)
             if(lapkinGroup.length > 0 && (!query || "lapkin".includes(query))) {
                 html += `
                 <div class="tool-card fade-in" onclick="openLapkinModal(${JSON.stringify(lapkinGroup).replace(/"/g, '&quot;')})">
@@ -243,9 +215,7 @@
                 </div>`;
             }
 
-            // 2. Layanan Utama Statis & Dinamis dengan filter
-            const filteredOther = otherTools.filter(t => t.Nama.toLowerCase().includes(query));
-            html += filteredOther.map(t => {
+            html += otherTools.filter(t => t.Nama.toLowerCase().includes(query)).map(t => {
                 let url = t.Link_URL || '';
                 if(t.Nama === "E-Presensi") url = 'presensi.html';
                 else if(t.Nama === "E-Raport") url = 'raport.html';
@@ -258,21 +228,11 @@
                 </div>`;
             }).join('');
 
-            // 3. Ikon Kas Kantor & Admin (Hanya muncul jika cocok filter)
             if("kas kantor".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='kas.html'"><div class="tool-icon" style="background:var(--toska);"><i data-lucide="wallet"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Kas Kantor</div></div>`;
             if("admin panel".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='admin.html'"><div class="tool-icon" style="background:var(--bg-body); border:1px solid var(--glass-border); color:var(--text-main);"><i data-lucide="shield-check"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Admin Panel</div></div>`;
 
-            container.innerHTML = html || `<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5; font-weight:800;">Layanan tidak ditemukan.</div>`;
+            container.innerHTML = html || `<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5;">Layanan tidak ditemukan.</div>`;
             lucide.createIcons();
-        }
-
-        function speechToText(id, btn) {
-            if (!('webkitSpeechRecognition' in window)) return;
-            const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID';
-            rec.onstart = () => btn.classList.add('listening');
-            rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; renderTools(); };
-            rec.onend = () => btn.classList.remove('listening');
-            rec.start();
         }
 
         function openLapkinModal(items) {
@@ -288,38 +248,6 @@
         }
 
         function closeLapkinModal() { document.getElementById('lapkinModal').classList.remove('show'); }
-
-        function startHeroSlider() {
-            const img = document.getElementById('heroImage');
-            const data = window.appData.korlap; if(!img || !data.length) return;
-            const update = () => {
-                const p = data[slideIdx % data.length];
-                img.style.opacity = '0';
-                setTimeout(() => {
-                    img.src = p.Link_Foto_Profile || '';
-                    img.onload = () => {
-                        img.style.opacity = '1';
-                        document.getElementById('heroLabel').innerHTML = `
-                            <div style="font-weight:900; font-size:0.85rem; color:white; text-transform:uppercase; line-height:1.2;">${p.Nama}</div>
-                            <div style="font-weight:800; font-size:0.55rem; color:var(--accent); text-transform:uppercase; letter-spacing:1px;">${p.Jabatan} ${p.Wilayah}</div>
-                        `;
-                    };
-                }, 400);
-                slideIdx++;
-            };
-            update(); setInterval(update, 8000);
-        }
-
-        function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
-        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeIcons(localStorage.getItem('theme') === 'light'); }
-        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
-        function updateThemeIcons(isLight) {
-            const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
-            lucide.createIcons();
-        }
     </script>
 </body>
 </html>
