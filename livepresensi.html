@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Preview Master - SIM UPT PUSDA v21.8</title>
+    <title>Live Preview Master - SIM UPT PUSDA v23.0</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,24 +12,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <script>
-        /**
-         * CONFIG & LIVE ENGINE v21.8 (STANDARD AUTHORITY)
-         * Standardized Navigation: 1. Dashboard, 2. Raport, 3. Presensi, 4. Live Preview, 5. Wilayah
-         * Layout: No-Crop Authority (Pop-Out Images)
-         */
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
-        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
-        window.appData = window.appData || { pegawai: [], korlap: [], presensi: [], config: {}, isLoaded: false };
-    </script>
-
     <style>
-        /* --- MASTER THEME v21.8 --- */
+        /**
+         * SIM UPT PUSDA - Live Preview Stylesheet v5.9 (Single-File Authority)
+         * Fixed: Desktop Icons, Instant Loading, & Colored Branding.
+         */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
-            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
-            --toska: #06b6d4; --pink: #f472b6; --purple: #a855f7;
+            --success: #10b981; --toska: #06b6d4; --danger: #ef4444; --warning: #f59e0b;
+            --pink: #f472b6; --purple: #a855f7;
             --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
@@ -38,19 +30,19 @@
         }
 
         body.light-theme {
-            --bg-body: #f1f5f9; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f1f5f9 70%);
-            --text-main: #1e293b; --text-muted: #64748b;
-            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.08);
-            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.1);
+            --bg-body: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f8fafc 70%);
+            --text-main: #1e293b; --text-muted: #475569;
+            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
-        /* --- SIDEBAR MASTER --- */
+        /* --- SIDEBAR --- */
         #master-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
-        body.light-theme #master-sidebar { background: rgba(255,255,255,0.9); }
+        body.light-theme #master-sidebar { background: rgba(255,255,255,0.95); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
         .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -60,91 +52,86 @@
         .nav-link { padding: 15px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-weight: 600; cursor: pointer; }
         .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3); }
 
-        /* SIDEBAR FOOTER (STANDARD) */
         .sidebar-footer { margin-top: auto; padding: 5px; }
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
-        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; color: var(--text-main); }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
-        
-        /* Light Mode Theme Button Fix */
         .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
 
         /* --- MAIN CONTENT --- */
-        #main-content { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; position: relative; }
+        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; }
         .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
-        .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.2rem); font-weight: 900; color: var(--text-main); letter-spacing: -1.5px; }
-        .master-title-text b { font-weight: 900; text-transform: uppercase; color: var(--primary-light); }
-        .master-title-text span { color: var(--toska); font-weight: 900; text-transform: uppercase; }
+        .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; font-weight: 900; text-transform: uppercase; }
 
-        /* --- STATS BAR --- */
+        /* --- STATS ROW --- */
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; backdrop-filter: var(--glass-blur); box-shadow: var(--card-shadow); }
         .stat-val { font-size: 1.8rem; font-weight: 900; display: block; }
         .stat-lbl { font-size: 0.6rem; font-weight: 800; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- FILTERS --- */
-        .filter-section { display: flex; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
+        .filter-section { display: flex; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; align-items: center; }
         .search-wrapper { flex: 2; position: relative; min-width: 250px; }
-        input, select { width: 100%; height: 50px; padding: 0 20px; border-radius: 18px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.85rem; }
+        input, select { width: 100%; height: 50px; padding: 0 16px; border-radius: 14px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 600; outline: none; transition: 0.3s; font-size: 0.85rem; }
+        input#liveSearch { padding-right: 50px; }
         body.light-theme input, body.light-theme select { background: white; color: #1e293b; border-color: #cbd5e1; }
         
-        .mic-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--accent-gradient); border: none; width: 34px; height: 34px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1.2s infinite; }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); } }
+        .mic-btn { position: absolute; right: 8px; top: 8px; background: var(--accent-gradient); border: none; width: 34px; height: 34px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; z-index: 5; }
+        .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1s infinite; }
 
-        /* --- STAF CARDS (NO-CROP AUTHORITY) --- */
+        /* --- STAF CARDS (NO-CROP) --- */
         .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 35px; }
-        .staf-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 25px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible; }
-        .staf-card:hover { border-color: var(--primary-light); box-shadow: 0 25px 50px rgba(0,0,0,0.3); z-index: 100; }
+        .staf-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 25px; transition: 0.4s ease; display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible; box-shadow: var(--card-shadow); }
+        .staf-card:hover { border-color: var(--primary-light); transform: translateY(-8px); }
         
-        .card-top { display: flex; gap: 20px; align-items: center; position: relative; overflow: visible; }
+        .card-top { display: flex; gap: 20px; align-items: center; overflow: visible; }
         
         .avatar-container { position: relative; width: 85px; height: 120px; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; overflow: visible; }
-        .avatar-decoration { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1; }
-        .avatar-decoration::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 0); width: 80px; height: 80px; border: 2px solid var(--primary-light); border-radius: 50%; opacity: 0.15; }
-        
         .avatar-box { position: relative; width: 75px; height: 100px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1.5px solid var(--glass-border); z-index: 10; display: flex; align-items: flex-end; justify-content: center; transition: 0.4s; }
-        .avatar-box img { width: 140%; height: auto; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); margin-bottom: -2px; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
+        .avatar-box img { width: 140%; height: auto; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); margin-bottom: -2px; transition: 0.4s; }
         .staf-card:hover .avatar-box img { transform: scale(1.3) translateY(-12px); filter: drop-shadow(0 25px 45px rgba(0,0,0,0.6)); }
         
-        .staf-name { font-weight: 900; font-size: 1.05rem; color: var(--text-main); text-transform: uppercase; letter-spacing: -0.5px; }
+        .staf-name { font-weight: 900; font-size: 1.05rem; color: var(--text-main); text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.2; }
         .staf-role { font-size: 0.7rem; font-weight: 800; opacity: 0.5; margin-top: 4px; }
         
-        /* Riwayat Visual */
+        /* History Visuals */
         .history-list { border-top: 1.5px solid var(--glass-border); padding-top: 18px; display: flex; flex-direction: column; gap: 15px; }
-        .history-row { background: rgba(255,255,255,0.03); border-radius: 26px; padding: 18px; transition: 0.3s; }
-        .history-row:hover { background: rgba(255,255,255,0.06); }
-        
+        .history-row { background: rgba(255,255,255,0.03); border-radius: 26px; padding: 18px; }
         .status-badge { padding: 6px 14px; border-radius: 12px; font-size: 0.6rem; font-weight: 900; color: white; text-transform: uppercase; }
         .score-label { background: rgba(249, 115, 22, 0.15); padding: 5px 10px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; color: var(--accent); }
 
         .triple-visual { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
         .v-box { aspect-ratio: 1; border-radius: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: zoom-in; transition: 0.3s; position: relative; }
-        .v-box:hover { transform: scale(1.15) translateY(-5px); z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .v-box img { width: 100%; height: 100%; object-fit: cover; }
         .v-box span { font-size: 0.45rem; font-weight: 900; margin-top: 5px; opacity: 0.5; text-transform: uppercase; }
 
-        /* --- MOBILE PROTECTION (FIX BUGS) --- */
+        /* --- MOBILE --- */
         .theme-toggle-mobile { display: none !important; }
         #master-bottom-nav { display: none !important; }
 
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
-            #main-content { margin-left: 0; padding: 20px 0.5rem 140px 0.5rem; width: 100%; }
+            #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; width: 100%; }
             #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
-            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; }
+            body.light-theme #master-bottom-nav { background: white; }
             body.light-theme .theme-toggle-mobile { background: white; color: var(--primary); }
-
+            .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); color: white; }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
-            .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
             
-            .live-grid { grid-template-columns: 1fr; gap: 25px; }
-            .staf-card { padding: 20px; }
+            .live-grid { grid-template-columns: 1fr; }
+            .filter-section { flex-direction: column; }
+            .search-wrapper { width: 100%; }
         }
+
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .spin { animation: spin 1.5s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -152,14 +139,12 @@
     <div class="fixed-bg"></div>
     <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
-    <!-- SIDEBAR MASTER -->
     <aside id="master-sidebar">
         <div class="brand">
             <img src="" class="main-logo-src" onerror="this.src='https://placehold.co/50x50?text=Logo'">
             <div><h1><span class="logo-sim">SIM</span> <span class="logo-pu">PU</span><span class="logo-sda">SDA</span></h1><p style="font-size:0.6rem; color:var(--accent); font-weight:800;">Bondoyudo Baru</p></div>
         </div>
         <nav class="nav-items">
-            <!-- STANDARDIZED ORDER -->
             <a href="index.html" class="nav-link"><i data-lucide="layout-grid"></i> Dashboard</a>
             <a href="raport.html" class="nav-link"><i data-lucide="file-bar-chart"></i> E-Raport</a>
             <a href="presensi.html" class="nav-link"><i data-lucide="fingerprint"></i> E-Presensi</a>
@@ -175,13 +160,12 @@
         </div>
     </aside>
 
-    <main id="main-content">
+    <main id="master-main-dashboard">
         <div class="master-title-container">
             <div class="master-accent-bar"></div>
-            <div class="master-title-text"><b>LIVE</b> <span>PREVIEW</span></div>
+            <div class="master-title-text"><span class="logo-sim">LIVE</span> <span class="logo-pu">PRE</span><span class="logo-sda">VIEW</span></div>
         </div>
 
-        <!-- STATS -->
         <div class="stats-row" id="statsRow">
             <div class="stat-card"><span class="stat-val" id="valHadir" style="color:var(--success)">0</span><span class="stat-lbl">Hadir</span></div>
             <div class="stat-card"><span class="stat-val" id="valPulang" style="color:var(--primary-light)">0</span><span class="stat-lbl">Pulang</span></div>
@@ -189,13 +173,12 @@
             <div class="stat-card"><span class="stat-val" id="valBelum" style="color:#94a3b8">0</span><span class="stat-lbl">Belum</span></div>
         </div>
 
-        <!-- FILTERS -->
         <div class="filter-section">
             <div class="search-wrapper">
                 <input type="text" id="liveSearch" placeholder="Cari Nama Pegawai..." oninput="renderCards()">
-                <button class="mic-btn" id="micBtn" onclick="speechToText()"><i data-lucide="mic"></i></button>
+                <button class="mic-btn" id="micBtn" onclick="speechToText('liveSearch', this)"><i data-lucide="mic"></i></button>
             </div>
-            <div style="flex: 1; min-width: 150px;">
+            <div style="flex: 1; min-width: 180px;">
                 <select id="filterWilayah" onchange="renderCards()">
                     <option value="ALL">SEMUA WILAYAH</option>
                     <option value="Bangorejo">BANGOREJO</option>
@@ -207,49 +190,67 @@
         </div>
 
         <div class="live-grid" id="stafContainer">
-            <!-- Data Staf rendered via JS -->
             <div style="grid-column: 1/-1; text-align: center; padding: 100px 20px; opacity: 0.3;">
-                <i data-lucide="database-zap" class="spin" size="64" style="margin-bottom: 20px;"></i>
-                <h3 style="font-weight: 900; text-transform: uppercase;">Menyinkronkan Data Cloud...</h3>
+                <i data-lucide="database-zap" class="spin" size="48"></i>
+                <p style="font-weight: 900; margin-top: 10px;">Menyinkronkan Database Cloud...</p>
             </div>
         </div>
     </main>
 
-    <!-- BOTTOM NAV -->
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
-        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
+        <div class="presensi-fab" onclick="location.reload()"><i data-lucide="fingerprint" color="white" size="30"></i></div>
         <a href="livepresensi.html" class="b-nav-item active"><i data-lucide="monitor-play"></i><span>Live</span></a>
         <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
     </nav>
 
     <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
+        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
+        window.appData = { config: {}, pegawai: [], korlap: [], presensi: [], isLoaded: false };
+
         window.onload = async () => {
-            lucide.createIcons(); initClock(); initTheme();
-            await fetchLiveData();
+            initTheme(); initClock();
+            
+            const cached = sessionStorage.getItem('pusda_app_data');
+            if (cached) {
+                try {
+                    window.appData = JSON.parse(cached);
+                    window.appData.isLoaded = true;
+                    applyGlobalUI(); renderCards();
+                    fetchDataFromCloud(true); 
+                } catch(e) { await fetchDataFromCloud(); }
+            } else {
+                await fetchDataFromCloud();
+            }
         };
 
-        async function fetchLiveData() {
+        async function fetchDataFromCloud(isBackground = false) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
-                const result = await res.json();
+                const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { signal: controller.signal });
+                const result = await response.json();
+                clearTimeout(timeoutId);
                 if (result.status === 'success') {
-                    window.appData = result;
-                    updateLogo();
-                    renderCards();
+                    window.appData = result; window.appData.isLoaded = true;
+                    sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
+                    applyGlobalUI(); renderCards();
                 }
-            } catch (e) { console.error("Live Sync Failure"); }
+            } catch (e) { if(!isBackground) handleSyncError("Koneksi Cloud Gagal."); }
         }
 
-        function updateLogo() {
-            const logo = window.appData.config.Logo || FALLBACK_LOGO;
+        function handleSyncError(msg) {
+            const container = document.getElementById('stafContainer');
+            if(container) container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger); font-weight: 800;">${msg} <br><button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; border-radius:10px; background:var(--accent); border:none; color:white; font-weight:900; cursor:pointer;">RETRY</button></div>`;
+            lucide.createIcons();
+        }
+
+        function applyGlobalUI() {
+            const logo = window.appData.config?.Logo || FALLBACK_LOGO;
             document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
-        }
-
-        function calculatePoin(log) {
-            if (log.Nilai) return parseInt(log.Nilai);
-            return 0;
+            lucide.createIcons();
         }
 
         function getStatusColor(s) {
@@ -259,6 +260,8 @@
 
         function renderCards() {
             const container = document.getElementById('stafContainer');
+            if(!container || !window.appData.isLoaded) return;
+
             const query = document.getElementById('liveSearch').value.toLowerCase();
             const wilayah = document.getElementById('filterWilayah').value;
             const today = new Date().toLocaleDateString('sv-SE');
@@ -267,7 +270,7 @@
             const logs = (window.appData.presensi || []).filter(p => p.Timestamp && p.Timestamp.includes(today));
 
             const filtered = allUsers.filter(u => {
-                const matchName = u.Nama.toLowerCase().includes(query);
+                const matchName = u.Nama.toLowerCase().includes(query) || String(u.ID).includes(query);
                 const matchWil = wilayah === 'ALL' || u.Wilayah === wilayah;
                 return matchName && matchWil;
             });
@@ -288,7 +291,6 @@
                 <div class="staf-card fade-in">
                     <div class="card-top">
                         <div class="avatar-container">
-                            <div class="avatar-decoration"></div>
                             <div class="avatar-box">
                                 <img src="${u.Link_Foto_Profile || ''}" onerror="this.src='https://placehold.co/100x130?text=?'">
                             </div>
@@ -300,24 +302,21 @@
                     </div>
                     
                     <div class="history-list">
-                        ${userLogs.length > 0 ? userLogs.map(l => {
-                            const pts = calculatePoin(l);
-                            return `
+                        ${userLogs.length > 0 ? userLogs.map(l => `
                             <div class="history-row">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                                     <span class="status-badge" style="background:${getStatusColor(l.Status)}">${l.Status}</span>
                                     <div style="display:flex; align-items:center; gap:8px;">
-                                        <span class="score-label">+${pts} PTS</span>
+                                        <span class="score-label">+${l.Nilai || 0} PTS</span>
                                         <span style="font-size:0.6rem; font-weight:800; opacity:0.5;">${l.Timestamp.split(' ')[1] || ''}</span>
                                     </div>
                                 </div>
                                 <div class="triple-visual">
                                     <div class="v-box" onclick="window.open('${l.Foto_Selfie}')">${l.Foto_Selfie ? `<img src="${l.Foto_Selfie}">` : '<i data-lucide="camera" size="14"></i><span>SELFIE</span>'}</div>
                                     <div class="v-box" onclick="window.open('${l.Foto_Lokasi}')">${l.Foto_Lokasi ? `<img src="${l.Foto_Lokasi}">` : '<i data-lucide="image" size="14"></i><span>KERJA</span>'}</div>
-                                    <div class="v-box" style="background:#e0f2fe; color:#0369a1;" onclick="window.open('https://www.google.com/maps?q=${l.GPS}')"><i data-lucide="map-pin" size="14"></i><span>MAPS</span></div>
+                                    <div class="v-box" style="background:rgba(59,130,246,0.1); color:var(--primary-light);" onclick="window.open('https://www.google.com/maps?q=${l.GPS}')"><i data-lucide="map-pin" size="14"></i><span>MAPS</span></div>
                                 </div>
-                            </div>`;
-                        }).join('') : '<div style="text-align:center; padding:30px; opacity:0.3; font-weight:800; font-size:0.75rem;">BELUM ADA ABSENSI HARI INI</div>'}
+                            </div>`).join('') : '<div style="text-align:center; padding:30px; opacity:0.3; font-weight:800; font-size:0.75rem;">BELUM ADA ABSENSI HARI INI</div>'}
                     </div>
                 </div>`;
             }).join('');
@@ -330,24 +329,22 @@
             lucide.createIcons();
         }
 
-        function speechToText() {
+        function speechToText(id, btn) {
             if (!('webkitSpeechRecognition' in window)) return;
-            const rec = new webkitSpeechRecognition();
-            const btn = document.getElementById('micBtn');
-            rec.lang = 'id-ID';
+            const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID';
             rec.onstart = () => btn.classList.add('listening');
-            rec.onresult = (e) => { document.getElementById('liveSearch').value = e.results[0][0].transcript; renderCards(); };
+            rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; renderCards(); };
             rec.onend = () => btn.classList.remove('listening');
             rec.start();
         }
 
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
-        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeIcons(localStorage.getItem('theme') === 'light'); }
-        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
-        function updateThemeIcons(isLight) {
+        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeUI(localStorage.getItem('theme') === 'light'); }
+        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeUI(isLight); }
+        function updateThemeUI(isLight) {
             const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
