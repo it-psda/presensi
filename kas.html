@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kas Kantor Master - SIM UPT PUSDA v23.6</title>
+    <title>Kas Kantor Master - SIM UPT PUSDA v23.7</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,8 +14,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Finance Stylesheet v5.6 (Final Print Integrity)
-         * Optimized for: Professional Print, No Navbar Leak, & Clean Table Alignment.
+         * SIM UPT PUSDA - Finance Stylesheet v5.7 (Ultimate Print Fix)
+         * Solusi: Menghilangkan Bottom Nav & Ikon Tema secara total saat Cetak.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -93,7 +93,7 @@
         td { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; font-weight: 600; word-wrap: break-word; }
         
         .col-no { width: 60px; }
-        .col-tgl { width: 150px; }
+        .col-tgl { width: 140px; }
         .col-tipe { width: 120px; text-align: center; }
         .col-nom { width: 180px; text-align: right; }
 
@@ -112,14 +112,16 @@
 
         /* --- BOTTOM NAV (Standard UI) --- */
         #master-bottom-nav { display: none; }
+        .theme-toggle-mobile { display: none; }
 
         /* --- PROFESSIONAL PRINT SYSTEM (A4 FINAL FIX) --- */
         #print-header, #print-footer { display: none; }
 
         @media print {
-            body { background: white !important; color: black !important; padding: 0 !important; display: block !important; }
+            /* 1. Paksa Latar Belakang Putih & Sembunyikan Navigasi */
+            body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; display: block !important; }
             
-            /* HARD HIDE ALL UI ELEMENTS */
+            /* 2. Sembunyikan SEMUA elemen UI melayang (Bottom Nav & Theme Icon) */
             #master-sidebar, 
             #master-bottom-nav, 
             .theme-toggle-mobile, 
@@ -128,45 +130,48 @@
             .modal-overlay, 
             .fixed-bg, 
             .btn-kas-action,
-            .master-title-container { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
+            .master-title-container,
+            #sidebarLogo { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
-            #master-main-dashboard { margin: 0 !important; padding: 20px !important; width: 100% !important; }
+            /* 3. Atur Area Konten Utama */
+            #master-main-dashboard { margin: 0 !important; padding: 10mm !important; width: 100% !important; border: none !important; }
             
-            /* Official Kop Surat */
-            #print-header { display: block !important; text-align: center; margin-bottom: 25px; border-bottom: 4px double #000; padding-bottom: 15px; }
-            .kop-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
-            .kop-logo { height: 75px; width: auto; }
-            .kop-text h2 { font-size: 1.25rem; font-weight: 900; line-height: 1.2; text-transform: uppercase; margin: 0; }
-            .kop-text p { font-size: 0.8rem; font-weight: 600; margin: 2px 0 0 0; }
+            /* 4. Kop Surat Resmi */
+            #print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 4px double #000; padding-bottom: 10px; }
+            .kop-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
+            .kop-logo { height: 70px; width: auto; }
+            .kop-text h2 { font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin: 0; }
+            .kop-text p { font-size: 0.75rem; font-weight: 600; margin: 2px 0 0 0; }
             
-            .report-title { text-align: center; margin: 20px 0; }
-            .report-title h3 { text-decoration: underline; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; }
+            /* 5. Judul Laporan */
+            .report-title { text-align: center; margin: 15px 0; }
+            .report-title h3 { text-decoration: underline; font-size: 1.05rem; font-weight: 900; text-transform: uppercase; }
             
-            /* Table Print Optimization */
-            .table-responsive { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; margin-top: 10px !important; }
-            table { min-width: 100% !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
-            th { border: 1.5px solid #000 !important; padding: 8px !important; color: black !important; font-size: 0.7rem; background: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
-            td { border: 1px solid #000 !important; padding: 8px 10px !important; color: black !important; font-size: 0.8rem; font-weight: 600 !important; line-height: 1.2; }
+            /* 6. Optimasi Tabel Cetak (Fixing Gaps) */
+            .table-responsive { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; }
+            table { width: 100% !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
+            th { border: 1.5px solid #000 !important; padding: 6px !important; color: black !important; font-size: 0.65rem; background: #f2f2f2 !important; -webkit-print-color-adjust: exact; }
+            td { border: 1px solid #000 !important; padding: 6px 8px !important; color: black !important; font-size: 0.75rem; font-weight: 600 !important; line-height: 1.2; }
             
-            /* Fix Nominal Column (Lingkaran Hijau) */
-            td { white-space: nowrap !important; }
-            td:nth-child(3) { white-space: normal !important; } /* Keterangan boleh wrap */
+            /* Menangani baris nominal agar tidak berantakan (Lingkaran Hijau Fix) */
+            td.col-nom { text-align: right !important; white-space: nowrap !important; }
+            td { white-space: normal !important; } 
             
-            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 900; border: none; font-size: 0.75rem; }
-            tr.total-row td { background: #f5f5f5 !important; font-weight: 900 !important; -webkit-print-color-adjust: exact; border-top: 2px solid #000 !important; }
+            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 900; font-size: 0.7rem; border: none !important; }
+            tr.total-row td { background: #fafafa !important; font-weight: 900 !important; -webkit-print-color-adjust: exact; border-top: 2px solid #000 !important; }
 
-            /* Signatures */
-            #print-footer { display: block !important; margin-top: 50px; width: 100%; page-break-inside: avoid; }
-            .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; }
-            .sig-box { display: flex; flex-direction: column; height: 130px; justify-content: space-between; }
+            /* 7. Penandatangan */
+            #print-footer { display: block !important; margin-top: 30px; width: 100%; page-break-inside: avoid; }
+            .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: center; }
+            .sig-box { display: flex; flex-direction: column; height: 110px; justify-content: space-between; }
             .sig-name { font-weight: 900; text-decoration: underline; text-transform: uppercase; margin-top: auto; }
         }
 
-        /* --- MOBILE --- */
+        /* --- MOBILE UI --- */
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 20px 0.5rem 140px 0.5rem; width: 100%; }
-            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; }
+            .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; border: 1px solid var(--glass-border); }
             #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
@@ -174,9 +179,6 @@
             .summary-grid { grid-template-columns: 1fr; }
             .filters-container { flex-direction: column; }
             .action-bar { flex-direction: column; align-items: stretch; }
-            
-            table { min-width: 700px; }
-            .col-nom { width: 150px; }
         }
 
         .spin { animation: spin 1s linear infinite; }
@@ -188,6 +190,7 @@
 <body class="dark-theme">
 
     <div class="fixed-bg"></div>
+    <!-- Tombol Tema Mobile (Akan otomatis disembunyikan saat cetak) -->
     <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
     <!-- SIDEBAR MASTER -->
@@ -213,19 +216,19 @@
     </aside>
 
     <main id="master-main-dashboard">
-        <!-- PROFESSIONAL HEADER FOR PRINT (A4 READY) -->
+        <!-- HEADER KOP SURAT (Hanya Muncul Saat Print) -->
         <div id="print-header">
             <div class="kop-container">
                 <img src="" class="main-logo-src kop-logo" onerror="this.src='https://placehold.co/80x80?text=Logo'">
                 <div class="kop-text">
                     <h2>Dinas Pekerjaan Umum Sumber Daya Air</h2>
                     <p>UPT Pengelolaan Sumber Daya Air Bondoyudo Baru</p>
-                    <p style="font-size: 0.65rem; opacity: 0.8; font-weight: 400; text-transform: none;">Jalan Raya Lumajang-Jember, Indonesia | Email: pusda.wsbb@jatimprov.go.id</p>
+                    <p style="font-size: 0.65rem; font-weight: 400; text-transform: none;">Email: pusda.wsbb@jatimprov.go.id | Status: Data Otoritas Digital</p>
                 </div>
             </div>
             <div class="report-title">
-                <h3>Laporan Rekapitulasi Kas Kantor</h3>
-                <p id="print-period" style="font-size: 0.85rem; font-weight: 800; margin-top: 5px;">Periode: Semua Data</p>
+                <h3>Rekapitulasi Arus Kas Kantor</h3>
+                <p id="print-period" style="font-size: 0.8rem; font-weight: 800; margin-top: 5px;">Periode: -</p>
             </div>
         </div>
 
@@ -234,14 +237,14 @@
             <h2 class="master-title-text"><span class="logo-sim">KAS</span> <span class="logo-pu">KANTOR</span></h2>
         </div>
 
-        <!-- SUMMARY -->
+        <!-- SUMMARY (Hidden saat print) -->
         <div class="summary-grid">
             <div class="summary-card"><span class="auth-label">Saldo Saat Ini</span><span class="sum-val text-toska" id="valSaldo">Rp 0</span></div>
             <div class="summary-card"><span class="auth-label">Total Pemasukan</span><span class="sum-val text-blue" id="valIn">Rp 0</span></div>
             <div class="summary-card"><span class="auth-label">Total Pengeluaran</span><span class="sum-val text-orange" id="valOut">Rp 0</span></div>
         </div>
 
-        <!-- ACTION BAR -->
+        <!-- ACTION BAR (Hidden saat print) -->
         <div class="action-bar">
             <div class="filters-container">
                 <div class="search-box-kas"><input type="text" id="kasSearch" placeholder="Cari uraian..." oninput="renderKasTable()"></div>
@@ -284,27 +287,36 @@
             </table>
         </div>
 
-        <!-- SIGNATURE AREA FOR PRINT -->
+        <!-- FOOTER TANDA TANGAN (Hanya Muncul Saat Print) -->
         <div id="print-footer">
-            <div style="text-align: right; margin-bottom: 20px; font-size: 0.9rem;" id="print-date-footer">Lumajang, 10 Maret 2026</div>
+            <div style="text-align: right; margin-bottom: 20px; font-size: 0.85rem;" id="print-date-footer">Lumajang, 10 Maret 2026</div>
             <div class="signature-grid">
                 <div class="sig-box">
                     <span>Mengetahui,</span>
                     <span>Kepala UPT PSDA Bondoyudo Baru</span>
                     <span class="sig-name">( __________________________ )</span>
-                    <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
+                    <span style="font-size: 0.65rem; margin-top: 2px;">NIP. ........................................</span>
                 </div>
                 <div class="sig-box">
                     <span>Bendahara,</span>
                     <span>UPT PSDA Bondoyudo Baru</span>
                     <span class="sig-name">( __________________________ )</span>
-                    <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
+                    <span style="font-size: 0.65rem; margin-top: 2px;">NIP. ........................................</span>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- MODALS -->
+    <!-- BOTTOM NAV (Hanya Muncul di Mobile) -->
+    <nav id="master-bottom-nav">
+        <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
+        <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
+        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
+        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
+        <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
+    </nav>
+
+    <!-- MODAL PASSWORD -->
     <div id="passwordModal" class="modal-overlay">
         <div class="glass-modal-card" style="max-width:400px; text-align:center;">
             <div style="width:70px; height:70px; background:var(--accent-gradient); color:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px;"><i data-lucide="lock" size="32"></i></div>
@@ -318,6 +330,7 @@
         </div>
     </div>
 
+    <!-- MODAL INPUT KAS -->
     <div id="kasModal" class="modal-overlay">
         <div class="glass-modal-card">
             <div style="padding: 0 1.5rem 25px 1.5rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); margin-bottom:25px;">
@@ -334,26 +347,16 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAV -->
-    <nav id="master-bottom-nav">
-        <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
-        <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
-        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
-        <a href="livepresensi.html" class="b-nav-item"><i data-lucide="monitor-play"></i><span>Live</span></a>
-        <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
-    </nav>
-
-    <!-- LOGIKA TERPADU -->
+    <!-- SCRIPT UTAMA -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
         const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
         window.appData = { config: {}, cash: [], isLoaded: false };
 
         window.addEventListener('DOMContentLoaded', async () => {
-            initTheme();
-            initClock();
+            initTheme(); initClock();
             
-            // Set Print Date Footer
+            // Set Tanggal Laporan Otomatis
             const now = new Date();
             const dateStr = now.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
             const printDateFooter = document.getElementById('print-date-footer');
@@ -364,13 +367,9 @@
                 try {
                     window.appData = JSON.parse(cached);
                     window.appData.isLoaded = true;
-                    applyGlobalUI();
-                    renderKasTable();
-                    fetchDataFromCloud(true); 
+                    applyGlobalUI(); renderKasTable(); fetchDataFromCloud(true); 
                 } catch(e) { await fetchDataFromCloud(); }
-            } else {
-                await fetchDataFromCloud();
-            }
+            } else { await fetchDataFromCloud(); }
         });
 
         async function fetchDataFromCloud(isBackground = false) {
@@ -381,13 +380,11 @@
                 const result = await response.json();
                 clearTimeout(timeoutId);
                 if (result.status === 'success') {
-                    window.appData = result;
-                    window.appData.isLoaded = true;
+                    window.appData = result; window.appData.isLoaded = true;
                     sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
-                    applyGlobalUI();
-                    renderKasTable();
+                    applyGlobalUI(); renderKasTable();
                 }
-            } catch (e) { if(!isBackground) handleSyncError("Gagal Sinkronisasi Database."); }
+            } catch (e) { if(!isBackground) handleSyncError("Gagal Sinkronisasi."); }
         }
 
         function renderKasTable() {
@@ -414,7 +411,7 @@
             let html = "";
 
             if (filtered.length === 0) {
-                html = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Data tidak ditemukan untuk periode ini.</td></tr>';
+                html = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Data tidak ditemukan.</td></tr>';
             } else {
                 html = filtered.map((c, i) => {
                     const nominal = Number(c.Nominal) || 0;
@@ -426,14 +423,14 @@
                         <td style="white-space:nowrap;">${new Date(c.Tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
                         <td style="word-break:break-word;">${c.Keterangan}</td>
                         <td style="text-align:center;"><span class="type-pill ${c.Tipe === 'MASUK' ? 'in' : 'out'}">${c.Tipe}</span></td>
-                        <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap; font-weight:900;">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td class="col-nom" style="color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; font-weight:900;">Rp ${nominal.toLocaleString('id-ID')}</td>
                     </tr>`;
                 }).join('');
 
                 html += `
                 <tr class="total-row">
-                    <td colspan="3" style="text-align:right; font-weight:900; padding-right:20px;">REKAPITULASI TOTAL:</td>
-                    <td style="text-align:center; font-size: 0.65rem; padding: 5px;">
+                    <td colspan="3" style="text-align:right; font-weight:900;">REKAPITULASI TOTAL:</td>
+                    <td style="text-align:center; font-size: 0.65rem;">
                         <div style="color:var(--success); font-weight:900;">IN: ${totalIn.toLocaleString('id-ID')}</div>
                         <div style="color:var(--danger); font-weight:900;">OUT: ${totalOut.toLocaleString('id-ID')}</div>
                     </td>
@@ -462,7 +459,7 @@
                 await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 sessionStorage.removeItem('pusda_app_data');
                 alert("Berhasil!"); location.reload();
-            } catch (e) { alert("Gagal!"); btn.disabled = false; btn.innerText = "SIMPAN KE CLOUD"; }
+            } catch (e) { alert("Gagal!"); btn.disabled = false; }
         }
 
         function verifyAdminPassword() { document.getElementById('passwordModal').classList.add('active'); }
@@ -471,11 +468,6 @@
             if(input === (window.appData.config?.AdminPassword || 'admin123')) {
                 closeModal('passwordModal'); document.getElementById('kasModal').classList.add('active');
             } else { alert("🔴 Password Salah!"); }
-        }
-
-        function handleSyncError(msg) {
-            document.getElementById('kasTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:50px;"><h3 style="color:var(--danger)">${msg}</h3><button onclick="location.reload()" style="margin-top:10px; padding:10px 20px; border-radius:10px; background:var(--accent); border:none; color:white; font-weight:900; cursor:pointer;">SINKRON ULANG</button></td></tr>`;
-            lucide.createIcons();
         }
 
         function applyGlobalUI() {
@@ -495,6 +487,7 @@
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
+        function handleSyncError(msg) { document.getElementById('kasTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:50px; color:var(--danger); font-weight:800;">${msg}</td></tr>`; }
     </script>
 </body>
 </html>
