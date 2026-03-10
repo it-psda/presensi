@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Dashboard Master - SIM UPT PUSDA v24.2</title>
+    <title>Dashboard Master - SIM UPT PUSDA v24.3</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,8 +14,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Dashboard Stylesheet v6.2 (Auto-Retry Engine)
-         * Solusi: Exponential Backoff Fetching, UI Stability, & Desktop Strictness.
+         * SIM UPT PUSDA - Dashboard Stylesheet v6.3 (UI Refinement)
+         * Perbaikan: Ukuran Foto diperkecil, Stabilitas Koneksi, & Strict Desktop View.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -67,13 +67,16 @@
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
         .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 900; color: var(--text-main); letter-spacing: -1.5px; text-transform: uppercase; }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (PHOTO SIZE UPDATED) --- */
         .hero-section { position: relative; background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 35px; padding: 45px; margin-bottom: 45px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: var(--card-shadow); min-height: 380px; }
         .hero-text { flex: 0 0 60%; }
-        .hero-image-container { flex: 0 0 40%; position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: 380px; }
-        .hero-img-box { position: relative; width: 160px; height: 215px; background: rgba(255,255,255,0.08); border: 1.5px solid var(--glass-border); border-radius: 32px; display: flex; align-items: flex-end; justify-content: center; }
-        .hero-img { width: 185%; height: auto; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5)); margin-bottom: -5px; opacity: 0; transition: 0.5s; }
-        #heroLabel { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: max-content; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); padding: 12px 24px; border: 1px solid var(--glass-border); border-radius: 22px; text-align: center; z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .hero-image-container { flex: 0 0 40%; position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: 380px; overflow: visible; }
+        
+        /* Box Foto Diperkecil */
+        .hero-img-box { position: relative; width: 140px; height: 190px; background: rgba(255,255,255,0.08); border: 1.5px solid var(--glass-border); border-radius: 28px; display: flex; align-items: flex-end; justify-content: center; }
+        .hero-img { width: 165%; height: auto; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 20px 45px rgba(0,0,0,0.5)); margin-bottom: -5px; opacity: 0; transition: 0.5s; }
+        
+        #heroLabel { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: max-content; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); padding: 10px 20px; border: 1px solid var(--glass-border); border-radius: 20px; text-align: center; z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
         /* --- SEARCH FILTER --- */
         .search-wrapper { position: relative; flex: 1; display: flex; align-items: center; margin-bottom: 25px; }
@@ -112,9 +115,14 @@
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
+            
             .hero-section { flex-direction: column; padding: 35px 20px; min-height: auto; margin-top: 20px; }
             .hero-text { flex: none; order: 2; margin-top: 15px; text-align: center; }
             .hero-image-container { flex: none; order: 1; min-height: 280px; margin-top: -20px; }
+            
+            .hero-img-box { width: 120px; height: 165px; }
+            .hero-img { width: 170%; }
+
             .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .modal-grid { grid-template-columns: 1fr; }
         }
@@ -130,6 +138,7 @@
     <div class="fixed-bg"></div>
     <div class="theme-toggle-mobile" onclick="toggleTheme()"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
+    <!-- SIDEBAR MASTER -->
     <aside id="master-sidebar">
         <div class="brand">
             <img src="" class="main-logo-src" onerror="this.src='https://placehold.co/50x50?text=Logo'">
@@ -212,21 +221,18 @@
                 try {
                     window.appData = JSON.parse(cached); window.appData.isLoaded = true;
                     applyGlobalUI(); renderDashboardTools(); startHeroSlider();
-                    fetchWithRetry(true); // Background refresh
+                    fetchWithRetry(true); 
                 } catch(e) { await fetchWithRetry(); }
             } else { await fetchWithRetry(); }
         };
 
-        // --- ENGINE: FETCH WITH EXPONENTIAL BACKOFF ---
         async function fetchWithRetry(isBackground = false, retries = 3, delay = 2000) {
             const ctrl = new AbortController();
             const timeout = setTimeout(() => ctrl.abort(), 12000);
-
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { signal: ctrl.signal });
                 const result = await response.json();
                 clearTimeout(timeout);
-
                 if (result.status === 'success') {
                     window.appData = result; window.appData.isLoaded = true;
                     sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
@@ -235,10 +241,9 @@
                 }
             } catch (e) {
                 if (retries > 0) {
-                    console.warn(`Koneksi gagal, mencoba lagi dalam ${delay/1000}s... (${retries} sisa)`);
                     setTimeout(() => fetchWithRetry(isBackground, retries - 1, delay * 2), delay);
                 } else if (!isBackground) {
-                    handleSyncError("Koneksi Cloud Gagal Setelah Beberapa Percobaan.");
+                    handleSyncError("Koneksi Cloud Gagal.");
                 }
             }
         }
@@ -247,8 +252,7 @@
             document.getElementById('toolsContainer').innerHTML = `
                 <div style="grid-column:1/-1; text-align:center; padding:50px;">
                     <i data-lucide="cloud-off" size="48" color="var(--danger)"></i>
-                    <h3 style="margin-top:15px; font-weight:900;">GAGAL SINKRONISASI</h3>
-                    <p style="opacity:0.6; font-size:0.8rem; margin:10px 0;">${msg}</p>
+                    <h3 style="margin-top:15px; font-weight:900;">${msg}</h3>
                     <button style="background:var(--accent-gradient); border:none; padding:12px 30px; border-radius:15px; color:white; font-weight:900; cursor:pointer;" onclick="location.reload()">SINKRON ULANG</button>
                 </div>`;
             lucide.createIcons();
@@ -259,10 +263,8 @@
             if (!container || !window.appData.isLoaded) return;
             const query = (document.getElementById('toolSearch')?.value || "").toLowerCase();
             const rawTools = [...(window.appData.tools || [])];
-            
             const lapkinGroup = rawTools.filter(t => t.Nama.toLowerCase().includes("lapkin"));
             const otherTools = rawTools.filter(t => !t.Nama.toLowerCase().includes("lapkin"));
-
             let html = "";
             if(lapkinGroup.length > 0 && (!query || "lapkin".includes(query))) {
                 html += `<div class="tool-card fade-in" onclick='openLapkinModal(${JSON.stringify(lapkinGroup).replace(/'/g, "&apos;")})'>
@@ -271,7 +273,6 @@
                     <div style="font-size:0.55rem; opacity:0.5; margin-top:-10px;">${lapkinGroup.length} Modul</div>
                 </div>`;
             }
-
             html += otherTools.filter(t => t.Nama.toLowerCase().includes(query)).map(t => {
                 let url = t.Link_URL || '#';
                 if(t.Nama === "E-Presensi") url = 'presensi.html';
@@ -283,21 +284,16 @@
                     <div class="tool-name" style="font-weight:900; font-size:0.85rem;">${t.Nama}</div>
                 </div>`;
             }).join('');
-
             if(!query || "kas kantor".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='kas.html'"><div class="tool-icon" style="background:var(--toska);"><i data-lucide="wallet"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Kas Kantor</div></div>`;
             if(!query || "admin panel".includes(query)) html += `<div class="tool-card fade-in" onclick="location.href='admin.html'"><div class="tool-icon" style="background:var(--bg-body); border:1px solid var(--glass-border); color:var(--text-main);"><i data-lucide="shield-check"></i></div><div class="tool-name" style="font-weight:900; font-size:0.85rem;">Admin Panel</div></div>`;
-
-            container.innerHTML = html;
-            lucide.createIcons();
+            container.innerHTML = html; lucide.createIcons();
         }
 
         function openLapkinModal(items) {
             const container = document.getElementById('lapkinToolsContainer');
             container.innerHTML = items.map(t => `<div class="modal-item fade-in" onclick="location.href='${t.Link_URL}'"><div class="modal-icon"><i data-lucide="${t.Icon || 'file-text'}"></i></div><div class="modal-name">${t.Nama}</div></div>`).join('');
-            document.getElementById('lapkinModal').classList.add('show');
-            lucide.createIcons();
+            document.getElementById('lapkinModal').classList.add('show'); lucide.createIcons();
         }
-
         function closeLapkinModal() { document.getElementById('lapkinModal').classList.remove('show'); }
 
         let slideIdx = 0;
@@ -320,7 +316,6 @@
             };
             updateSlider(); setInterval(updateSlider, 8000);
         }
-
         function applyGlobalUI() { const logo = window.appData.config?.Logo || FALLBACK_LOGO; document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo); lucide.createIcons(); }
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
         function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeUI(localStorage.getItem('theme') === 'light'); }
