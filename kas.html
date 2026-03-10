@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kas Kantor Master - SIM UPT PUSDA v22.0</title>
+    <title>Kas Kantor Master - SIM UPT PUSDA v23.0</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,25 +12,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <script>
-        /**
-         * CONFIG & FINANCE ENGINE v22.0 (CLOUD SYNC)
-         * Integrated with: Google Sheets (Sheet: E_KAS)
-         * Standardized Navigation: Dashboard, Raport, Presensi, Live, Wilayah.
-         */
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
-        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
-        window.appData = window.appData || { pegawai: [], korlap: [], presensi: [], cash: [], config: {}, isLoaded: false };
-        let cashData = [];
-    </script>
-
     <style>
-        /* --- MASTER THEME v22.0 --- */
+        /**
+         * SIM UPT PUSDA - Finance Stylesheet v5.3 (Single-File Authority)
+         * Optimized for Multi-Year Financial Reporting.
+         */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
-            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
-            --toska: #06b6d4; --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
+            --success: #10b981; --toska: #06b6d4; --danger: #ef4444;
+            --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
             --glass-blur: blur(15px); --card-shadow: 0 20px 50px rgba(0,0,0,0.4);
@@ -62,7 +53,7 @@
 
         .sidebar-footer { margin-top: auto; padding: 5px; }
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
-        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; color: var(--text-main); }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
         .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
@@ -71,13 +62,29 @@
         #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; }
         .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
-        .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 900; letter-spacing: -1.5px; }
+        .master-title-text { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 900; color: var(--text-main); letter-spacing: -1.5px; }
 
-        /* --- FINANCE SUMMARY --- */
+        /* --- SUMMARY GRID --- */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .summary-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 28px; padding: 25px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 5px; }
         .sum-val { font-size: 1.8rem; font-weight: 900; display: block; }
         .sum-lbl { font-size: 0.65rem; font-weight: 800; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- ACTION BAR --- */
+        .action-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 15px; }
+        .filters-container { display: flex; gap: 10px; flex: 1; min-width: 300px; }
+        .search-box-kas { flex: 2; position: relative; }
+        .search-box-kas input { width: 100%; height: 50px; padding: 0 20px; border-radius: 14px; background: rgba(0,0,0,0.2); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; }
+        body.light-theme .search-box-kas input { background: white; color: #1e293b; border-color: #cbd5e1; }
+        
+        select.filter-input { 
+            height: 50px; background: var(--primary); border: none; border-radius: 14px; 
+            color: white; font-weight: 800; font-size: 0.75rem; padding: 0 15px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-kas-action { background: var(--accent-gradient); color: white; border: none; padding: 15px 25px; border-radius: 18px; font-weight: 900; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.2); transition: 0.3s; text-transform: uppercase; }
+        .btn-print { background: var(--primary-light); }
 
         /* --- DATA TABLE --- */
         .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 30px; overflow-x: auto; box-shadow: var(--card-shadow); margin-bottom: 30px; }
@@ -88,37 +95,50 @@
         .type-pill.in { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .type-pill.out { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        /* --- ACTION BAR --- */
-        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 15px; }
-        .btn-add-kas { background: var(--accent-gradient); color: white; border: none; padding: 15px 30px; border-radius: 18px; font-weight: 900; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3); transition: 0.3s; }
-        .btn-add-kas:hover { transform: translateY(-5px); filter: brightness(1.1); }
-
-        /* --- MODAL STYLES (0.5rem Side Padding) --- */
+        /* --- MODAL --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .glass-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 550px; border-radius: 40px; padding: 35px 0.5rem; color: white; position: relative; animation: modalPop 0.4s ease; }
         @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
         label { font-size: 0.65rem; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; margin-left: 1rem; }
-        input, select, textarea { width: calc(100% - 2rem); margin: 0 1rem 15px 1rem; padding: 16px 20px; border-radius: 16px; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.9rem; }
-        body.light-theme input, body.light-theme select, body.light-theme textarea { background: white; color: #1e293b; border-color: #cbd5e1; }
+        input.form-input, select.form-input, textarea.form-input { width: calc(100% - 2rem); margin: 0 1rem 15px 1rem; padding: 16px 20px; border-radius: 16px; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.9rem; }
+        body.light-theme input.form-input, body.light-theme select.form-input { background: white; color: #1e293b; border-color: #cbd5e1; }
 
-        /* --- MOBILE PROTECTION --- */
+        /* --- PRINT --- */
+        #print-header { display: none; }
+        @media print {
+            body { background: white !important; color: black !important; }
+            .fixed-bg, #master-sidebar, #master-bottom-nav, .theme-toggle-mobile, .action-bar, .summary-grid, .modal-overlay { display: none !important; }
+            #master-main-dashboard { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+            #print-header { display: block !important; text-align: center; border-bottom: 3px double #000; margin-bottom: 30px; padding-bottom: 15px; }
+            table { min-width: 100% !important; border: 1px solid #000 !important; }
+            th, td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.8rem; }
+            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 800; }
+        }
+
+        /* --- MOBILE --- */
         .theme-toggle-mobile { display: none !important; }
         #master-bottom-nav { display: none !important; }
 
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 20px 0.5rem 140px 0.5rem; width: 100%; }
-            #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
             .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
             body.light-theme .theme-toggle-mobile { background: white; color: var(--primary); }
+            #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
             .summary-grid { grid-template-columns: 1fr; }
+            .filters-container { flex-direction: column; }
             .action-bar { flex-direction: column; align-items: stretch; }
         }
+
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .spin { animation: spin 1.5s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -149,85 +169,64 @@
     </aside>
 
     <main id="master-main-dashboard">
+        <!-- OFFICIAL HEADER FOR PRINT -->
+        <div id="print-header">
+            <h2 style="font-size:1.4rem; font-weight:900;">DINAS PEKERJAAN UMUM SUMBER DAYA AIR</h2>
+            <p style="font-size:0.9rem; font-weight:700;">LAPORAN REKAPITULASI KAS KANTOR UPT PSDA BONDOYUDO BARU</p>
+            <p id="print-period" style="font-size:0.75rem; margin-top:5px;">Periode: -</p>
+        </div>
+
         <div class="master-title-container">
-            <div class="master-accent-bar" style="width:7px; height:40px; background:var(--accent-gradient); border-radius:4px; margin-right:15px;"></div>
-            <h2 class="master-title-text"><span class="logo-sim">KAS</span> <span class="logo-pu">KANTOR</span></h2>
+            <div class="master-accent-bar"></div>
+            <h2 class="master-title-text"><span class="logo-sim">MANAJEMEN</span> <span class="logo-pu">KAS</span> <span class="logo-sda">KANTOR</span></h2>
         </div>
 
         <!-- SUMMARY -->
         <div class="summary-grid">
-            <div class="summary-card">
-                <span class="sum-lbl">Saldo Saat Ini</span>
-                <span class="sum-val text-toska" id="valSaldo">Rp 0</span>
-            </div>
-            <div class="summary-card">
-                <span class="sum-lbl">Total Pemasukan</span>
-                <span class="sum-val text-blue" id="valIn">Rp 0</span>
-            </div>
-            <div class="summary-card">
-                <span class="sum-lbl">Total Pengeluaran</span>
-                <span class="sum-val text-orange" id="valOut">Rp 0</span>
-            </div>
+            <div class="summary-card"><span class="auth-label">Saldo Saat Ini</span><span class="sum-val text-toska" id="valSaldo">Rp 0</span></div>
+            <div class="summary-card"><span class="auth-label">Total Pemasukan</span><span class="sum-val text-blue" id="valIn">Rp 0</span></div>
+            <div class="summary-card"><span class="auth-label">Total Pengeluaran</span><span class="sum-val text-orange" id="valOut">Rp 0</span></div>
         </div>
 
+        <!-- ACTION BAR -->
         <div class="action-bar">
-            <div style="flex:1;">
-                <input type="text" id="kasSearch" placeholder="Cari keterangan transaksi..." style="margin-bottom:0; width:100%;" oninput="renderKasTable()">
+            <div class="filters-container">
+                <div class="search-box-kas"><input type="text" id="kasSearch" placeholder="Cari uraian..." oninput="renderKasTable()"></div>
+                <select id="filterMonth" class="filter-input" onchange="renderKasTable()">
+                    <option value="ALL">SEMUA BULAN</option>
+                    <option value="01">JANUARI</option><option value="02">FEBRUARI</option><option value="03">MARET</option>
+                    <option value="04">APRIL</option><option value="05">MEI</option><option value="06">JUNI</option>
+                    <option value="07">JULI</option><option value="08">AGUSTUS</option><option value="09">SEPTEMBER</option>
+                    <option value="10">OKTOBER</option><option value="11">NOVEMBER</option><option value="12">DESEMBER</option>
+                </select>
+                <select id="filterYear" class="filter-input" onchange="renderKasTable()">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
+                </select>
             </div>
-            <button class="btn-add-kas" onclick="verifyAdminPassword()"><i data-lucide="plus-circle"></i> TAMBAH DATA</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-kas-action btn-print" onclick="window.print()"><i data-lucide="printer"></i></button>
+                <button class="btn-kas-action" onclick="verifyAdminPassword()">+ TRANSAKSI</button>
+            </div>
         </div>
 
         <!-- TABLE -->
         <div class="table-responsive fade-in">
             <table>
                 <thead>
-                    <tr>
-                        <th width="50">NO</th>
-                        <th>TANGGAL</th>
-                        <th>KETERANGAN</th>
-                        <th>TIPE</th>
-                        <th style="text-align:right;">JUMLAH</th>
-                    </tr>
+                    <tr><th width="50">NO</th><th>TANGGAL</th><th>KETERANGAN / URAIAN</th><th>TIPE</th><th style="text-align:right;">NOMINAL</th></tr>
                 </thead>
                 <tbody id="kasTableBody">
-                    <tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.3; font-weight:800;">MENYINKRONKAN DATA KAS...</td></tr>
+                    <tr><td colspan="5" style="text-align:center; padding:60px; opacity:0.3; font-weight:800;">
+                        <i data-lucide="database-zap" class="spin" size="32" style="margin-bottom:10px;"></i><br>MENYINKRONKAN DATABASE CLOUD...
+                    </td></tr>
                 </tbody>
             </table>
         </div>
     </main>
 
-    <!-- PASSWORD MODAL -->
-    <div id="passwordModal" class="modal-overlay">
-        <div class="glass-modal-card" style="max-width:400px; text-align:center;">
-            <div style="width:70px; height:70px; background:var(--accent-gradient); color:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px;"><i data-lucide="lock" size="32"></i></div>
-            <h3 style="font-weight:900; margin-bottom:10px;">AKSES TERKUNCI</h3>
-            <p style="font-size:0.8rem; opacity:0.6; margin-bottom:25px;">Masukkan password admin untuk mencatat kas.</p>
-            <input type="password" id="adminPassInput" placeholder="••••••••" style="text-align:center; letter-spacing:5px;">
-            <div style="display:flex; gap:10px; margin: 0 1rem;">
-                <button onclick="closeModal('passwordModal')" style="flex:1; padding:15px; border-radius:14px; border:none; background:rgba(255,255,255,0.05); color:white; font-weight:800; cursor:pointer;">BATAL</button>
-                <button onclick="validateAdmin()" style="flex:1; padding:15px; border-radius:14px; border:none; background:var(--accent-gradient); color:white; font-weight:800; cursor:pointer;">LANJUT</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ENTRY MODAL -->
-    <div id="kasModal" class="modal-overlay">
-        <div class="glass-modal-card">
-            <div style="padding: 0 1.5rem 25px 1.5rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); margin-bottom:25px;">
-                <h3 style="font-weight:900; text-transform:uppercase; color:var(--accent);">INPUT TRANSAKSI BARU</h3>
-                <div onclick="closeModal('kasModal')" style="cursor:pointer; opacity:0.5;"><i data-lucide="x-circle" size="32"></i></div>
-            </div>
-            <form id="kasForm">
-                <div><label>Tanggal Transaksi</label><input type="date" id="kasTgl" required></div>
-                <div><label>Jenis Kas</label><select id="kasTipe"><option value="MASUK">PEMASUKAN</option><option value="KELUAR">PENGELUARAN</option></select></div>
-                <div style="grid-column: span 2;"><label>Keterangan / Uraian</label><textarea id="kasKet" placeholder="Tulis detail transaksi..." rows="3" required></textarea></div>
-                <div style="grid-column: span 2;"><label>Jumlah Nominal (Rp)</label><input type="number" id="kasNominal" placeholder="Contoh: 500000" required></div>
-                <button type="button" id="btnSaveKas" onclick="saveKasToCloud()" style="width:calc(100% - 2rem); margin: 10px 1rem 0 1rem; padding:20px; background:var(--accent-gradient); border:none; border-radius:20px; color:white; font-weight:900; cursor:pointer; text-transform:uppercase;">SIMPAN TRANSAKSI</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAV -->
+    <!-- MOBILE NAVIGATION -->
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
@@ -236,57 +235,118 @@
         <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
     </nav>
 
-    <script>
-        window.onload = async () => {
-            lucide.createIcons(); initClock(); initTheme();
-            await fetchKasData();
-        };
+    <!-- MODALS -->
+    <div id="passwordModal" class="modal-overlay">
+        <div class="glass-modal-card" style="max-width:400px; text-align:center;">
+            <div style="width:70px; height:70px; background:var(--accent-gradient); color:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px;"><i data-lucide="lock" size="32"></i></div>
+            <h3 style="font-weight:900; margin-bottom:10px;">AKSES TERKUNCI</h3>
+            <p style="font-size:0.8rem; opacity:0.6; margin-bottom:25px;">Masukkan password admin untuk mencatat kas.</p>
+            <input type="password" id="adminPassInput" placeholder="••••••••" style="text-align:center; letter-spacing:5px;" class="form-input">
+            <div style="display:flex; gap:10px; margin: 0 1rem;">
+                <button onclick="closeModal('passwordModal')" style="flex:1; padding:15px; border-radius:14px; border:none; background:rgba(255,255,255,0.05); color:white; font-weight:800; cursor:pointer;">BATAL</button>
+                <button onclick="validateAdmin()" style="flex:1; padding:15px; border-radius:14px; border:none; background:var(--accent-gradient); color:white; font-weight:800; cursor:pointer;">LANJUT</button>
+            </div>
+        </div>
+    </div>
 
-        async function fetchKasData() {
+    <div id="kasModal" class="modal-overlay">
+        <div class="glass-modal-card">
+            <div style="padding: 0 1.5rem 25px 1.5rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); margin-bottom:25px;">
+                <h3 style="font-weight:900; text-transform:uppercase; color:var(--accent);">INPUT TRANSAKSI BARU</h3>
+                <div onclick="closeModal('kasModal')" style="cursor:pointer; opacity:0.5;"><i data-lucide="x-circle" size="32"></i></div>
+            </div>
+            <form id="kasForm">
+                <label>Tanggal Transaksi</label><input type="date" id="kasTgl" class="form-input" required>
+                <label>Jenis Kas</label><select id="kasTipe" class="form-input"><option value="MASUK">PEMASUKAN</option><option value="KELUAR">PENGELUARAN</option></select>
+                <label>Uraian / Keterangan</label><textarea id="kasKet" placeholder="Tulis detail transaksi..." rows="3" class="form-input" required></textarea>
+                <label>Nominal (Rp)</label><input type="number" id="kasNominal" placeholder="0" class="form-input" required>
+                <button type="button" id="btnSaveKas" onclick="saveKasToCloud()" style="width:calc(100% - 2rem); margin: 10px 1rem 0 1rem; padding:20px; background:var(--accent-gradient); border:none; border-radius:20px; color:white; font-weight:900; cursor:pointer; text-transform:uppercase;">SIMPAN KE CLOUD</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIKA TERPADU -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
+        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
+        window.appData = { config: {}, cash: [], isLoaded: false };
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            initTheme();
+            initClock();
+            
+            // Speed Protocol: Cek memori browser
+            const cached = sessionStorage.getItem('pusda_app_data');
+            if (cached) {
+                try {
+                    window.appData = JSON.parse(cached);
+                    window.appData.isLoaded = true;
+                    applyGlobalUI();
+                    renderKasTable();
+                    fetchDataFromCloud(true); // Update background
+                } catch(e) { await fetchDataFromCloud(); }
+            } else {
+                await fetchDataFromCloud();
+            }
+        });
+
+        async function fetchDataFromCloud(isBackground = false) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
-                const result = await res.json();
+                const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { signal: controller.signal });
+                const result = await response.json();
+                clearTimeout(timeoutId);
+
                 if (result.status === 'success') {
-                    window.appData = result; 
-                    updateLogo();
-                    window.appData.cash = result.cash || [];
+                    window.appData = result;
+                    window.appData.isLoaded = true;
+                    sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
+                    applyGlobalUI();
                     renderKasTable();
                 }
             } catch (e) { 
-                console.error("Sync Failure"); 
-                document.getElementById('kasTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center; padding:50px;">Gagal sinkronisasi data Cloud.</td></tr>';
+                if(!isBackground) handleSyncError("Gagal Sinkronisasi Database.");
             }
-        }
-
-        function updateLogo() {
-            const logo = window.appData.config?.Logo || FALLBACK_LOGO;
-            document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
         }
 
         function renderKasTable() {
             const container = document.getElementById('kasTableBody');
-            const query = document.getElementById('kasSearch').value.toLowerCase();
+            if(!container || !window.appData.isLoaded) return;
+
+            const query = (document.getElementById('kasSearch')?.value || '').toLowerCase();
+            const monthFilter = document.getElementById('filterMonth').value;
+            const yearFilter = document.getElementById('filterYear').value;
             const data = window.appData.cash || [];
             
-            const filtered = data.filter(c => (c.Keterangan || '').toLowerCase().includes(query));
+            const filtered = data.filter(c => {
+                const matchKet = (c.Keterangan || '').toLowerCase().includes(query);
+                const itemDate = new Date(c.Tanggal);
+                const m = String(itemDate.getMonth() + 1).padStart(2, '0');
+                const y = String(itemDate.getFullYear());
+                const matchPeriod = (monthFilter === 'ALL' || m === monthFilter) && (y === yearFilter);
+                return matchKet && matchPeriod;
+            });
             
+            filtered.sort((a,b) => new Date(b.Tanggal) - new Date(a.Tanggal));
+
             let totalIn = 0, totalOut = 0;
             
             if (filtered.length === 0) {
-                container.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Belum ada data transaksi.</td></tr>';
+                container.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:50px; opacity:0.5;">Data tidak ditemukan untuk periode ini.</td></tr>';
             } else {
                 container.innerHTML = filtered.map((c, i) => {
                     const nominal = Number(c.Nominal) || 0;
                     if(c.Tipe === 'MASUK') totalIn += nominal;
                     else totalOut += nominal;
-                    
                     return `
                     <tr class="fade-in">
                         <td style="opacity:0.3; font-weight:800;">${i+1}</td>
                         <td style="white-space:nowrap;">${new Date(c.Tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
                         <td style="word-break:break-word;">${c.Keterangan}</td>
                         <td><span class="type-pill ${c.Tipe === 'MASUK' ? 'in' : 'out'}">${c.Tipe}</span></td>
-                        <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap;">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap; font-weight:800;">Rp ${nominal.toLocaleString('id-ID')}</td>
                     </tr>`;
                 }).join('');
             }
@@ -294,64 +354,62 @@
             document.getElementById('valSaldo').innerText = 'Rp ' + (totalIn - totalOut).toLocaleString('id-ID');
             document.getElementById('valIn').innerText = 'Rp ' + totalIn.toLocaleString('id-ID');
             document.getElementById('valOut').innerText = 'Rp ' + totalOut.toLocaleString('id-ID');
+            
+            const mText = monthFilter === 'ALL' ? 'Semua Bulan' : document.getElementById('filterMonth').options[document.getElementById('filterMonth').selectedIndex].text;
+            document.getElementById('print-period').innerText = `Periode: ${mText} ${yearFilter}`;
             lucide.createIcons();
-        }
-
-        function verifyAdminPassword() {
-            document.getElementById('adminPassInput').value = '';
-            document.getElementById('passwordModal').classList.add('active');
-        }
-
-        function validateAdmin() {
-            const input = document.getElementById('adminPassInput').value;
-            const adminPass = window.appData.config?.AdminPassword || 'admin123';
-            if(input === adminPass) {
-                closeModal('passwordModal');
-                document.getElementById('kasModal').classList.add('active');
-            } else { alert("🔴 Password Otoritas Salah!"); }
         }
 
         async function saveKasToCloud() {
             const btn = document.getElementById('btnSaveKas');
-            const tgl = document.getElementById('kasTgl').value;
-            const ket = document.getElementById('kasKet').value;
-            const nominal = document.getElementById('kasNominal').value;
-            const tipe = document.getElementById('kasTipe').value;
+            const payload = { 
+                action: 'saveKas', 
+                tgl: document.getElementById('kasTgl').value, 
+                ket: document.getElementById('kasKet').value, 
+                nominal: document.getElementById('kasNominal').value, 
+                tipe: document.getElementById('kasTipe').value 
+            };
 
-            if(!tgl || !ket || !nominal) { alert("Lengkapi semua data!"); return; }
+            if(!payload.tgl || !payload.ket || !payload.nominal) return alert("Lengkapi data!");
 
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> MENGIRIM...`;
-            lucide.createIcons();
-
-            const payload = { action: 'saveKas', tgl: tgl, ket: ket, nominal: nominal, tipe: tipe };
-
+            btn.disabled = true; btn.innerHTML = `MENGIRIM...`;
+            
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(payload)
-                });
-                // no-cors doesn't return body, so we assume success if no error
-                alert("✅ Transaksi Berhasil Disimpan ke Cloud!");
-                closeModal('kasModal');
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                sessionStorage.removeItem('pusda_app_data'); // Cache busting
+                alert("Berhasil!");
                 location.reload();
-            } catch (e) { 
-                alert("🔴 Terjadi kesalahan jaringan."); 
-                btn.disabled = false;
-                btn.innerText = "SIMPAN TRANSAKSI";
-                lucide.createIcons();
-            }
+            } catch (e) { alert("Gagal!"); btn.disabled = false; }
+        }
+
+        function verifyAdminPassword() { document.getElementById('passwordModal').classList.add('active'); }
+        function validateAdmin() {
+            const input = document.getElementById('adminPassInput').value;
+            if(input === (window.appData.config?.AdminPassword || 'admin123')) {
+                closeModal('passwordModal');
+                document.getElementById('kasModal').classList.add('active');
+            } else { alert("🔴 Password Salah!"); }
+        }
+
+        function handleSyncError(msg) {
+            document.getElementById('kasTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:50px;"><h3 style="color:var(--danger)">${msg}</h3><button onclick="location.reload()" style="margin-top:10px; padding:10px 20px; border-radius:10px; background:var(--accent); border:none; color:white; font-weight:900; cursor:pointer;">SINKRON ULANG</button></td></tr>`;
+            lucide.createIcons();
+        }
+
+        function applyGlobalUI() {
+            const logo = window.appData.config?.Logo || FALLBACK_LOGO;
+            document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
+            lucide.createIcons();
         }
 
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
-        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeIcons(localStorage.getItem('theme') === 'light'); }
-        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
-        function updateThemeIcons(isLight) {
+        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeUI(localStorage.getItem('theme') === 'light'); }
+        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeUI(isLight); }
+        function updateThemeUI(isLight) {
             const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
