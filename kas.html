@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kas Kantor Master - SIM UPT PUSDA v23.5</title>
+    <title>Kas Kantor Master - SIM UPT PUSDA v23.6</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,8 +14,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Finance Stylesheet v5.4 (Authority Reporting)
-         * Optimized for High-End Desktop UI & Professional A4 Print.
+         * SIM UPT PUSDA - Finance Stylesheet v5.6 (Final Print Integrity)
+         * Optimized for: Professional Print, No Navbar Leak, & Clean Table Alignment.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -88,58 +88,79 @@
 
         /* --- DATA TABLE --- */
         .table-responsive { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 30px; overflow-x: auto; box-shadow: var(--card-shadow); margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; table-layout: fixed; }
         th { padding: 20px; text-align: left; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); border-bottom: 1.5px solid var(--glass-border); }
-        td { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; font-weight: 600; }
-        .type-pill { padding: 5px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
+        td { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; font-weight: 600; word-wrap: break-word; }
+        
+        .col-no { width: 60px; }
+        .col-tgl { width: 150px; }
+        .col-tipe { width: 120px; text-align: center; }
+        .col-nom { width: 180px; text-align: right; }
+
+        .type-pill { padding: 5px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; display: inline-block; }
         .type-pill.in { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .type-pill.out { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        tr.total-row td { background: rgba(255,255,255,0.03); border-top: 2px solid var(--glass-border); font-size: 1rem; color: var(--text-main); }
+        tr.total-row td { background: rgba(255,255,255,0.03); border-top: 2px solid var(--glass-border); font-size: 1rem; color: var(--text-main); font-weight: 900; }
 
         /* --- MODAL --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 5000; display: none; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .glass-modal-card { background: var(--bg-body); border: 1px solid var(--glass-border); width: 100%; max-width: 550px; border-radius: 40px; padding: 35px 0.5rem; color: white; position: relative; animation: modalPop 0.4s ease; }
         
         label { font-size: 0.65rem; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-bottom: 6px; display: block; letter-spacing: 0.5px; margin-left: 1rem; }
         input.form-input, select.form-input, textarea.form-input { width: calc(100% - 2rem); margin: 0 1rem 15px 1rem; padding: 16px 20px; border-radius: 16px; background: rgba(0,0,0,0.3); border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.9rem; }
 
-        /* --- PROFESSIONAL PRINT SYSTEM (A4) --- */
+        /* --- BOTTOM NAV (Standard UI) --- */
+        #master-bottom-nav { display: none; }
+
+        /* --- PROFESSIONAL PRINT SYSTEM (A4 FINAL FIX) --- */
         #print-header, #print-footer { display: none; }
 
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; display: block !important; }
-            .fixed-bg, #master-sidebar, #master-bottom-nav, .theme-toggle-mobile, .action-bar, .summary-grid, .modal-overlay { display: none !important; }
-            #master-main-dashboard { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+            
+            /* HARD HIDE ALL UI ELEMENTS */
+            #master-sidebar, 
+            #master-bottom-nav, 
+            .theme-toggle-mobile, 
+            .action-bar, 
+            .summary-grid, 
+            .modal-overlay, 
+            .fixed-bg, 
+            .btn-kas-action,
+            .master-title-container { display: none !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
+
+            #master-main-dashboard { margin: 0 !important; padding: 20px !important; width: 100% !important; }
             
             /* Official Kop Surat */
-            #print-header { display: block !important; text-align: center; margin-bottom: 30px; position: relative; }
-            .kop-container { display: flex; align-items: center; justify-content: center; gap: 20px; border-bottom: 4px double #000; padding-bottom: 15px; }
-            .kop-logo { height: 85px; }
-            .kop-text h2 { font-size: 1.4rem; font-weight: 900; line-height: 1.2; text-transform: uppercase; }
-            .kop-text p { font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+            #print-header { display: block !important; text-align: center; margin-bottom: 25px; border-bottom: 4px double #000; padding-bottom: 15px; }
+            .kop-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
+            .kop-logo { height: 75px; width: auto; }
+            .kop-text h2 { font-size: 1.25rem; font-weight: 900; line-height: 1.2; text-transform: uppercase; margin: 0; }
+            .kop-text p { font-size: 0.8rem; font-weight: 600; margin: 2px 0 0 0; }
             
-            .report-title { text-align: center; margin: 25px 0; }
-            .report-title h3 { text-decoration: underline; font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
+            .report-title { text-align: center; margin: 20px 0; }
+            .report-title h3 { text-decoration: underline; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; }
             
-            /* Table Print */
-            .table-responsive { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; }
-            table { min-width: 100% !important; border-collapse: collapse !important; border: 1.5px solid #000 !important; }
-            th { border: 1.5px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.75rem; background: #eee !important; -webkit-print-color-adjust: exact; }
-            td { border: 1px solid #000 !important; padding: 10px !important; color: black !important; font-size: 0.85rem; font-weight: 500 !important; }
-            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 900; border: none; }
-            tr.total-row td { background: #f9f9f9 !important; font-weight: 900 !important; -webkit-print-color-adjust: exact; }
+            /* Table Print Optimization */
+            .table-responsive { background: none !important; border: none !important; box-shadow: none !important; overflow: visible !important; margin-top: 10px !important; }
+            table { min-width: 100% !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
+            th { border: 1.5px solid #000 !important; padding: 8px !important; color: black !important; font-size: 0.7rem; background: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
+            td { border: 1px solid #000 !important; padding: 8px 10px !important; color: black !important; font-size: 0.8rem; font-weight: 600 !important; line-height: 1.2; }
+            
+            /* Fix Nominal Column (Lingkaran Hijau) */
+            td { white-space: nowrap !important; }
+            td:nth-child(3) { white-space: normal !important; } /* Keterangan boleh wrap */
+            
+            .type-pill { background: none !important; color: black !important; padding: 0 !important; font-weight: 900; border: none; font-size: 0.75rem; }
+            tr.total-row td { background: #f5f5f5 !important; font-weight: 900 !important; -webkit-print-color-adjust: exact; border-top: 2px solid #000 !important; }
 
             /* Signatures */
-            #print-footer { display: block !important; margin-top: 40px; width: 100%; }
-            .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center; }
-            .sig-box { display: flex; flex-direction: column; height: 140px; justify-content: space-between; }
-            .sig-name { font-weight: 900; text-decoration: underline; text-transform: uppercase; }
+            #print-footer { display: block !important; margin-top: 50px; width: 100%; page-break-inside: avoid; }
+            .signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; }
+            .sig-box { display: flex; flex-direction: column; height: 130px; justify-content: space-between; }
+            .sig-name { font-weight: 900; text-decoration: underline; text-transform: uppercase; margin-top: auto; }
         }
-
-        /* --- UI PROTECTION (DESKTOP HIDDEN BY DEFAULT) --- */
-        #master-bottom-nav { display: none !important; }
-        .theme-toggle-mobile { display: none !important; }
 
         /* --- MOBILE --- */
         @media (max-width: 1024px) {
@@ -153,6 +174,9 @@
             .summary-grid { grid-template-columns: 1fr; }
             .filters-container { flex-direction: column; }
             .action-bar { flex-direction: column; align-items: stretch; }
+            
+            table { min-width: 700px; }
+            .col-nom { width: 150px; }
         }
 
         .spin { animation: spin 1s linear infinite; }
@@ -189,19 +213,19 @@
     </aside>
 
     <main id="master-main-dashboard">
-        <!-- PROFESSIONAL HEADER FOR PRINT -->
+        <!-- PROFESSIONAL HEADER FOR PRINT (A4 READY) -->
         <div id="print-header">
             <div class="kop-container">
                 <img src="" class="main-logo-src kop-logo" onerror="this.src='https://placehold.co/80x80?text=Logo'">
                 <div class="kop-text">
                     <h2>Dinas Pekerjaan Umum Sumber Daya Air</h2>
                     <p>UPT Pengelolaan Sumber Daya Air Bondoyudo Baru</p>
-                    <p style="font-size: 0.65rem; opacity: 0.8;">Jalan Raya Lumajang-Jember, Indonesia | Email: pusda.wsbb@jatimprov.go.id</p>
+                    <p style="font-size: 0.65rem; opacity: 0.8; font-weight: 400; text-transform: none;">Jalan Raya Lumajang-Jember, Indonesia | Email: pusda.wsbb@jatimprov.go.id</p>
                 </div>
             </div>
             <div class="report-title">
                 <h3>Laporan Rekapitulasi Kas Kantor</h3>
-                <p id="print-period" style="font-size: 0.85rem; font-weight: 800; margin-top: 5px;">Periode: -</p>
+                <p id="print-period" style="font-size: 0.85rem; font-weight: 800; margin-top: 5px;">Periode: Semua Data</p>
             </div>
         </div>
 
@@ -244,7 +268,13 @@
         <div class="table-responsive fade-in">
             <table>
                 <thead>
-                    <tr><th width="50">NO</th><th>TANGGAL</th><th>KETERANGAN / URAIAN</th><th width="120">TIPE</th><th style="text-align:right;">NOMINAL</th></tr>
+                    <tr>
+                        <th class="col-no" style="text-align:center;">NO</th>
+                        <th class="col-tgl">TANGGAL</th>
+                        <th>KETERANGAN / URAIAN</th>
+                        <th class="col-tipe">TIPE</th>
+                        <th class="col-nom">NOMINAL</th>
+                    </tr>
                 </thead>
                 <tbody id="kasTableBody">
                     <tr><td colspan="5" style="text-align:center; padding:60px; opacity:0.3; font-weight:800;">
@@ -261,14 +291,12 @@
                 <div class="sig-box">
                     <span>Mengetahui,</span>
                     <span>Kepala UPT PSDA Bondoyudo Baru</span>
-                    <br><br><br>
                     <span class="sig-name">( __________________________ )</span>
                     <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
                 </div>
                 <div class="sig-box">
                     <span>Bendahara,</span>
                     <span>UPT PSDA Bondoyudo Baru</span>
-                    <br><br><br>
                     <span class="sig-name">( __________________________ )</span>
                     <span style="font-size: 0.7rem; margin-top: 2px;">NIP. ........................................</span>
                 </div>
@@ -348,12 +376,10 @@
         async function fetchDataFromCloud(isBackground = false) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 12000);
-
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { signal: controller.signal });
                 const result = await response.json();
                 clearTimeout(timeoutId);
-
                 if (result.status === 'success') {
                     window.appData = result;
                     window.appData.isLoaded = true;
@@ -361,9 +387,7 @@
                     applyGlobalUI();
                     renderKasTable();
                 }
-            } catch (e) { 
-                if(!isBackground) handleSyncError("Gagal Sinkronisasi Database.");
-            }
+            } catch (e) { if(!isBackground) handleSyncError("Gagal Sinkronisasi Database."); }
         }
 
         function renderKasTable() {
@@ -402,17 +426,16 @@
                         <td style="white-space:nowrap;">${new Date(c.Tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
                         <td style="word-break:break-word;">${c.Keterangan}</td>
                         <td style="text-align:center;"><span class="type-pill ${c.Tipe === 'MASUK' ? 'in' : 'out'}">${c.Tipe}</span></td>
-                        <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap; font-weight:800;">Rp ${nominal.toLocaleString('id-ID')}</td>
+                        <td style="text-align:right; color:${c.Tipe === 'MASUK' ? 'var(--success)' : 'var(--danger)'}; white-space:nowrap; font-weight:900;">Rp ${nominal.toLocaleString('id-ID')}</td>
                     </tr>`;
                 }).join('');
 
-                // Add TOTAL Row for professionalism
                 html += `
                 <tr class="total-row">
-                    <td colspan="3" style="text-align:right; font-weight:900;">REKAPITULASI TOTAL:</td>
-                    <td style="text-align:center; font-size: 0.65rem;">
-                        <div style="color:var(--success)">IN: Rp ${totalIn.toLocaleString('id-ID')}</div>
-                        <div style="color:var(--danger)">OUT: Rp ${totalOut.toLocaleString('id-ID')}</div>
+                    <td colspan="3" style="text-align:right; font-weight:900; padding-right:20px;">REKAPITULASI TOTAL:</td>
+                    <td style="text-align:center; font-size: 0.65rem; padding: 5px;">
+                        <div style="color:var(--success); font-weight:900;">IN: ${totalIn.toLocaleString('id-ID')}</div>
+                        <div style="color:var(--danger); font-weight:900;">OUT: ${totalOut.toLocaleString('id-ID')}</div>
                     </td>
                     <td style="text-align:right; font-weight:900; color:var(--toska);">
                         Rp ${(totalIn - totalOut).toLocaleString('id-ID')}
@@ -421,35 +444,24 @@
             }
 
             container.innerHTML = html;
-
             document.getElementById('valSaldo').innerText = 'Rp ' + (totalIn - totalOut).toLocaleString('id-ID');
             document.getElementById('valIn').innerText = 'Rp ' + totalIn.toLocaleString('id-ID');
             document.getElementById('valOut').innerText = 'Rp ' + totalOut.toLocaleString('id-ID');
             
             const monthLabel = monthFilter === 'ALL' ? 'Semua Bulan' : document.getElementById('filterMonth').options[document.getElementById('filterMonth').selectedIndex].text;
             document.getElementById('print-period').innerText = `Periode: ${monthLabel} ${yearFilter}`;
-            
             lucide.createIcons();
         }
 
         async function saveKasToCloud() {
             const btn = document.getElementById('btnSaveKas');
-            const payload = { 
-                action: 'saveKas', 
-                tgl: document.getElementById('kasTgl').value, 
-                ket: document.getElementById('kasKet').value, 
-                nominal: document.getElementById('kasNominal').value, 
-                tipe: document.getElementById('kasTipe').value 
-            };
-
+            const payload = { action: 'saveKas', tgl: document.getElementById('kasTgl').value, ket: document.getElementById('kasKet').value, nominal: document.getElementById('kasNominal').value, tipe: document.getElementById('kasTipe').value };
             if(!payload.tgl || !payload.ket || !payload.nominal) return alert("Lengkapi data!");
             btn.disabled = true; btn.innerHTML = `MENGIRIM...`;
-            
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 sessionStorage.removeItem('pusda_app_data');
-                alert("Berhasil!");
-                location.reload();
+                alert("Berhasil!"); location.reload();
             } catch (e) { alert("Gagal!"); btn.disabled = false; btn.innerText = "SIMPAN KE CLOUD"; }
         }
 
@@ -457,8 +469,7 @@
         function validateAdmin() {
             const input = document.getElementById('adminPassInput').value;
             if(input === (window.appData.config?.AdminPassword || 'admin123')) {
-                closeModal('passwordModal');
-                document.getElementById('kasModal').classList.add('active');
+                closeModal('passwordModal'); document.getElementById('kasModal').classList.add('active');
             } else { alert("🔴 Password Salah!"); }
         }
 
@@ -479,8 +490,8 @@
         function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeUI(isLight); }
         function updateThemeUI(isLight) {
             const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
