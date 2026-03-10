@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Wilayah Kerja Master - SIM UPT PUSDA v21.9</title>
+    <title>Wilayah Kerja Master - SIM UPT PUSDA v23.0</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,18 +16,15 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
-        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
-        window.appData = window.appData || { korlap: [], pegawai: [], presensi: [], config: {}, isLoaded: false };
-    </script>
-    
     <style>
-        /* --- MASTER THEME v21.9 --- */
+        /**
+         * SIM UPT PUSDA - Wilayah Stylesheet v5.3 (Single-File Authority)
+         * Optimized for Mapping & Fast Loading.
+         */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
-            --success: #10b981; --danger: #ef4444; --toska: #06b6d4;
+            --success: #10b981; --toska: #06b6d4; --danger: #ef4444;
             --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
@@ -36,19 +33,19 @@
         }
 
         body.light-theme {
-            --bg-body: #f1f5f9; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f1f5f9 70%);
-            --text-main: #1e293b; --text-muted: #64748b;
-            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.08);
-            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.1);
+            --bg-body: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f8fafc 70%);
+            --text-main: #1e293b; --text-muted: #475569;
+            --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
-        /* --- SIDEBAR MASTER --- */
+        /* --- SIDEBAR --- */
         #master-sidebar { width: var(--sidebar-width); height: calc(100vh - 40px); position: fixed; top: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px; display: flex; flex-direction: column; z-index: 1000; box-shadow: var(--card-shadow); }
-        body.light-theme #master-sidebar { background: rgba(255,255,255,0.9); }
+        body.light-theme #master-sidebar { background: rgba(255,255,255,0.95); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
         .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -58,24 +55,17 @@
         .nav-link { padding: 15px 18px; border-radius: 16px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-weight: 600; cursor: pointer; }
         .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3); }
 
-        /* SIDEBAR FOOTER & THEME FIX */
         .sidebar-footer { margin-top: auto; padding: 5px; }
         .authority-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px 15px; text-align: center; }
-        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        .auth-label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 1px; display: block; margin-bottom: 10px; text-transform: uppercase; color: var(--text-main); }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; }
-        
-        .theme-btn-sidebar { 
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); 
-            border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); 
-            font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; 
-            justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; 
-        }
-        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
 
         /* --- MAIN CONTENT --- */
-        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 150px 2.5rem; min-height: 100vh; position: relative; }
+        #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; }
         .master-title-container { display: flex; align-items: center; gap: 18px; margin-bottom: 35px; }
-        .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+        .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
         .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; }
         .master-title-text span { font-weight: 900; text-transform: uppercase; }
 
@@ -96,11 +86,11 @@
         .inline-stat-lbl { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; font-weight: 800; }
 
         /* --- MAP SECTION --- */
-        .map-section { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 32px; overflow: hidden; margin-top: 40px; box-shadow: var(--card-shadow); }
+        .map-section { background: var(--glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 32px; overflow: hidden; margin-top: 40px; box-shadow: var(--card-shadow); position: relative; }
         #map { width: 100%; height: 500px; z-index: 1; filter: contrast(1.1) brightness(0.9); }
         .main-office-icon { filter: invert(58%) sepia(96%) saturate(2500%) hue-rotate(345deg) brightness(98%) contrast(97%) drop-shadow(0 0 8px rgba(249, 115, 22, 0.6)); }
 
-        /* --- MOBILE PROTECTION (FIXED BUGS) --- */
+        /* --- MOBILE PROTECTION --- */
         .theme-toggle-mobile { display: none !important; }
         #master-bottom-nav { display: none !important; }
 
@@ -119,6 +109,7 @@
                 border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; 
                 cursor: pointer; color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
             }
+            body.light-theme #master-bottom-nav { background: white; }
             body.light-theme .theme-toggle-mobile { background: white; color: var(--primary); }
 
             #map { height: 380px; }
@@ -127,6 +118,11 @@
             .b-nav-item.active { color: var(--accent); }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); color: white; }
         }
+
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -141,7 +137,6 @@
             <div><h1><span class="logo-sim">SIM</span> <span class="logo-pu">PU</span><span class="logo-sda">SDA</span></h1><p style="font-size:0.6rem; color:var(--accent); font-weight:800;">Bondoyudo Baru</p></div>
         </div>
         <nav class="nav-items">
-            <!-- STANDARDIZED ORDER -->
             <a href="index.html" class="nav-link"><i data-lucide="layout-grid"></i> Dashboard</a>
             <a href="raport.html" class="nav-link"><i data-lucide="file-bar-chart"></i> E-Raport</a>
             <a href="presensi.html" class="nav-link"><i data-lucide="fingerprint"></i> E-Presensi</a>
@@ -194,7 +189,7 @@
             </div>
         </div>
 
-        <div class="premium-title-container" style="margin-top: 70px;">
+        <div class="master-title-container" style="margin-top: 70px;">
             <div style="width: 6px; height: 28px; background: var(--primary-light); border-radius: 3px;"></div>
             <span style="font-size: 1.4rem; font-weight: 900;">PEMETAAN ASET & KEJURON</span>
         </div>
@@ -220,30 +215,65 @@
     </nav>
 
     <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF7MP60nTfLmnA7_GhUedzAl58I51kfJmk_xePBhgVxVHaLtce51aBfCuSskPP67ym/exec";
+        const FALLBACK_LOGO = "https://lh3.googleusercontent.com/d/1VYrfN1EG20Enf74vSyw1dGdskFujX8_r";
+        window.appData = { config: {}, pegawai: [], korlap: [], presensi: [], isLoaded: false };
         let map;
 
         window.onload = async () => {
-            lucide.createIcons(); initClock(); initTheme(); initMap();
-            await fetchDashboardData();
+            initTheme();
+            initClock();
+            initMap();
+            
+            // Protokol Speed Protocol: Gunakan Cache Sesi jika ada
+            const cached = sessionStorage.getItem('pusda_app_data');
+            if (cached) {
+                try {
+                    window.appData = JSON.parse(cached);
+                    window.appData.isLoaded = true;
+                    applyGlobalUI();
+                    renderWilayahStats();
+                    renderKorlapCards();
+                    console.log("⚡ Wilayah: Data dimuat instan dari cache lokal.");
+                    fetchDataFromCloud(true); // Update background
+                } catch(e) { await fetchDataFromCloud(); }
+            } else {
+                await fetchDataFromCloud();
+            }
         };
 
-        async function fetchDashboardData() {
+        async function fetchDataFromCloud(isBackground = false) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
-                const result = await res.json();
+                const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`, { signal: controller.signal });
+                const result = await response.json();
+                clearTimeout(timeoutId);
+
                 if (result.status === 'success') {
-                    window.appData = result; window.appData.isLoaded = true;
-                    renderWilayahStats(); renderKorlapCards(); updateLogos();
+                    window.appData = result;
+                    window.appData.isLoaded = true;
+                    sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
+                    applyGlobalUI();
+                    renderWilayahStats();
+                    renderKorlapCards();
                 }
-            } catch (e) {
-                const container = document.getElementById('korlapContainer');
-                if(container) container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger); font-weight: 800;">SINKRONISASI GAGAL.</div>`;
+            } catch (e) { 
+                if(!isBackground) handleSyncError("Gagal Sinkronisasi Database.");
             }
         }
 
-        function updateLogos() {
-            const finalLogo = window.appData.config?.Logo || FALLBACK_LOGO;
-            document.querySelectorAll('.main-logo-src').forEach(el => el.src = finalLogo);
+        function handleSyncError(msg) {
+            const container = document.getElementById('korlapContainer');
+            if(container) container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger); font-weight: 800;">${msg} <br><button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; border-radius:10px; background:var(--accent); border:none; color:white; font-weight:900; cursor:pointer;">SINKRON ULANG</button></div>`;
+            lucide.createIcons();
+        }
+
+        function applyGlobalUI() {
+            const logo = window.appData.config?.Logo || FALLBACK_LOGO;
+            document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
+            lucide.createIcons();
         }
 
         function renderWilayahStats() {
@@ -251,6 +281,7 @@
             const today = new Date().toLocaleDateString('sv-SE');
             const hadirToday = (window.appData.presensi || []).filter(p => p.Timestamp?.split(' ')[0] === today).length;
             const sektorUnik = [...new Set((window.appData.korlap || []).map(k => k.Wilayah?.toUpperCase()))].length;
+            
             document.getElementById('statTotalPeg').innerText = totalPeg;
             document.getElementById('statHadir').innerText = hadirToday;
             document.getElementById('statWilayah').innerText = sektorUnik || 0;
@@ -263,6 +294,11 @@
             const pegawais = window.appData.pegawai || [];
             const today = new Date().toLocaleDateString('sv-SE');
             
+            if(korlaps.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; opacity:0.5; font-weight: 800;">TIDAK ADA DATA KORLAP.</div>`;
+                return;
+            }
+
             container.innerHTML = korlaps.map(k => {
                 const wilKey = k.Wilayah?.toString().trim().toUpperCase() || '';
                 const totalInArea = pegawais.filter(p => p.Wilayah?.toString().trim().toUpperCase() === wilKey).length;
@@ -282,7 +318,9 @@
                     <div style="width:100%; text-align:left; background:rgba(0,0,0,0.15); padding:18px; border-radius:24px; border:1px solid var(--glass-border);">
                         <div style="display:flex; gap:12px; margin-bottom:10px; font-size:0.75rem;"><i data-lucide="map-pin" size="14" style="color:var(--accent); flex-shrink:0;"></i><span style="font-weight:700; opacity:0.8;">${k.Lokasi_Kerja || '-'}</span></div>
                         <div style="display:flex; gap:12px; margin-bottom:18px; font-size:0.75rem;"><i data-lucide="phone" size="14" style="color:var(--primary-light); flex-shrink:0;"></i><span>${k.NoHP || '-'}</span></div>
-                        <button class="theme-btn-sidebar" style="margin-top:0; font-size:0.6rem; border-color:var(--accent); color:var(--accent); height:35px; border-radius:10px;" onclick="focusMap('${k.Wilayah}')"><i data-lucide="navigation-2" size="12"></i> FOKUS AREA</button>
+                        <button style="width:100%; height:42px; background:rgba(249,115,22,0.1); border:1.5px solid var(--accent); border-radius:12px; color:var(--accent); font-weight:900; font-size:0.65rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; text-transform:uppercase; transition:0.3s;" onclick="focusMap('${k.Wilayah}')">
+                            <i data-lucide="navigation-2" size="14"></i> FOKUS AREA
+                        </button>
                     </div>
                 </div>`;
             }).join('');
@@ -291,31 +329,60 @@
 
         function initMap() {
             if(map) map.remove();
-            map = L.map('map').setView([-8.25, 113.8], 9);
+            map = L.map('map', { zoomControl: false }).setView([-8.25, 113.8], 9);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            const mainIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/8030/8030335.png', className: 'main-office-icon', iconSize: [40, 40], iconAnchor: [22, 45] });
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            
+            const mainIcon = L.icon({ 
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/8030/8030335.png', 
+                className: 'main-office-icon', 
+                iconSize: [40, 40], 
+                iconAnchor: [20, 40] 
+            });
+            
             L.marker([-8.43372, 114.22131], {icon: mainIcon}).addTo(map).bindPopup('<b>Kantor UPT PSDA</b><br>Satker Banyuwangi');
             L.marker([-8.13553, 113.22595], {icon: mainIcon}).addTo(map).bindPopup('<b>Kantor UPT PSDA</b><br>Lumajang').openPopup();
         }
 
         function focusMap(wilayah) {
-            const coords = { 'Bangorejo': [-8.46177, 114.16771], 'Cluring': [-8.4369, 114.2279], 'Pesanggaran': [-8.5616, 114.1006], 'Porolinggo': [-8.31357, 114.05213] };
+            const coords = { 
+                'Bangorejo': [-8.46177, 114.16771], 
+                'Cluring': [-8.4369, 114.2279], 
+                'Pesanggaran': [-8.5616, 114.1006], 
+                'Porolinggo': [-8.31357, 114.05213] 
+            };
             const target = coords[wilayah];
             if (target) {
-                map.flyTo(target, 13, { duration: 2.5 });
-                L.circle(target, { radius: 2000, color: '#f97316', fillOpacity: 0.1, weight: 2.5 }).addTo(map);
+                map.flyTo(target, 13, { duration: 2 });
+                L.circle(target, { radius: 2500, color: '#f97316', fillOpacity: 0.1, weight: 2 }).addTo(map);
                 L.marker(target).addTo(map).bindPopup(`<b>Pusat Sektor ${wilayah}</b>`).openPopup();
                 if (window.innerWidth < 1024) document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
-        function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
-        function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeIcons(localStorage.getItem('theme') === 'light'); }
-        function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeIcons(isLight); }
-        function updateThemeIcons(isLight) {
+        function initClock() { 
+            setInterval(() => { 
+                const el = document.getElementById('clockSidebar'); 
+                if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); 
+            }, 1000); 
+        }
+
+        function initTheme() { 
+            const isLight = localStorage.getItem('theme') === 'light';
+            if (isLight) document.body.classList.add('light-theme'); 
+            updateThemeUI(isLight);
+        }
+
+        function toggleTheme() { 
+            const isLight = document.body.classList.toggle('light-theme'); 
+            localStorage.setItem('theme', isLight ? 'light' : 'dark'); 
+            updateThemeUI(isLight);
+        }
+
+        function updateThemeUI(isLight) {
             const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (mI) mI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-            if (sI) sI.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+            if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
             lucide.createIcons();
         }
