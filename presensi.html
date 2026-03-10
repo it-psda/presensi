@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Presensi Master - SIM UPT PUSDA v26.28</title>
+    <title>E-Presensi Master - SIM UPT PUSDA v26.29</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -53,8 +53,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Presensi Stylesheet v8.28 (Wide View)
-         * Solusi: 0.5rem Horizontal Spacing, Photo over Input, & 40:60 Modal Ratio.
+         * SIM UPT PUSDA - Presensi Stylesheet v8.29 (Wide View Optimization)
+         * Solusi: 0.5rem Horizontal Spacing, No-Crop Modal Profile, & Z-Index Layering.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -103,13 +103,13 @@
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
         .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; font-weight: 900; text-transform: uppercase; }
 
-        /* --- FORM CARD --- */
+        /* --- PRESENSI CARD (FIXED PADDING) --- */
         .presensi-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 40px; max-width: 650px; margin: 0 auto; box-shadow: var(--card-shadow); position: relative; }
 
         .gps-status { background: rgba(0, 0, 0, 0.2); min-height: 55px; color: var(--text-muted); padding: 12px 20px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 12px; margin-bottom: 25px; border: 1.5px solid var(--glass-border); }
         .gps-status.locked { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); }
 
-        /* Search System */
+        /* Smart Search */
         .search-container { position: relative; width: 100%; margin-bottom: 25px; z-index: 50; }
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         input, select, textarea { width: 100%; padding: 16px 60px 16px 20px; border-radius: 18px; background: rgba(0,0,0,0.3) !important; border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.95rem; }
@@ -171,16 +171,16 @@
         .btn-submit { width: 100%; padding: 22px; border-radius: 24px; border: none; background: var(--accent-gradient); color: white; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 15px; }
         .btn-submit:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
 
-        /* --- MODAL RAPORT (PRECISION 40:60) --- */
+        /* --- MODAL RAPORT (PRECISION 40:60 & WIDE VIEW) --- */
         .raport-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .raport-modal.show { display: flex; }
         .raport-content { background: #fff; width: 100%; max-width: 520px; height: 88vh; border-radius: 45px; color: #1e293b; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); display: flex; flex-direction: column; animation: modalPop 0.4s ease; position: relative; }
         
-        /* CALIBRATED HEADER: Vertical Safe-Zone (80px padding top) */
+        /* Fixed Header Modal */
         .raport-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 80px 35px 30px 35px; color: white; flex-shrink: 0; position: relative; border-radius: 45px 45px 0 0; }
         .raport-profile-integrated { display: flex; align-items: center; gap: 20px; text-align: left; overflow: visible; position: relative; width: 100%; }
         
-        /* Left Column (40%) - Small 2:3 Frame */
+        /* Left Column (40%) */
         .r-avatar-stage { flex: 0 0 40%; max-width: 40%; position: relative; height: 105px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; z-index: 100; }
         .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
         .r-avatar-img { 
@@ -196,30 +196,49 @@
         .r-info-stage p { font-size: 0.65rem; opacity: 0.75; font-weight: 700; color: white; margin-bottom: 8px; text-transform: uppercase; }
         .raport-score-pill { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 900; font-size: 0.8rem; width: fit-content; border: 1px solid rgba(255,255,255,0.2); }
 
+        /* Scroll Area Modal */
         .raport-scroll-area { flex: 1; overflow-y: auto; background: #fff; padding-bottom: 20px; -webkit-overflow-scrolling: touch; position: relative; z-index: 5; }
+        
+        /* Grid Heatmap Fix */
+        .heatmap-container { padding: 25px 30px; background: #fcfdfe; border-bottom: 1px solid #f1f5f9; }
         .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 15px; }
         .heat-box { aspect-ratio: 1; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; border: 1px solid #e2e8f0; cursor: pointer; }
         .heat-box.full { background: var(--success); color: white; border: none; }
         .heat-box.partial { background: var(--warning); color: white; border: none; }
         .heat-box.none { background: var(--danger); color: white; border: none; }
 
+        /* History Card Item */
+        .history-card { padding: 20px 30px; border-bottom: 1px solid #f8fafc; }
+
+        /* Footer Modal */
         .raport-footer-btns { padding: 20px 30px 40px; display: flex; gap: 15px; background: white; border-top: 1px solid #f1f5f9; flex-shrink: 0; border-radius: 0 0 45px 45px; }
         .btn-modal-footer { flex: 1; padding: 18px; border-radius: 20px; font-weight: 800; border: none; cursor: pointer; text-align: center; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; }
         .btn-modal-footer.tutup { background: #64748b; color: white; }
         .btn-modal-footer.refresh { background: var(--accent-gradient); color: white; }
 
+        /* --- RESPONSIVITAS MOBILE (0.5rem SPACING) --- */
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; width: 100%; }
+            
+            /* Form Card Mobile Wide */
+            .presensi-card { padding: 30px 0.5rem; border-radius: 35px; width: 100%; }
+            
+            /* Modal Raport Mobile Wide */
+            .raport-modal { padding: 20px 0.5rem; }
+            .raport-content { height: 92vh; width: calc(100% - 1rem); margin: 0 0.5rem; border-radius: 40px; }
+            .raport-header { padding: 75px 0.5rem 30px 0.5rem; }
+            .raport-profile-integrated { padding: 0 0.5rem; }
+            .heatmap-container { padding: 25px 0.5rem; }
+            .history-card { padding: 20px 0.5rem; }
+            .raport-footer-btns { padding: 15px 0.5rem 35px 0.5rem; }
+
             .theme-toggle-mobile { display: flex !important; position: fixed; top: 20px; right: 20px; width: 52px; height: 52px; background: rgba(15, 23, 42, 0.85); border-radius: 16px; z-index: 1001; align-items: center; justify-content: center; cursor: pointer; color: white; border: 1px solid var(--glass-border); }
             #master-bottom-nav { display: flex !important; position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(15, 23, 42, 0.95); border-radius: 22px; justify-content: space-around; align-items: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
             body.light-theme #master-bottom-nav { background: white; }
             .presensi-fab { background: var(--accent-gradient); width: 55px; height: 55px; border-radius: 18px; margin-top: -40px; border: 5px solid var(--bg-body); display: flex; align-items: center; justify-content: center; color: white; }
             .b-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-muted); text-decoration: none; font-size: 0.6rem; font-weight: 800; gap: 5px; }
             .b-nav-item.active { color: var(--accent); }
-            .raport-content { height: 92vh; width: calc(100% - 1rem); margin: 0 0.5rem; }
-            .raport-modal { padding: 20px 0.5rem; }
-            .raport-header { padding-top: 70px; }
         }
 
         @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -365,7 +384,7 @@
             </div>
             
             <div class="raport-scroll-area">
-                <div class="heatmap-container" style="padding:25px 30px; border-bottom:1px solid #f1f5f9; background:#fcfdfe;">
+                <div class="heatmap-container" style="background:#fcfdfe; border-bottom:1px solid #f1f5f9;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div id="heatmapTitle" style="font-size: 0.75rem; font-weight: 900; color: var(--primary); text-transform: uppercase;">MARET 2026</div>
                         <div style="display:flex; gap:10px;">
@@ -375,7 +394,7 @@
                     </div>
                     <div class="heatmap-grid" id="heatmapGrid"></div>
                 </div>
-                <div style="padding: 25px 35px 5px; background:#fff;">
+                <div style="padding: 25px 0.5rem 5px; background:#fff;">
                     <label style="font-size: 0.65rem; font-weight: 900; opacity: 0.5; color:#1e293b;">DETAIL RIWAYAT TANGGAL:</label>
                     <input type="date" id="raportDateFilter" style="margin-top: 5px; border: 1.5px solid #e2e8f0 !important; color:#000 !important;" onchange="updateHistoryByDate()">
                 </div>
@@ -502,12 +521,12 @@
             box.style.display = 'flex'; box.classList.add('show');
             const now = new Date(); const tm = now.getHours() * 60 + now.getMinutes();
             let txt = ""; let iconName = "info"; let type = "info";
-            if (status === 'Hadir') { if (tm <= 460) { txt = "☀️ <b>SELAMAT PAGI!</b> Kehadiran tepat waktu tercatat. Skor: <b>50 PTS</b>."; iconName = "sun"; type = "success"; } else { txt = "⚠️ <b>TERLAMBAT TERDETEKSI.</b> Jam operasional telah dimulai. Presensi diterima."; iconName = "alert-triangle"; type = "danger"; } }
+            if (status === 'Hadir') { if (tm <= 460) { txt = "☀️ <b>SELAMAT PAGI!</b> Kehadiran tepat waktu tercatat. Skor: <b>50 PTS</b>."; iconName = "sun"; type = "success"; } else { txt = "⚠️ <b>TERLAMBAT TERDETEKSI.</b> Jam operasional telah dimulai. Skor dikurangi."; iconName = "alert-triangle"; type = "danger"; } }
             else if (status === 'Pulang') { txt = "🏡 <b>TUGAS SELESAI.</b> Terima kasih hari ini. Selamat beristirahat. Skor: <b>50 PTS</b>."; iconName = "home"; type = "success"; }
             else if (status === 'Sakit') { txt = "🏥 <b>STATUS SAKIT.</b> Kondisi tercatat. Mohon lampirkan Surat Dokter via Admin. Lekas pulih!"; iconName = "thermometer"; type = "info"; }
             else if (status === 'Izin') { txt = "📝 <b>STATUS IZIN.</b> Permohonan izin diterima. Harap tetap berkoordinasi dengan Korlap."; iconName = "clipboard-list"; type = "warning"; }
             else if (status === 'Dinas') { txt = "💼 <b>TUGAS KEDINASAN.</b> Anda dalam penugasan luar. Tetap utamakan keselamatan kerja."; iconName = "briefcase"; type = "info"; }
-            else if (status === 'Margin Error') { txt = "📍 <b>ANOMALI POSISI.</b> Lokasi di luar radius kerja. Gunakan jika teknis bermasalah. Lapor Korlap!"; iconName = "map-pin"; type = "pink"; }
+            else if (status === 'Margin Error') { txt = "📍 <b>ANOMALI POSISI.</b> Lokasi di luar radius kerja. Lapor Korlap segera!"; iconName = "map-pin"; type = "pink"; }
             box.className = "status-alert-box show " + type; msg.innerHTML = `<div>${txt}</div>`; icon.innerHTML = `<i data-lucide="${iconName}" size="24"></i>`; lucide.createIcons();
         }
 
@@ -566,7 +585,7 @@
             const dateStr = document.getElementById('raportDateFilter').value;
             const logs = (window.appData.presensi || []).filter(p => String(p.ID_Pegawai) === String(userData.ID) && p.Timestamp && p.Timestamp.includes(dateStr));
             const historyHtml = logs.length > 0 ? logs.map(log => `
-                <div class="history-card" style="padding:20px 30px; border-bottom:1px solid #f8fafc;">
+                <div class="history-card" style="border-bottom:1px solid #f8fafc;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                         <h4 style="font-weight:900; font-size:0.9rem; text-transform:uppercase;">${log.Status}</h4>
                         <span style="color:var(--accent); font-weight:900; font-size:0.8rem;">+${log.Nilai || 0} PTS</span>
