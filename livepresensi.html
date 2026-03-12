@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Preview Master - SIM UPT PUSDA v26.39</title>
+    <title>Live Preview Master - SIM UPT PUSDA v26.40</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,23 +12,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Firebase SDK Integration (Modular & High Speed) -->
+    <!-- Firebase SDK Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // FIX: Safe check for __firebase_config to prevent ReferenceError
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "", 
-            authDomain: "sim-pusda-master.firebaseapp.com",
-            projectId: "sim-pusda-master",
-            storageBucket: "sim-pusda-master.firebasestorage.app",
-            messagingSenderId: "606502874855",
-            appId: "1:606502874855:web:1b53b4f69f21049e7cbc42",
-            measurementId: "G-0BPH99F48P"
+        // Protocol Rule: Access environment config safely
+        const getFirebaseConfig = () => {
+            try {
+                if (typeof __firebase_config !== 'undefined') {
+                    return JSON.parse(__firebase_config);
+                }
+            } catch (e) {
+                console.error("Config parse error");
+            }
+            // Strict Fallback (apiKey must be empty string as per environment contract)
+            return { apiKey: "" }; 
         };
 
+        const firebaseConfig = getFirebaseConfig();
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -43,14 +46,14 @@
                     await signInAnonymously(auth);
                 }
             } catch (e) {
-                console.warn("Auth initializing...");
+                console.warn("Auth initialization retry...");
             }
         };
 
         window.loadLiveFromFirebase = async () => {
             await initAuth();
             
-            // Tunggu hingga auth selesai jika belum
+            // Wait for auth state to be ready
             if (!auth.currentUser) {
                 await new Promise(resolve => {
                     const unsub = onAuthStateChanged(auth, (user) => {
@@ -61,17 +64,16 @@
 
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'dashboard_cache');
             
-            // Real-time synchronization
+            // Real-time listener for ultra-speed updates
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     window.appData = docSnap.data();
                     window.appData.isLoaded = true;
                     if (typeof applyGlobalUI === 'function') applyGlobalUI();
                     if (typeof renderCards === 'function') renderCards();
-                    console.log("⚡ Ultra-Speed: Data Firestore Sinkron.");
                 }
             }, (err) => {
-                console.error("Firestore Sync Error:", err);
+                console.error("Firestore Error:", err);
             });
         };
 
@@ -79,15 +81,11 @@
     </script>
     
     <style>
-        /**
-         * SIM UPT PUSDA - Live Preview Stylesheet v7.39 (Stability)
-         * Solusi: Config Reference Fix, Skeleton Loading, & 0.5rem Spacing.
-         */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
             --success: #10b981; --toska: #06b6d4; --danger: #ef4444; --warning: #f59e0b;
-            --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
+            --pink: #f472b6; --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
             --glass-blur: blur(15px); --card-shadow: 0 20px 50px rgba(0,0,0,0.4);
@@ -114,7 +112,6 @@
         body.light-theme #master-sidebar { background: rgba(255,255,255,0.95); }
         .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
         .brand img { height: 45px; object-fit: contain; }
-        .brand h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; }
         .logo-sim { color: var(--accent); } .logo-pu { color: var(--primary-light); } .logo-sda { color: var(--toska); }
 
         .nav-items { flex: 1; display: flex; flex-direction: column; gap: 8px; }
@@ -145,7 +142,7 @@
         
         .mic-btn { position: absolute; right: 8px; top: 6px; background: var(--accent-gradient); border: none; width: 38px; height: 38px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; transition: 0.3s; }
 
-        /* --- STAF CARDS (NO-CROP) --- */
+        /* --- STAF CARDS --- */
         .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 35px; }
         .staf-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 25px; transition: 0.4s ease; display: flex; flex-direction: column; gap: 15px; position: relative; overflow: visible; box-shadow: var(--card-shadow); }
         .staf-card:hover { border-color: var(--primary-light); transform: translateY(-8px); }
@@ -181,7 +178,7 @@
             .live-grid { grid-template-columns: 1fr; }
         }
 
-        .spin { animation: spin 1s linear infinite; }
+        .spin { animation: spin 1.5s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -241,7 +238,7 @@
         </div>
 
         <div class="live-grid" id="stafContainer">
-            <!-- Skeletons -->
+            <!-- Skeletons while loading -->
             <div class="staf-card skeleton" style="height:250px;"></div>
             <div class="staf-card skeleton" style="height:250px;"></div>
             <div class="staf-card skeleton" style="height:250px;"></div>
@@ -264,14 +261,14 @@
         window.onload = async () => {
             initTheme(); initClock();
             
-            // Prioritas 1: Muat Instan dari Firestore
+            // Prioritas 1: Muat Instan dari Firestore (Kecepatan Maksimal)
             window.addEventListener('firebaseReady', async () => {
                 if (window.loadLiveFromFirebase) {
                     await window.loadLiveFromFirebase();
                 }
             });
 
-            // Prioritas 2: Update Data Terbaru dari Google Sheets
+            // Prioritas 2: Update Data Terbaru dari Google Sheets di latar belakang
             fetchWithRetry();
         };
 
@@ -285,6 +282,7 @@
                 if (result.status === 'success') {
                     window.appData = result; window.appData.isLoaded = true;
                     applyGlobalUI(); renderCards();
+                    // Simpan hasil terbaru ke Firestore Cache di latar belakang jika fungsi tersedia
                     if (window.saveToFirebase) window.saveToFirebase(result);
                 }
             } catch (e) {
@@ -309,7 +307,9 @@
             const logs = (window.appData.presensi || []).filter(p => p.Timestamp && p.Timestamp.includes(today));
 
             const filtered = allUsers.filter(u => {
-                const matchName = u.Nama.toLowerCase().includes(query) || String(u.ID).includes(query);
+                const name = u.Nama || "";
+                const id = String(u.ID || "");
+                const matchName = name.toLowerCase().includes(query) || id.includes(query);
                 const matchWil = wilayah === 'ALL' || u.Wilayah === wilayah;
                 return matchName && matchWil;
             });
@@ -346,7 +346,7 @@
                                     <span class="status-badge" style="background:${getStatusColor(l.Status)}">${l.Status}</span>
                                     <div style="display:flex; align-items:center; gap:8px;">
                                         <span class="score-label">+${l.Nilai || 0} PTS</span>
-                                        <span style="font-size:0.6rem; font-weight:800; opacity:0.5;">${l.Timestamp.split(' ')[1] || ''}</span>
+                                        <span style="font-size:0.6rem; font-weight:800; opacity:0.5;">${(l.Timestamp || "").split(' ')[1] || ''}</span>
                                     </div>
                                 </div>
                                 <div class="triple-visual">
@@ -364,13 +364,13 @@
             document.getElementById('valIzin').innerText = c_izin;
             document.getElementById('valBelum').innerText = c_belum;
 
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function applyGlobalUI() {
             const logo = window.appData.config?.Logo || FALLBACK_LOGO;
             document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo);
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
@@ -378,10 +378,10 @@
         function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeUI(isLight); }
         function updateThemeUI(isLight) {
             const sI = document.getElementById('sidebarThemeIcon'), mI = document.getElementById('mobileThemeIcon'), lbl = document.getElementById('themeLabel');
-            if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (sI) sI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
         function speechToText(id, btn) { if (!('webkitSpeechRecognition' in window)) return; const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID'; rec.onstart = () => btn.classList.add('listening'); rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; renderCards(); }; rec.onend = () => btn.classList.remove('listening'); rec.start(); }
     </script>
