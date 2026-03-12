@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Preview Master - SIM UPT PUSDA v26.0</title>
+    <title>Live Preview Master - SIM UPT PUSDA v26.38</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,42 +12,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Firebase SDK Integration (Modular) -->
+    <!-- Firebase SDK Integration (Modular & High Speed) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB7DfBiDFB3P3as40f1__ZglPNffg_Pcdw",
-            authDomain: "sim-pusda-master.firebaseapp.com",
-            projectId: "sim-pusda-master",
-            storageBucket: "sim-pusda-master.firebasestorage.app",
-            messagingSenderId: "606502874855",
-            appId: "1:606502874855:web:1b53b4f69f21049e7cbc42",
-            measurementId: "G-0BPH99F48P"
-        };
-
+        // RULE 1 & 2: Use provided config and strict paths
+        const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
         const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sim-pusda-wsbb';
 
-        // Global Helper: Muat Instan dari Firebase
-        window.loadFromFirebase = async () => {
-            try {
-                if (!auth.currentUser) await signInAnonymously(auth);
-                const docRef = doc(db, 'artifacts', 'sim-pusda-wsbb', 'public', 'data', 'dashboard_cache');
-                const docSnap = await getDoc(docRef);
-                return docSnap.exists() ? docSnap.data() : null;
-            } catch (e) { return null; }
+        // RULE 3: Auth BEFORE Queries
+        const initAuth = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
         };
 
-        // Global Helper: Sinkron ke Firebase
-        window.saveToFirebase = async (data) => {
-            try {
-                const docRef = doc(db, 'artifacts', 'sim-pusda-wsbb', 'public', 'data', 'dashboard_cache');
-                await setDoc(docRef, { ...data, lastSync: new Date().toISOString() });
-            } catch (e) { }
+        window.loadLiveFromFirebase = async () => {
+            await initAuth();
+            if (!auth.currentUser) return null;
+
+            // Membaca dari cache publik untuk kecepatan maksimal
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'dashboard_cache');
+            
+            // Menggunakan onSnapshot untuk update data secara Real-time tanpa refresh
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    window.appData = docSnap.data();
+                    window.appData.isLoaded = true;
+                    if (typeof applyGlobalUI === 'function') applyGlobalUI();
+                    if (typeof renderCards === 'function') renderCards();
+                    console.log("⚡ Ultra-Speed: Data Firestore Sinkron.");
+                }
+            }, (err) => console.error("Firestore Sync Error:", err));
         };
 
         window.dispatchEvent(new Event('firebaseReady'));
@@ -55,14 +58,13 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Live Preview Stylesheet v7.0 (Hybrid Edition)
-         * Solusi: Skeleton Loading, No-Crop Avatar Stage, & Fail-safe Fetching.
+         * SIM UPT PUSDA - Live Preview Stylesheet v7.38 (Ultra-Speed)
+         * Solusi: Firestore-First, Skeleton Loading, & 0.5rem Spacing.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
             --accent: #f97316; --accent-gradient: linear-gradient(135deg, #f97316, #ea580c);
             --success: #10b981; --toska: #06b6d4; --danger: #ef4444; --warning: #f59e0b;
-            --pink: #f472b6; --purple: #a855f7;
             --bg-body: #0f172a; --bg-gradient: radial-gradient(circle at top right, #1e40af, #0f172a 60%);
             --text-main: #f8fafc; --text-muted: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.12);
@@ -74,10 +76,8 @@
             --bg-body: #f8fafc; --bg-gradient: radial-gradient(circle at top right, #dbeafe, #f8fafc 70%);
             --text-main: #1e293b; --text-muted: #475569;
             --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(0, 0, 0, 0.1);
-            --card-shadow: 0 15px 35px rgba(30, 41, 59, 0.08);
         }
 
-        /* --- SKELETON ANIMATION --- */
         .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: skeletonPulse 1.5s infinite linear; border-radius: 20px; }
         @keyframes skeletonPulse { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
@@ -85,7 +85,6 @@
         body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; display: flex; min-height: 100vh; transition: 0.3s; }
         .fixed-bg { position: fixed; inset: 0; z-index: -1; background: var(--bg-gradient); }
 
-        /* --- HIDDEN ON DESKTOP --- */
         .theme-toggle-mobile, #master-bottom-nav { display: none !important; }
 
         /* --- SIDEBAR --- */
@@ -103,7 +102,6 @@
         .sidebar-footer { margin-top: auto; padding: 5px; }
         #clockSidebar { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 15px; letter-spacing: 1px; text-align: center; }
         .theme-btn-sidebar { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 14px; color: var(--text-main); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        body.light-theme .theme-btn-sidebar { background: #fff; color: #1e293b; border-color: #cbd5e1; }
 
         /* --- MAIN CONTENT --- */
         #master-main-dashboard { flex: 1; margin-left: calc(var(--sidebar-width) + 40px); padding: 40px 2.5rem 120px 2.5rem; min-height: 100vh; position: relative; }
@@ -121,11 +119,9 @@
         .filter-section { display: flex; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; align-items: center; }
         .search-wrapper { flex: 2; position: relative; min-width: 250px; }
         input, select { width: 100%; height: 50px; padding: 0 16px; border-radius: 14px; background: rgba(0,0,0,0.3) !important; border: 1.5px solid var(--glass-border); color: white; font-weight: 600; outline: none; transition: 0.3s; font-size: 0.85rem; }
-        input#liveSearch { padding-right: 55px; }
         body.light-theme input, body.light-theme select { background: white !important; color: #1e293b; border-color: #cbd5e1; }
         
         .mic-btn { position: absolute; right: 8px; top: 6px; background: var(--accent-gradient); border: none; width: 38px; height: 38px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; transition: 0.3s; }
-        .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1s infinite; }
 
         /* --- STAF CARDS (NO-CROP) --- */
         .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 35px; }
@@ -133,11 +129,9 @@
         .staf-card:hover { border-color: var(--primary-light); transform: translateY(-8px); }
         
         .card-top { display: flex; gap: 20px; align-items: center; overflow: visible; }
-        
         .avatar-container { position: relative; width: 85px; height: 120px; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; overflow: visible; }
         .avatar-box { position: relative; width: 75px; height: 100px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1.5px solid var(--glass-border); z-index: 10; display: flex; align-items: flex-end; justify-content: center; transition: 0.4s; }
         .avatar-box img { width: 140%; height: auto; object-fit: contain; transform-origin: bottom center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); margin-bottom: -2px; transition: 0.4s; }
-        .staf-card:hover .avatar-box img { transform: scale(1.25) translateY(-12px); filter: drop-shadow(0 25px 45px rgba(0,0,0,0.6)); }
         
         .staf-name { font-weight: 900; font-size: 1.05rem; color: var(--text-main); text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.2; }
         .staf-role { font-size: 0.7rem; font-weight: 800; opacity: 0.5; margin-top: 4px; }
@@ -169,7 +163,6 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -225,7 +218,7 @@
         </div>
 
         <div class="live-grid" id="stafContainer">
-            <!-- Skeleton cards while loading -->
+            <!-- Skeletons -->
             <div class="staf-card skeleton" style="height:250px;"></div>
             <div class="staf-card skeleton" style="height:250px;"></div>
             <div class="staf-card skeleton" style="height:250px;"></div>
@@ -235,7 +228,7 @@
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
-        <div class="presensi-fab" onclick="location.reload()"><i data-lucide="fingerprint" color="white" size="30"></i></div>
+        <div class="presensi-fab" onclick="location.href='presensi.html'"><i data-lucide="fingerprint" color="white" size="30"></i></div>
         <a href="livepresensi.html" class="b-nav-item active"><i data-lucide="monitor-play"></i><span>Live</span></a>
         <a href="wilayah.html" class="b-nav-item"><i data-lucide="map"></i><span>Wilayah</span></a>
     </nav>
@@ -248,16 +241,14 @@
         window.onload = async () => {
             initTheme(); initClock();
             
+            // Prioritas 1: Muat Instan dari Firestore (Dibutuhkan untuk Speed)
             window.addEventListener('firebaseReady', async () => {
-                if (window.loadFromFirebase) {
-                    const fbData = await window.loadFromFirebase();
-                    if (fbData && !window.appData.isLoaded) {
-                        window.appData = fbData; window.appData.isLoaded = true;
-                        applyGlobalUI(); renderCards();
-                    }
+                if (window.loadLiveFromFirebase) {
+                    await window.loadLiveFromFirebase();
                 }
             });
 
+            // Prioritas 2: Update Data Terbaru dari Google Sheets di latar belakang
             fetchWithRetry();
         };
 
@@ -270,22 +261,12 @@
                 clearTimeout(timeout);
                 if (result.status === 'success') {
                     window.appData = result; window.appData.isLoaded = true;
-                    sessionStorage.setItem('pusda_app_data', JSON.stringify(result));
                     applyGlobalUI(); renderCards();
                     if (window.saveToFirebase) window.saveToFirebase(result);
                 }
             } catch (e) {
-                if (retries > 0) {
-                    setTimeout(() => fetchWithRetry(retries - 1, delay * 1.5), delay);
-                } else if (!window.appData.isLoaded) {
-                    handleSyncError("Jalur Data Live Terputus.");
-                }
+                if (retries > 0) setTimeout(() => fetchWithRetry(retries - 1, delay * 1.5), delay);
             }
-        }
-
-        function handleSyncError(msg) {
-            document.getElementById('stafContainer').innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--danger); font-weight: 800;">${msg} <br><button onclick="location.reload()" style="margin-top:15px; padding:12px 25px; border-radius:12px; background:var(--accent-gradient); border:none; color:white; font-weight:900; cursor:pointer;">PULIHKAN JARINGAN</button></div>`;
-            lucide.createIcons();
         }
 
         function getStatusColor(s) {
@@ -335,7 +316,6 @@
                             <div class="staf-role">${u.Jabatan} • WIL. ${u.Wilayah}</div>
                         </div>
                     </div>
-                    
                     <div class="history-list">
                         ${userLogs.length > 0 ? userLogs.map(l => `
                             <div class="history-row">
