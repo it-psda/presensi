@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Presensi Master - SIM UPT PUSDA v26.31</title>
+    <title>E-Presensi Master - SIM UPT PUSDA v26.32</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -53,8 +53,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Presensi Stylesheet v8.31 (Pro Feedback)
-         * Solusi: Professional Toasts, Auto-Raport Flow, & Wide View Optimization.
+         * SIM UPT PUSDA - Presensi Stylesheet v8.32 (Real-time Feedback)
+         * Solusi: Instant Data Update, Auto-Raport Sync, & Wide Spacing.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -110,7 +110,7 @@
         .gps-status { background: rgba(0, 0, 0, 0.2); min-height: 55px; color: var(--text-muted); padding: 12px 20px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 12px; margin-bottom: 25px; border: 1.5px solid var(--glass-border); }
         .gps-status.locked { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); }
 
-        /* Smart Search UI */
+        /* Smart Search */
         .search-container { position: relative; width: 100%; margin-bottom: 25px; z-index: 50; }
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         input, select, textarea { width: 100%; padding: 16px 60px 16px 20px; border-radius: 18px; background: rgba(0,0,0,0.3) !important; border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.95rem; }
@@ -128,14 +128,14 @@
         .mic-btn { position: absolute; right: 8px; width: 42px; height: 42px; border-radius: 12px; background: var(--accent-gradient); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: 0.3s; }
         .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1s infinite; }
 
-        /* Profile Stage Z-Index Fix */
+        /* Profile Stage */
         .profile-stage { position: relative; width: 120px; height: 160px; margin: 0 auto 30px; overflow: visible; z-index: 100; }
         .profile-frame { position: absolute; bottom: 0; left: 0; width: 100%; height: 82%; background: rgba(255,255,255,0.05); border: 2.5px dashed var(--glass-border); border-radius: 24px; z-index: 1; transition: 0.4s; }
         .profile-frame.active { border: 2.5px solid var(--success); background: rgba(16, 185, 129, 0.03); border-style: solid; box-shadow: 0 0 30px rgba(16, 185, 129, 0.15); }
         .profile-img-pop { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%) scale(0.85); width: 145%; height: auto; z-index: 5; opacity: 0; transition: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
         .profile-img-pop.show { opacity: 1; transform: translateX(-50%) scale(1.15) translateY(-5px); filter: drop-shadow(0 25px 35px rgba(0,0,0,0.8)); }
 
-        /* Mixed Status Grid (Executive Hierarchy) */
+        /* Mixed Status Grid */
         .status-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         .status-grid-big { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .status-grid-small { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
@@ -162,7 +162,7 @@
         .status-alert-box.info { background: rgba(59, 130, 246, 0.1); border-color: var(--primary-light); color: var(--primary-light); }
         .status-alert-box.pink { background: rgba(244, 114, 182, 0.1); border-color: var(--pink); color: var(--pink); }
 
-        /* Photo Slots Spacing */
+        /* Photo Slots */
         .photo-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 15px; margin-bottom: 30px; }
         .photo-slot { width: 100%; aspect-ratio: 3.5/4; background: rgba(0,0,0,0.25); border: 2px solid var(--glass-border); border-radius: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative; transition: 0.3s; box-shadow: inset 0 0 15px rgba(0,0,0,0.2); }
         .photo-slot.captured { border: 3px solid var(--success); background: #000; }
@@ -172,7 +172,7 @@
         .btn-submit { width: 100%; padding: 22px; border-radius: 24px; border: none; background: var(--accent-gradient); color: white; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 15px; }
         .btn-submit:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
 
-        /* --- MODAL RAPORT (PRECISION 40:60) --- */
+        /* --- MODAL RAPORT --- */
         .raport-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .raport-modal.show { display: flex; }
         .raport-content { background: #fff; width: 100%; max-width: 520px; height: 88vh; border-radius: 45px; color: #1e293b; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); display: flex; flex-direction: column; animation: modalPop 0.4s ease; position: relative; }
@@ -180,12 +180,10 @@
         .raport-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 80px 35px 30px 35px; color: white; flex-shrink: 0; position: relative; border-radius: 45px 45px 0 0; }
         .raport-profile-integrated { display: flex; align-items: center; gap: 20px; text-align: left; overflow: visible; position: relative; width: 100%; }
         
-        /* Photo Area (40%) - Small 2:3 Frame */
         .r-avatar-stage { flex: 0 0 40%; max-width: 40%; position: relative; height: 105px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; z-index: 100; }
-        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
         .r-avatar-img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 110px; height: auto; z-index: 110; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4)); overflow: visible; pointer-events: none; }
         
-        /* Info Area (60%) */
         .r-info-stage { flex: 0 0 60%; max-width: 60%; display: flex; flex-direction: column; gap: 1px; justify-content: center; }
         .r-info-stage h3 { font-size: 1.05rem; font-weight: 900; text-transform: uppercase; color: white; line-height: 1.1; margin-bottom: 2px; }
         .r-info-stage p { font-size: 0.65rem; opacity: 0.75; font-weight: 700; color: white; margin-bottom: 8px; text-transform: uppercase; }
@@ -203,7 +201,7 @@
         .btn-modal-footer.tutup { background: #64748b; color: white; }
         .btn-modal-footer.refresh { background: var(--accent-gradient); color: white; }
 
-        /* --- PROFESSIONAL TOAST SYSTEM --- */
+        /* --- TOAST SYSTEM --- */
         #toastContainer { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; width: calc(100% - 2rem); max-width: 400px; }
         .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 16px 22px; border-radius: 20px; color: white; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: toastSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; }
         .toast.success { border-left: 6px solid var(--success); }
@@ -213,7 +211,7 @@
         .toast.fade-out { animation: toastFadeOut 0.5s forwards; }
         @keyframes toastFadeOut { to { transform: translateY(-20px); opacity: 0; } }
 
-        /* --- RESPONSIVE 0.5rem SPACING --- */
+        /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; width: 100%; }
@@ -235,12 +233,10 @@
         }
 
         @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -277,6 +273,7 @@
         </div>
 
         <div class="presensi-card fade-in">
+            <!-- GPS Authority -->
             <div class="gps-status" id="gpsIndicator">
                 <i data-lucide="satellite" class="spin" size="20" id="gpsIcon" color="var(--primary-light)"></i>
                 <div style="flex:1;">
@@ -306,7 +303,7 @@
                 <div id="displayRole" style="font-size:0.75rem; opacity:0.6; font-weight:700; color: var(--primary-light); text-transform:uppercase;">PILIH IDENTITAS STAF</div>
             </div>
 
-            <!-- Authority Alerts (Persistent Form Color) -->
+            <!-- Authority Alerts -->
             <div id="statusAlert" class="status-alert-box">
                 <div id="alertIcon"><i data-lucide="info" size="24"></i></div>
                 <div id="alertMsg"></div>
@@ -360,7 +357,7 @@
         </div>
     </main>
 
-    <!-- RAPORT MODAL (FIXED IDENTITY 40:60 & 2:3 RATIO) -->
+    <!-- RAPORT MODAL -->
     <div id="raportOverlay" class="raport-modal">
         <div class="raport-content">
             <div class="raport-header">
@@ -394,12 +391,12 @@
 
             <div class="raport-footer-btns">
                 <button class="btn-modal-footer tutup" onclick="document.getElementById('raportOverlay').classList.remove('show')">TUTUP</button>
-                <button class="btn-modal-footer refresh" onclick="showRaport()">REFRESH</button>
+                <button class="btn-modal-footer refresh" onclick="manualSyncRaport()">REFRESH</button>
             </div>
         </div>
     </div>
 
-    <!-- KAMERA OVERLAY -->
+    <!-- CAMERA OVERLAY -->
     <div id="cameraOverlay" style="display:none; position:fixed; inset:0; background:#000; z-index:9999; flex-direction:column;">
         <video id="videoFeed" autoplay playsinline style="width:100%; flex:1; object-fit:cover;"></video>
         <div style="padding:30px; display:flex; justify-content:space-around; align-items:center; background:rgba(0,0,0,0.9);">
@@ -449,7 +446,7 @@
             const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-octagon' : 'info');
             toast.innerHTML = `<i data-lucide="${icon}" size="20"></i><span>${message}</span>`;
             container.appendChild(toast);
-            lucide.createIcons();
+            if(typeof lucide !== 'undefined') lucide.createIcons();
             setTimeout(() => { toast.classList.add('fade-out'); setTimeout(() => toast.remove(), 500); }, 4000);
         }
 
@@ -458,14 +455,15 @@
                 const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
                 const result = await response.json();
                 if (result.status === 'success') { window.appData = result; window.appData.isLoaded = true; applyGlobalUI(); if (window.saveToFirebase) window.saveToFirebase(result); }
-            } catch (e) { console.warn("Sync Active"); }
+                return result;
+            } catch (e) { console.warn("Sync Active"); return null; }
         }
 
         function initGPS() {
             navigator.geolocation.getCurrentPosition(pos => {
                 coords = pos.coords.latitude.toFixed(6) + ", " + pos.coords.longitude.toFixed(6);
                 const el = document.getElementById('gpsIndicator');
-                if(el) { el.classList.add('locked'); document.getElementById('gpsText').innerText = coords; document.getElementById('gpsCheck').style.display = 'block'; document.getElementById('gpsIcon').style.display = 'none'; gpsLocked = true; validateForm(); lucide.createIcons(); }
+                if(el) { el.classList.add('locked'); document.getElementById('gpsText').innerText = coords; document.getElementById('gpsCheck').style.display = 'block'; document.getElementById('gpsIcon').style.display = 'none'; gpsLocked = true; validateForm(); if(typeof lucide !== 'undefined') lucide.createIcons(); }
             }, null, { enableHighAccuracy: true });
         }
 
@@ -496,7 +494,13 @@
 
         function selectUser(p) {
             userData = p; const img = document.getElementById('profileImg'); img.classList.remove('show');
-            setTimeout(() => { img.src = p.Link_Foto_Profile || ''; document.getElementById('profFrame').classList.add('active'); document.getElementById('displayName').innerText = p.Nama.toUpperCase(); document.getElementById('displayRole').innerText = p.Jabatan + " • WIL. " + (p.Wilayah || '-'); checkPresenceHistory(); validateForm(); }, 100);
+            setTimeout(() => {
+                img.src = p.Link_Foto_Profile || '';
+                document.getElementById('profFrame').classList.add('active');
+                document.getElementById('displayName').innerText = p.Nama.toUpperCase();
+                document.getElementById('displayRole').innerText = p.Jabatan + " • WIL. " + (p.Wilayah || '-');
+                checkPresenceHistory(); validateForm();
+            }, 100);
         }
 
         function checkPresenceHistory() {
@@ -528,7 +532,7 @@
             else if (status === 'Izin') { txt = "📝 <b>STATUS IZIN.</b> Permohonan izin diterima. Harap tetap berkoordinasi dengan Korlap."; iconName = "clipboard-list"; type = "warning"; }
             else if (status === 'Dinas') { txt = "💼 <b>TUGAS KEDINASAN.</b> Anda dalam penugasan luar. Tetap utamakan keselamatan kerja."; iconName = "briefcase"; type = "info"; }
             else if (status === 'Margin Error') { txt = "📍 <b>ANOMALI POSISI.</b> Lokasi di luar radius kerja. Lapor Korlap segera!"; iconName = "map-pin"; type = "pink"; }
-            box.className = "status-alert-box show " + type; msg.innerHTML = `<div>${txt}</div>`; icon.innerHTML = `<i data-lucide="${iconName}" size="24"></i>`; lucide.createIcons();
+            box.className = "status-alert-box show " + type; msg.innerHTML = `<div>${txt}</div>`; icon.innerHTML = `<i data-lucide="${iconName}" size="24"></i>`; if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         async function startCameraAPI(mode) {
@@ -557,11 +561,29 @@
 
         async function submitWithQueue() {
             const btn = document.getElementById('btnSubmit'); btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> MENGIRIM...`;
+            
+            const timestamp = new Date().toISOString();
             const payload = { action: 'presensi', idPegawai: userData.ID, nama: userData.Nama, status: selectedStatus, kegiatan: document.getElementById('selKegiatan').value, keterangan: document.getElementById('presensiNote').value, gps: coords, wilayah: userData.Wilayah, selfieBase64: document.getElementById('imgSelfie').src, workBase64: document.getElementById('imgWork').src };
+            
             try { 
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) }); 
                 const result = await res.json(); 
+                
                 if (result.status === 'success') { 
+                    // INSTANT LOCAL SYNC: Masukkan data baru ke memori lokal segera
+                    const newLog = {
+                        Timestamp: timestamp.replace('T', ' ').substring(0, 19),
+                        ID_Pegawai: userData.ID,
+                        Nama: userData.Nama,
+                        Status: selectedStatus,
+                        Nilai: result.score || 0,
+                        Keterangan: payload.keterangan,
+                        Foto_Selfie: payload.selfieBase64,
+                        Foto_Lokasi: payload.workBase64,
+                        GPS: coords
+                    };
+                    window.appData.presensi.push(newLog);
+                    
                     showToast("✅ Berhasil! Data tercatat di server otoritas."); 
                     setTimeout(() => showRaport(), 800);
                     btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`;
@@ -570,6 +592,20 @@
                     btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`; 
                 } 
             } catch (e) { showToast("🔴 Kesalahan Jaringan.", "error"); btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`; }
+        }
+
+        async function manualSyncRaport() {
+            const btn = document.querySelector('.btn-modal-footer.refresh');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="spin" size="14"></i> SYNC...`;
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+            
+            await fetchDataFromCloud();
+            showRaport();
+            
+            btn.innerHTML = originalText;
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+            showToast("✅ Database Cloud Sinkron.");
         }
 
         function changeMonth(delta) { viewMonth += delta; if (viewMonth > 11) { viewMonth = 0; viewYear++; } else if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderMonthlyCalendar(); }
@@ -608,18 +644,19 @@
                         <div style="aspect-ratio:1; border-radius:10px; background:#e0f2fe; border:1px solid #bae6fd; display:flex; align-items:center; justify-content:center;" onclick="window.open('https://www.google.com/maps?q=${log.GPS}')"><i data-lucide="map" size="18" color="var(--primary-light)"></i></div>
                     </div>
                 </div>`).join('') : '<div style="text-align:center; padding:40px; opacity:0.3; font-weight:800;">TIDAK ADA DATA</div>';
-            document.getElementById('rHistoryContainer').innerHTML = historyHtml; lucide.createIcons();
+            document.getElementById('rHistoryContainer').innerHTML = historyHtml; if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function showRaport() {
             if(!userData) return; document.getElementById('rAvatar').src = userData.Link_Foto_Profile || ''; document.getElementById('rName').innerText = userData.Nama; document.getElementById('rRole').innerText = userData.Jabatan;
-            const monthlyTotal = (window.appData.presensi || []).filter(p => String(p.ID_Pegawai) === String(userData.ID)).reduce((acc, l) => acc + (parseInt(l.Nilai) || 0), 0);
+            const currentMonthStr = `${viewYear}-${String(viewMonth+1).padStart(2,'0')}`;
+            const monthlyTotal = (window.appData.presensi || []).filter(p => String(p.ID_Pegawai) === String(userData.ID) && p.Timestamp && p.Timestamp.includes(currentMonthStr)).reduce((acc, l) => acc + (parseInt(l.Nilai) || 0), 0);
             document.getElementById('rTotalScore').innerText = monthlyTotal; renderMonthlyCalendar(); updateHistoryByDate();
-            document.getElementById('raportOverlay').classList.add('show'); lucide.createIcons();
+            document.getElementById('raportOverlay').classList.add('show'); if(typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function openManualRaport() { if(!userData) { showToast("Pilih identitas terlebih dahulu.", "info"); return; } showRaport(); }
-        function applyGlobalUI() { const logo = window.appData.config?.Logo || FALLBACK_LOGO; document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo); lucide.createIcons(); }
+        function applyGlobalUI() { const logo = window.appData.config?.Logo || FALLBACK_LOGO; document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo); if(typeof lucide !== 'undefined') lucide.createIcons(); }
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
         function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeUI(localStorage.getItem('theme') === 'light'); }
         function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); updateThemeUI(isLight); }
@@ -629,7 +666,7 @@
             if (mI) mI.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
             const lbl = document.getElementById('themeLabel');
             if (lbl) lbl.innerText = isLight ? "LIGHT MODE" : "DARK MODE";
-            lucide.createIcons();
+            if(typeof lucide !== 'undefined') lucide.createIcons();
         }
         function speechToText(id, btn) { if (!('webkitSpeechRecognition' in window)) return; const rec = new webkitSpeechRecognition(); rec.lang = 'id-ID'; rec.onstart = () => btn.classList.add('listening'); rec.onresult = (e) => { document.getElementById(id).value = e.results[0][0].transcript; if(id === 'searchPegawai') filterPegawai(); validateForm(); }; rec.onend = () => btn.classList.remove('listening'); rec.start(); }
     </script>
