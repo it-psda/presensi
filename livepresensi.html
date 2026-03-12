@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Preview Master - SIM UPT PUSDA v26.38</title>
+    <title>Live Preview Master - SIM UPT PUSDA v26.39</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,8 +18,17 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // RULE 1 & 2: Use provided config and strict paths
-        const firebaseConfig = JSON.parse(__firebase_config);
+        // FIX: Safe check for __firebase_config to prevent ReferenceError
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "", 
+            authDomain: "sim-pusda-master.firebaseapp.com",
+            projectId: "sim-pusda-master",
+            storageBucket: "sim-pusda-master.firebasestorage.app",
+            messagingSenderId: "606502874855",
+            appId: "1:606502874855:web:1b53b4f69f21049e7cbc42",
+            measurementId: "G-0BPH99F48P"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -27,21 +36,32 @@
 
         // RULE 3: Auth BEFORE Queries
         const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (e) {
+                console.warn("Auth initializing...");
             }
         };
 
         window.loadLiveFromFirebase = async () => {
             await initAuth();
-            if (!auth.currentUser) return null;
+            
+            // Tunggu hingga auth selesai jika belum
+            if (!auth.currentUser) {
+                await new Promise(resolve => {
+                    const unsub = onAuthStateChanged(auth, (user) => {
+                        if (user) { unsub(); resolve(); }
+                    });
+                });
+            }
 
-            // Membaca dari cache publik untuk kecepatan maksimal
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'dashboard_cache');
             
-            // Menggunakan onSnapshot untuk update data secara Real-time tanpa refresh
+            // Real-time synchronization
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     window.appData = docSnap.data();
@@ -50,7 +70,9 @@
                     if (typeof renderCards === 'function') renderCards();
                     console.log("⚡ Ultra-Speed: Data Firestore Sinkron.");
                 }
-            }, (err) => console.error("Firestore Sync Error:", err));
+            }, (err) => {
+                console.error("Firestore Sync Error:", err);
+            });
         };
 
         window.dispatchEvent(new Event('firebaseReady'));
@@ -58,8 +80,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Live Preview Stylesheet v7.38 (Ultra-Speed)
-         * Solusi: Firestore-First, Skeleton Loading, & 0.5rem Spacing.
+         * SIM UPT PUSDA - Live Preview Stylesheet v7.39 (Stability)
+         * Solusi: Config Reference Fix, Skeleton Loading, & 0.5rem Spacing.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -159,10 +181,11 @@
             .live-grid { grid-template-columns: 1fr; }
         }
 
-        .spin { animation: spin 1.5s linear infinite; }
+        .spin { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body class="dark-theme">
@@ -241,14 +264,14 @@
         window.onload = async () => {
             initTheme(); initClock();
             
-            // Prioritas 1: Muat Instan dari Firestore (Dibutuhkan untuk Speed)
+            // Prioritas 1: Muat Instan dari Firestore
             window.addEventListener('firebaseReady', async () => {
                 if (window.loadLiveFromFirebase) {
                     await window.loadLiveFromFirebase();
                 }
             });
 
-            // Prioritas 2: Update Data Terbaru dari Google Sheets di latar belakang
+            // Prioritas 2: Update Data Terbaru dari Google Sheets
             fetchWithRetry();
         };
 
@@ -278,8 +301,8 @@
             const container = document.getElementById('stafContainer');
             if(!container || !window.appData.isLoaded) return;
 
-            const query = document.getElementById('liveSearch').value.toLowerCase();
-            const wilayah = document.getElementById('filterWilayah').value;
+            const query = (document.getElementById('liveSearch')?.value || "").toLowerCase();
+            const wilayah = document.getElementById('filterWilayah')?.value || "ALL";
             const today = new Date().toLocaleDateString('sv-SE');
             
             const allUsers = [...(window.appData.pegawai || []), ...(window.appData.korlap || [])];
