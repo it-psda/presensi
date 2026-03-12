@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Presensi Master - SIM UPT PUSDA v26.33</title>
+    <title>E-Presensi Master - SIM UPT PUSDA v26.34</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -53,8 +53,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Presensi Stylesheet v8.33 (Form Reset Logic)
-         * Solusi: Auto-Reset on Modal Close, Wide View Optimization, & Pro Spacing.
+         * SIM UPT PUSDA - Presensi Stylesheet v8.34 (Consolidated Note)
+         * Solusi: Merge Note & Activity, Auto-Reset, & Wide View Optimization.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -185,17 +185,10 @@
         .raport-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 80px 35px 30px 35px; color: white; flex-shrink: 0; position: relative; border-radius: 45px 45px 0 0; }
         .raport-profile-integrated { display: flex; align-items: center; gap: 20px; text-align: left; overflow: visible; position: relative; width: 100%; }
         
-        /* Left Column (40%) - Strict 2:3 Frame */
         .r-avatar-stage { flex: 0 0 40%; max-width: 40%; position: relative; height: 105px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; z-index: 100; }
-        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
-        .r-avatar-img { 
-            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); 
-            width: 110px; height: auto; z-index: 110; 
-            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4)); 
-            overflow: visible; pointer-events: none;
-        }
+        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .r-avatar-img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 110px; height: auto; z-index: 110; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4)); overflow: visible; pointer-events: none; }
         
-        /* Right Column (60%) */
         .r-info-stage { flex: 0 0 60%; max-width: 60%; display: flex; flex-direction: column; gap: 1px; justify-content: center; }
         .r-info-stage h3 { font-size: 1.05rem; font-weight: 900; text-transform: uppercase; color: white; line-height: 1.1; margin-bottom: 2px; }
         .r-info-stage p { font-size: 0.65rem; opacity: 0.75; font-weight: 700; color: white; margin-bottom: 8px; text-transform: uppercase; }
@@ -576,20 +569,38 @@
             const btn = document.getElementById('btnSubmit'); btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> MENGIRIM...`;
             
             const timestamp = new Date().toISOString();
-            const payload = { action: 'presensi', idPegawai: userData.ID, nama: userData.Nama, status: selectedStatus, kegiatan: document.getElementById('selKegiatan').value, keterangan: document.getElementById('presensiNote').value, gps: coords, wilayah: userData.Wilayah, selfieBase64: document.getElementById('imgSelfie').src, workBase64: document.getElementById('imgWork').src };
+            const jenisKegiatan = document.getElementById('selKegiatan').value;
+            const lokasiNote = document.getElementById('presensiNote').value;
+            
+            // CONSOLIDATED NOTE: Lokasi Detail + Jenis Kegiatan
+            const consolidatedNote = `${lokasiNote} - [${jenisKegiatan}]`;
+            
+            const payload = { 
+                action: 'presensi', 
+                idPegawai: userData.ID, 
+                nama: userData.Nama, 
+                status: selectedStatus, 
+                kegiatan: jenisKegiatan, 
+                keterangan: consolidatedNote, // Sent to spreadsheet
+                gps: coords, 
+                wilayah: userData.Wilayah, 
+                selfieBase64: document.getElementById('imgSelfie').src, 
+                workBase64: document.getElementById('imgWork').src 
+            };
             
             try { 
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) }); 
                 const result = await res.json(); 
                 
                 if (result.status === 'success') { 
+                    // INSTANT LOCAL SYNC
                     const newLog = {
                         Timestamp: timestamp.replace('T', ' ').substring(0, 19),
                         ID_Pegawai: userData.ID,
                         Nama: userData.Nama,
                         Status: selectedStatus,
                         Nilai: result.score || 0,
-                        Keterangan: payload.keterangan,
+                        Keterangan: consolidatedNote,
                         Foto_Selfie: payload.selfieBase64,
                         Foto_Lokasi: payload.workBase64,
                         GPS: coords
@@ -607,41 +618,25 @@
         }
 
         function closeRaportAndResetForm() {
-            // 1. Sembunyikan Modal
             document.getElementById('raportOverlay').classList.remove('show');
-            
-            // 2. Reset Data Logika
-            userData = null;
-            selectedStatus = '';
-            
-            // 3. Reset Input UI
+            userData = null; selectedStatus = '';
             document.getElementById('searchPegawai').value = '';
             document.getElementById('displayName').innerText = '---';
             document.getElementById('displayRole').innerText = 'PILIH IDENTITAS STAF';
             document.getElementById('selKegiatan').value = '';
             document.getElementById('presensiNote').value = '';
-            
-            // 4. Reset Profile UI
             const profImg = document.getElementById('profileImg');
             profImg.classList.remove('show');
             profImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
             document.getElementById('profFrame').classList.remove('active');
-            document.getElementById('groupIdentitas')?.classList.remove('is-valid');
-            
-            // 5. Reset Status Buttons
             document.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active', 'hadir', 'pulang', 'izin', 'sakit', 'dinas', 'margin', 'hadir-telat'));
             document.getElementById('statusAlert').classList.remove('show');
-            
-            // 6. Reset Photo Slots
             document.getElementById('imgSelfie').src = '';
             document.getElementById('imgSelfie').style.display = 'none';
             document.getElementById('imgWork').src = '';
             document.getElementById('imgWork').style.display = 'none';
             document.querySelectorAll('.photo-slot').forEach(slot => slot.classList.remove('captured'));
-            
-            // 7. Re-validate Form (Disable Submit Button)
             validateForm();
-            
             showToast("ℹ️ Formulir dikosongkan.");
         }
 
@@ -650,10 +645,8 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = `<i data-lucide="loader-2" class="spin" size="14"></i> SYNC...`;
             if(typeof lucide !== 'undefined') lucide.createIcons();
-            
             await fetchDataFromCloud();
             showRaport();
-            
             btn.innerHTML = originalText;
             if(typeof lucide !== 'undefined') lucide.createIcons();
             showToast("✅ Database Cloud Sinkron.");
