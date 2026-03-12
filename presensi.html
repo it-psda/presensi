@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>E-Presensi Master - SIM UPT PUSDA v26.29</title>
+    <title>E-Presensi Master - SIM UPT PUSDA v26.31</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -53,8 +53,8 @@
     
     <style>
         /**
-         * SIM UPT PUSDA - Presensi Stylesheet v8.29 (Wide View Optimization)
-         * Solusi: 0.5rem Horizontal Spacing, No-Crop Modal Profile, & Z-Index Layering.
+         * SIM UPT PUSDA - Presensi Stylesheet v8.31 (Pro Feedback)
+         * Solusi: Professional Toasts, Auto-Raport Flow, & Wide View Optimization.
          */
         :root {
             --primary: #1e3a8a; --primary-light: #3b82f6;
@@ -103,13 +103,14 @@
         .master-accent-bar { width: 7px; height: 42px; background: var(--accent-gradient); border-radius: 4px; }
         .master-title-text { font-size: clamp(1.4rem, 4.5vw, 2.3rem); letter-spacing: -1px; font-weight: 900; text-transform: uppercase; }
 
-        /* --- PRESENSI CARD (FIXED PADDING) --- */
+        /* --- FORM CARD --- */
         .presensi-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 40px; padding: 40px; max-width: 650px; margin: 0 auto; box-shadow: var(--card-shadow); position: relative; }
 
+        /* GPS Status */
         .gps-status { background: rgba(0, 0, 0, 0.2); min-height: 55px; color: var(--text-muted); padding: 12px 20px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 12px; margin-bottom: 25px; border: 1.5px solid var(--glass-border); }
         .gps-status.locked { background: rgba(16, 185, 129, 0.1); border-color: var(--success); color: var(--success); }
 
-        /* Smart Search */
+        /* Smart Search UI */
         .search-container { position: relative; width: 100%; margin-bottom: 25px; z-index: 50; }
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         input, select, textarea { width: 100%; padding: 16px 60px 16px 20px; border-radius: 18px; background: rgba(0,0,0,0.3) !important; border: 1.5px solid var(--glass-border); color: white; font-weight: 700; outline: none; transition: 0.3s; font-size: 0.95rem; }
@@ -127,14 +128,14 @@
         .mic-btn { position: absolute; right: 8px; width: 42px; height: 42px; border-radius: 12px; background: var(--accent-gradient); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: 0.3s; }
         .mic-btn.listening { background: var(--danger) !important; animation: pulse-red 1s infinite; }
 
-        /* FIXED: Profile stage over search box */
+        /* Profile Stage Z-Index Fix */
         .profile-stage { position: relative; width: 120px; height: 160px; margin: 0 auto 30px; overflow: visible; z-index: 100; }
         .profile-frame { position: absolute; bottom: 0; left: 0; width: 100%; height: 82%; background: rgba(255,255,255,0.05); border: 2.5px dashed var(--glass-border); border-radius: 24px; z-index: 1; transition: 0.4s; }
         .profile-frame.active { border: 2.5px solid var(--success); background: rgba(16, 185, 129, 0.03); border-style: solid; box-shadow: 0 0 30px rgba(16, 185, 129, 0.15); }
         .profile-img-pop { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%) scale(0.85); width: 145%; height: auto; z-index: 5; opacity: 0; transition: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
         .profile-img-pop.show { opacity: 1; transform: translateX(-50%) scale(1.15) translateY(-5px); filter: drop-shadow(0 25px 35px rgba(0,0,0,0.8)); }
 
-        /* Status Section */
+        /* Mixed Status Grid (Executive Hierarchy) */
         .status-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         .status-grid-big { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .status-grid-small { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
@@ -151,7 +152,6 @@
         .status-btn.active.sakit { background: var(--primary-light); color: white; border-color: var(--primary-light); }
         .status-btn.active.dinas { background: var(--toska); color: white; border-color: var(--toska); }
         .status-btn.active.margin { background: var(--pink); color: white; border-color: var(--pink); box-shadow: 0 10px 25px rgba(244, 114, 182, 0.4); }
-        
         .status-btn.disabled { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
 
         .status-alert-box { border-radius: 24px; margin-bottom: 25px; display: none; padding: 18px 25px; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1.5px solid transparent; backdrop-filter: blur(10px); }
@@ -160,9 +160,10 @@
         .status-alert-box.warning { background: rgba(245, 158, 11, 0.1); border-color: var(--warning); color: var(--warning); }
         .status-alert-box.danger { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
         .status-alert-box.info { background: rgba(59, 130, 246, 0.1); border-color: var(--primary-light); color: var(--primary-light); }
+        .status-alert-box.pink { background: rgba(244, 114, 182, 0.1); border-color: var(--pink); color: var(--pink); }
 
-        /* Photo Slots */
-        .photo-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 30px; }
+        /* Photo Slots Spacing */
+        .photo-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 15px; margin-bottom: 30px; }
         .photo-slot { width: 100%; aspect-ratio: 3.5/4; background: rgba(0,0,0,0.25); border: 2px solid var(--glass-border); border-radius: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative; transition: 0.3s; box-shadow: inset 0 0 15px rgba(0,0,0,0.2); }
         .photo-slot.captured { border: 3px solid var(--success); background: #000; }
         .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 10; }
@@ -171,60 +172,52 @@
         .btn-submit { width: 100%; padding: 22px; border-radius: 24px; border: none; background: var(--accent-gradient); color: white; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 15px; }
         .btn-submit:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
 
-        /* --- MODAL RAPORT (PRECISION 40:60 & WIDE VIEW) --- */
+        /* --- MODAL RAPORT (PRECISION 40:60) --- */
         .raport-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .raport-modal.show { display: flex; }
         .raport-content { background: #fff; width: 100%; max-width: 520px; height: 88vh; border-radius: 45px; color: #1e293b; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); display: flex; flex-direction: column; animation: modalPop 0.4s ease; position: relative; }
         
-        /* Fixed Header Modal */
         .raport-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 80px 35px 30px 35px; color: white; flex-shrink: 0; position: relative; border-radius: 45px 45px 0 0; }
         .raport-profile-integrated { display: flex; align-items: center; gap: 20px; text-align: left; overflow: visible; position: relative; width: 100%; }
         
-        /* Left Column (40%) */
+        /* Photo Area (40%) - Small 2:3 Frame */
         .r-avatar-stage { flex: 0 0 40%; max-width: 40%; position: relative; height: 105px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; z-index: 100; }
-        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
-        .r-avatar-img { 
-            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); 
-            width: 110px; height: auto; z-index: 110; 
-            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4)); 
-            overflow: visible; pointer-events: none;
-        }
+        .r-avatar-box { position: absolute; bottom: 0; width: 70px; height: 105px; background: rgba(255,255,255,0.15); border-radius: 14px; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .r-avatar-img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 110px; height: auto; z-index: 110; filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4)); overflow: visible; pointer-events: none; }
         
-        /* Right Column (60%) */
+        /* Info Area (60%) */
         .r-info-stage { flex: 0 0 60%; max-width: 60%; display: flex; flex-direction: column; gap: 1px; justify-content: center; }
         .r-info-stage h3 { font-size: 1.05rem; font-weight: 900; text-transform: uppercase; color: white; line-height: 1.1; margin-bottom: 2px; }
         .r-info-stage p { font-size: 0.65rem; opacity: 0.75; font-weight: 700; color: white; margin-bottom: 8px; text-transform: uppercase; }
         .raport-score-pill { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 30px; display: inline-flex; align-items: center; gap: 8px; font-weight: 900; font-size: 0.8rem; width: fit-content; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Scroll Area Modal */
         .raport-scroll-area { flex: 1; overflow-y: auto; background: #fff; padding-bottom: 20px; -webkit-overflow-scrolling: touch; position: relative; z-index: 5; }
-        
-        /* Grid Heatmap Fix */
-        .heatmap-container { padding: 25px 30px; background: #fcfdfe; border-bottom: 1px solid #f1f5f9; }
         .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 15px; }
         .heat-box { aspect-ratio: 1; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; border: 1px solid #e2e8f0; cursor: pointer; }
         .heat-box.full { background: var(--success); color: white; border: none; }
         .heat-box.partial { background: var(--warning); color: white; border: none; }
         .heat-box.none { background: var(--danger); color: white; border: none; }
 
-        /* History Card Item */
-        .history-card { padding: 20px 30px; border-bottom: 1px solid #f8fafc; }
-
-        /* Footer Modal */
         .raport-footer-btns { padding: 20px 30px 40px; display: flex; gap: 15px; background: white; border-top: 1px solid #f1f5f9; flex-shrink: 0; border-radius: 0 0 45px 45px; }
         .btn-modal-footer { flex: 1; padding: 18px; border-radius: 20px; font-weight: 800; border: none; cursor: pointer; text-align: center; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; }
         .btn-modal-footer.tutup { background: #64748b; color: white; }
         .btn-modal-footer.refresh { background: var(--accent-gradient); color: white; }
 
-        /* --- RESPONSIVITAS MOBILE (0.5rem SPACING) --- */
+        /* --- PROFESSIONAL TOAST SYSTEM --- */
+        #toastContainer { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; width: calc(100% - 2rem); max-width: 400px; }
+        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 16px 22px; border-radius: 20px; color: white; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: toastSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; }
+        .toast.success { border-left: 6px solid var(--success); }
+        .toast.error { border-left: 6px solid var(--danger); }
+        .toast.info { border-left: 6px solid var(--primary-light); }
+        @keyframes toastSlideIn { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .toast.fade-out { animation: toastFadeOut 0.5s forwards; }
+        @keyframes toastFadeOut { to { transform: translateY(-20px); opacity: 0; } }
+
+        /* --- RESPONSIVE 0.5rem SPACING --- */
         @media (max-width: 1024px) {
             #master-sidebar { display: none; }
             #master-main-dashboard { margin-left: 0; padding: 25px 0.5rem 140px 0.5rem; width: 100%; }
-            
-            /* Form Card Mobile Wide */
             .presensi-card { padding: 30px 0.5rem; border-radius: 35px; width: 100%; }
-            
-            /* Modal Raport Mobile Wide */
             .raport-modal { padding: 20px 0.5rem; }
             .raport-content { height: 92vh; width: calc(100% - 1rem); margin: 0 0.5rem; border-radius: 40px; }
             .raport-header { padding: 75px 0.5rem 30px 0.5rem; }
@@ -253,6 +246,7 @@
 <body class="dark-theme">
 
     <div class="fixed-bg"></div>
+    <div id="toastContainer"></div>
     <div class="theme-toggle-mobile" onclick="toggleTheme()" id="mobileThemeBtn"><i data-lucide="sun" id="mobileThemeIcon"></i></div>
 
     <aside id="master-sidebar">
@@ -283,7 +277,6 @@
         </div>
 
         <div class="presensi-card fade-in">
-            <!-- GPS Authority -->
             <div class="gps-status" id="gpsIndicator">
                 <i data-lucide="satellite" class="spin" size="20" id="gpsIcon" color="var(--primary-light)"></i>
                 <div style="flex:1;">
@@ -302,7 +295,7 @@
                 <div id="searchSuggestions"></div>
             </div>
 
-            <!-- Profile Area (Fixed Layering) -->
+            <!-- Profile Area -->
             <div class="profile-stage">
                 <div class="profile-frame" id="profFrame"></div>
                 <img id="profileImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="profile-img-pop" onload="this.classList.add('show')">
@@ -313,7 +306,7 @@
                 <div id="displayRole" style="font-size:0.75rem; opacity:0.6; font-weight:700; color: var(--primary-light); text-transform:uppercase;">PILIH IDENTITAS STAF</div>
             </div>
 
-            <!-- Authority Alerts -->
+            <!-- Authority Alerts (Persistent Form Color) -->
             <div id="statusAlert" class="status-alert-box">
                 <div id="alertIcon"><i data-lucide="info" size="24"></i></div>
                 <div id="alertMsg"></div>
@@ -343,7 +336,7 @@
                 </select>
             </div>
 
-            <div class="input-wrapper">
+            <div class="input-wrapper" style="margin-bottom:30px;">
                 <textarea id="presensiNote" placeholder="Lokasi Detail / Uraian (Minimal 10 Karakter)..." rows="2" oninput="validateForm()"></textarea>
                 <button class="mic-btn" onclick="speechToText('presensiNote', this)"><i data-lucide="mic" size="18"></i></button>
             </div>
@@ -372,9 +365,7 @@
         <div class="raport-content">
             <div class="raport-header">
                 <div class="raport-profile-integrated">
-                    <!-- Photo Area (Small 2:3 Ratio Box) -->
                     <div class="r-avatar-stage"><div class="r-avatar-box"></div><img id="rAvatar" class="r-avatar-img"></div>
-                    <!-- Info Area (60% Split) -->
                     <div class="r-info-stage">
                         <h3 id="rName">---</h3>
                         <p id="rRole">---</p>
@@ -384,7 +375,7 @@
             </div>
             
             <div class="raport-scroll-area">
-                <div class="heatmap-container" style="background:#fcfdfe; border-bottom:1px solid #f1f5f9;">
+                <div class="heatmap-container" style="padding:25px 30px; border-bottom:1px solid #f1f5f9; background:#fcfdfe;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div id="heatmapTitle" style="font-size: 0.75rem; font-weight: 900; color: var(--primary); text-transform: uppercase;">MARET 2026</div>
                         <div style="display:flex; gap:10px;">
@@ -408,7 +399,7 @@
         </div>
     </div>
 
-    <!-- CAMERA OVERLAY -->
+    <!-- KAMERA OVERLAY -->
     <div id="cameraOverlay" style="display:none; position:fixed; inset:0; background:#000; z-index:9999; flex-direction:column;">
         <video id="videoFeed" autoplay playsinline style="width:100%; flex:1; object-fit:cover;"></video>
         <div style="padding:30px; display:flex; justify-content:space-around; align-items:center; background:rgba(0,0,0,0.9);">
@@ -419,7 +410,6 @@
     </div>
     <canvas id="wmCanvas" style="display:none;"></canvas>
 
-    <!-- MOBILE BOTTOM NAV -->
     <nav id="master-bottom-nav">
         <a href="index.html" class="b-nav-item"><i data-lucide="home"></i><span>Home</span></a>
         <a href="raport.html" class="b-nav-item"><i data-lucide="file-text"></i><span>Raport</span></a>
@@ -452,12 +442,23 @@
             });
         };
 
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-octagon' : 'info');
+            toast.innerHTML = `<i data-lucide="${icon}" size="20"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => { toast.classList.add('fade-out'); setTimeout(() => toast.remove(), 500); }, 4000);
+        }
+
         async function fetchDataFromCloud() {
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getDashboardData`);
                 const result = await response.json();
                 if (result.status === 'success') { window.appData = result; window.appData.isLoaded = true; applyGlobalUI(); if (window.saveToFirebase) window.saveToFirebase(result); }
-            } catch (e) { console.warn("Sync Hybrid Active"); }
+            } catch (e) { console.warn("Sync Active"); }
         }
 
         function initGPS() {
@@ -521,8 +522,8 @@
             box.style.display = 'flex'; box.classList.add('show');
             const now = new Date(); const tm = now.getHours() * 60 + now.getMinutes();
             let txt = ""; let iconName = "info"; let type = "info";
-            if (status === 'Hadir') { if (tm <= 460) { txt = "☀️ <b>SELAMAT PAGI!</b> Kehadiran tepat waktu tercatat. Skor: <b>50 PTS</b>."; iconName = "sun"; type = "success"; } else { txt = "⚠️ <b>TERLAMBAT TERDETEKSI.</b> Jam operasional telah dimulai. Skor dikurangi."; iconName = "alert-triangle"; type = "danger"; } }
-            else if (status === 'Pulang') { txt = "🏡 <b>TUGAS SELESAI.</b> Terima kasih hari ini. Selamat beristirahat. Skor: <b>50 PTS</b>."; iconName = "home"; type = "success"; }
+            if (status === 'Hadir') { if (tm <= 460) { txt = "☀️ <b>SELAMAT PAGI!</b> Kehadiran tepat waktu tercatat. Skor: 50 PTS."; iconName = "sun"; type = "success"; } else { txt = "⚠️ <b>TERLAMBAT TERDETEKSI.</b> Jam operasional telah dimulai. Presensi diterima."; iconName = "alert-triangle"; type = "danger"; } }
+            else if (status === 'Pulang') { txt = "🏡 <b>TUGAS SELESAI.</b> Terima kasih hari ini. Selamat beristirahat. Skor: 50 PTS."; iconName = "home"; type = "success"; }
             else if (status === 'Sakit') { txt = "🏥 <b>STATUS SAKIT.</b> Kondisi tercatat. Mohon lampirkan Surat Dokter via Admin. Lekas pulih!"; iconName = "thermometer"; type = "info"; }
             else if (status === 'Izin') { txt = "📝 <b>STATUS IZIN.</b> Permohonan izin diterima. Harap tetap berkoordinasi dengan Korlap."; iconName = "clipboard-list"; type = "warning"; }
             else if (status === 'Dinas') { txt = "💼 <b>TUGAS KEDINASAN.</b> Anda dalam penugasan luar. Tetap utamakan keselamatan kerja."; iconName = "briefcase"; type = "info"; }
@@ -532,7 +533,7 @@
 
         async function startCameraAPI(mode) {
             currentCamMode = mode; document.getElementById('cameraOverlay').style.display = 'flex';
-            try { if (currentStream) currentStream.getTracks().forEach(t => t.stop()); currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode === 'user' ? 'user' : 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } }); document.getElementById('videoFeed').srcObject = currentStream; } catch (err) { alert("Izin kamera diperlukan."); closeCameraAPI(); }
+            try { if (currentStream) currentStream.getTracks().forEach(t => t.stop()); currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode === 'user' ? 'user' : 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } }); document.getElementById('videoFeed').srcObject = currentStream; } catch (err) { showToast("Izin kamera diperlukan.", "error"); closeCameraAPI(); }
         }
 
         function closeCameraAPI() { document.getElementById('cameraOverlay').style.display = 'none'; if (currentStream) currentStream.getTracks().forEach(t => t.stop()); }
@@ -557,7 +558,18 @@
         async function submitWithQueue() {
             const btn = document.getElementById('btnSubmit'); btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="spin"></i> MENGIRIM...`;
             const payload = { action: 'presensi', idPegawai: userData.ID, nama: userData.Nama, status: selectedStatus, kegiatan: document.getElementById('selKegiatan').value, keterangan: document.getElementById('presensiNote').value, gps: coords, wilayah: userData.Wilayah, selfieBase64: document.getElementById('imgSelfie').src, workBase64: document.getElementById('imgWork').src };
-            try { const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json(); if (result.status === 'success') { alert("✅ Presensi Otoritas Berhasil Dikirim!"); location.reload(); } else { alert(result.message); btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`; } } catch (e) { btn.disabled = false; }
+            try { 
+                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) }); 
+                const result = await res.json(); 
+                if (result.status === 'success') { 
+                    showToast("✅ Berhasil! Data tercatat di server otoritas."); 
+                    setTimeout(() => showRaport(), 800);
+                    btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`;
+                } else { 
+                    showToast("🔴 Gagal: " + result.message, "error"); 
+                    btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`; 
+                } 
+            } catch (e) { showToast("🔴 Kesalahan Jaringan.", "error"); btn.disabled = false; btn.innerHTML = `<i data-lucide="send"></i> KIRIM`; }
         }
 
         function changeMonth(delta) { viewMonth += delta; if (viewMonth > 11) { viewMonth = 0; viewYear++; } else if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderMonthlyCalendar(); }
@@ -585,7 +597,7 @@
             const dateStr = document.getElementById('raportDateFilter').value;
             const logs = (window.appData.presensi || []).filter(p => String(p.ID_Pegawai) === String(userData.ID) && p.Timestamp && p.Timestamp.includes(dateStr));
             const historyHtml = logs.length > 0 ? logs.map(log => `
-                <div class="history-card" style="border-bottom:1px solid #f8fafc;">
+                <div class="history-card" style="padding:20px 30px; border-bottom:1px solid #f8fafc;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                         <h4 style="font-weight:900; font-size:0.9rem; text-transform:uppercase;">${log.Status}</h4>
                         <span style="color:var(--accent); font-weight:900; font-size:0.8rem;">+${log.Nilai || 0} PTS</span>
@@ -606,7 +618,7 @@
             document.getElementById('raportOverlay').classList.add('show'); lucide.createIcons();
         }
 
-        function openManualRaport() { if(!userData) { alert("Pilih identitas terlebih dahulu."); return; } showRaport(); }
+        function openManualRaport() { if(!userData) { showToast("Pilih identitas terlebih dahulu.", "info"); return; } showRaport(); }
         function applyGlobalUI() { const logo = window.appData.config?.Logo || FALLBACK_LOGO; document.querySelectorAll('.main-logo-src').forEach(el => el.src = logo); lucide.createIcons(); }
         function initClock() { setInterval(() => { const el = document.getElementById('clockSidebar'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); }
         function initTheme() { if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme'); updateThemeUI(localStorage.getItem('theme') === 'light'); }
